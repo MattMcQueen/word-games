@@ -5,6 +5,7 @@
 
 import type { GameLogic } from '../core/game.ts';
 import { cleanSweepLogic } from './clean-sweep/logic.ts';
+import { gutenbergGapLogic } from './gutenberg-gap/logic.ts';
 import { keyhopLogic } from './keyhop/logic.ts';
 import { lockoutLogic } from './lockout/logic.ts';
 import { matryoshkaLogic } from './matryoshka/logic.ts';
@@ -20,4 +21,5 @@ export const ALL_GAMES: readonly GameLogic<unknown, unknown>[] = [
   cleanSweepLogic,
   keyhopLogic,
   lockoutLogic,
+  gutenbergGapLogic,
 ];

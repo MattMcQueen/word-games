@@ -1,0 +1,27 @@
+# Words that make a Gutenberg sentence unsuitable, on top of data/blocklist.txt.
+# Victorian novels use racial and ethnic terms that are offensive today but
+# aren't in the main word list's blocklist (often because they're proper nouns
+# or out of use). Any sentence containing one of these is left out.
+# One lowercase word per line; # starts a comment.
+chinaman
+coolie
+coolies
+darkey
+darkie
+darkies
+darky
+gipsies
+gipsy
+gypsies
+gypsy
+hottentot
+hottentots
+jew
+jewess
+jews
+kaffir
+mulatto
+negress
+negro
+negroes
+savages

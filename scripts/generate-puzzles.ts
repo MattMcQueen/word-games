@@ -25,6 +25,7 @@ import {
   generateDaily,
   type PuzzleMonthFile,
 } from '../src/core/game.ts';
+import type { SentenceBank } from '../src/core/sentences.ts';
 import { ALL_GAMES } from '../src/games/registry.ts';
 
 const ROOT = resolve(import.meta.dirname, '..');
@@ -47,6 +48,9 @@ const games = args.game ? ALL_GAMES.filter((g) => g.slug === args.game) : ALL_GA
 if (games.length === 0) throw new Error(`Unknown game: ${args.game}`);
 
 const dict = createDictionary(readFileSync(join(ROOT, 'public', 'data', 'words.txt'), 'utf8'));
+const sentences = JSON.parse(
+  readFileSync(join(ROOT, 'public', 'data', 'sentences.json'), 'utf8'),
+) as SentenceBank;
 
 /**
  * Write a month file with one day per line, so diffs stay readable when the
@@ -81,7 +85,10 @@ function generateGame(game: GameLogic<unknown, unknown>) {
       file = readMonth(path, game.slug, month);
     }
     if (!args.force && file.days[date]) continue;
-    file.days[date] = generateDaily(game, contextFor(dict, date)) as DailyPuzzle<unknown, unknown>;
+    file.days[date] = generateDaily(
+      game,
+      contextFor(dict, date, game.needsSentences ? sentences : undefined),
+    ) as DailyPuzzle<unknown, unknown>;
     created++;
   }
   if (file) writeMonth(path, file);

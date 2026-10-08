@@ -636,3 +636,8 @@
   font-size: 0.85rem;
   font-weight: 700;
 }
+
+.result-credit {
+  margin-top: 0.75rem;
+  color: var(--soft);
+}

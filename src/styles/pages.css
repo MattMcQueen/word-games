@@ -139,3 +139,12 @@ kbd {
   margin-top: auto;
   padding-top: 12px;
 }
+
+/* The About page's list of books: two columns where there's room. */
+.book-list {
+  columns: 2 16rem;
+  column-gap: 2rem;
+}
+.book-list li {
+  break-inside: avoid;
+}

@@ -7,7 +7,7 @@
 import { msUntilMidnight } from '../core/date.ts';
 import type { GameResult, GameStats } from '../core/progress.ts';
 import { copyText } from '../core/share.ts';
-import { h, icon } from './dom.ts';
+import { type Child, h, icon } from './dom.ts';
 import { openModal } from './modal.ts';
 import { toast } from './toast.ts';
 
@@ -20,6 +20,8 @@ export interface ResultSummary {
   answers: string[];
   /** Full spoiler-free share text. */
   shareText: string;
+  /** Optional credit shown under the answers, e.g. the book a sentence came from. */
+  credit?: Child;
 }
 
 export function statsGrid(stats: GameStats): HTMLElement {
@@ -103,6 +105,7 @@ export function showResults(opts: {
           summary.answers.map((a) => h('li', null, a)),
         ),
       ),
+      summary.credit ? h('p', { class: 'result-credit' }, summary.credit) : null,
       h('h3', null, 'Your stats'),
       statsGrid(stats),
       h(

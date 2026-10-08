@@ -42,6 +42,8 @@ export interface WordBoard {
   keyboard: Keyboard;
   /** After a change to data: end the game if it's now perfect, otherwise save and redraw. */
   commit(): void;
+  /** End the game now, perfect or not (e.g. a guessing game that's been won or lost). */
+  end(gaveUp: boolean): void;
 }
 
 export function mountWordBoard<D>(opts: WordBoardOptions<D>): WordBoard {
@@ -102,6 +104,7 @@ export function mountWordBoard<D>(opts: WordBoardOptions<D>): WordBoard {
   const board: WordBoard = {
     input,
     keyboard,
+    end,
     commit() {
       if (opts.result(false).perfect) return end(false);
       ctx.save(data);

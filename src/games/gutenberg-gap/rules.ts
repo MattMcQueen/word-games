@@ -1,0 +1,67 @@
+/** Gutenberg Gap's How to play page: the words only; the layout is src/ui/how-to-play.ts. */
+
+import { h } from '../../ui/dom.ts';
+import type { HowToPlay } from '../../ui/how-to-play.ts';
+
+export const gutenbergGapRules: HowToPlay = {
+  intro:
+    "A sentence from a classic novel, with one word missing. Can you fill the gap? There's a new sentence every day at midnight.",
+  sections: [
+    {
+      title: 'The goal',
+      body: [
+        h(
+          'p',
+          null,
+          h('strong', null, 'Guess the missing word'),
+          ' in as few tries as you can. The boxes show how many letters it has.',
+        ),
+      ],
+    },
+    {
+      title: 'Playing',
+      body: [
+        h(
+          'ul',
+          { class: 'points' },
+          h('li', null, 'Type a word of the right length and press Enter.'),
+          h('li', null, 'Each wrong guess reveals one more letter of the missing word.'),
+          h('li', null, 'Guesses must fit the letters already shown and be in the word list.'),
+          h(
+            'li',
+            null,
+            'You get as many guesses as the word has letters. Getting it first time is perfect.',
+          ),
+        ),
+      ],
+    },
+    {
+      title: 'The books',
+      body: [
+        h(
+          'p',
+          null,
+          'Every sentence comes from a novel in the public domain, from Jane Austen to H. G. Wells, thanks to ',
+          h(
+            'a',
+            { href: 'https://www.gutenberg.org/', rel: 'noopener', target: '_blank' },
+            'Project Gutenberg',
+          ),
+          ". Once you've finished, you'll see which book it's from, with a link to read it free.",
+        ),
+      ],
+    },
+    {
+      title: 'Finishing',
+      body: [
+        h(
+          'p',
+          null,
+          'The game ends when you guess the word, run out of guesses, or press ',
+          h('strong', null, 'Finish'),
+          ' to see the answer.',
+        ),
+      ],
+    },
+  ],
+};

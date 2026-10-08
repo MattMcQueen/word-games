@@ -15,6 +15,7 @@ import {
   generateDaily,
   type PuzzleMonthFile,
 } from './game.ts';
+import { loadSentences, type SentenceBank } from './sentences.ts';
 
 export interface LoadedPuzzle<P, S> extends DailyPuzzle<P, S> {
   /** Where the puzzle came from; handy for debugging and tests. */
@@ -40,11 +41,15 @@ export async function loadDailyPuzzle<P, S>(
   game: GameLogic<P, S>,
   date: string,
   getDictionary: () => Promise<Dictionary> = loadDictionary,
+  getSentences: () => Promise<SentenceBank> = loadSentences,
 ): Promise<LoadedPuzzle<P, S>> {
   const file = (await fetchMonth(game.slug, monthOf(date))) as PuzzleMonthFile<P, S> | null;
   const day = file?.days?.[date];
   if (day) return { ...day, source: 'file' };
 
-  const ctx = contextFor(await getDictionary(), date);
-  return { ...generateDaily(game, ctx), source: 'generated' };
+  const [dict, sentences] = await Promise.all([
+    getDictionary(),
+    game.needsSentences ? getSentences() : undefined,
+  ]);
+  return { ...generateDaily(game, contextFor(dict, date, sentences)), source: 'generated' };
 }

@@ -17,9 +17,13 @@ accounts or ads. It's hosted on Azure Static Web Apps.
 | Finishing | Unlimited guesses; ends on reaching the optimum or pressing Finish |
 | Streaks | Count only daily puzzles finished on the day; archive plays don't count |
 | Site name | "Word Games" (`SITE_NAME` in `src/config.ts`) |
-| Keyhop | Goal is the longest valid word from the start key (target length is a minimum) |
+| Keyhop | Longest word from the start key, at least the day's minimum length. Each letter must be within the day's reach (2 or 3 keys, same key allowed) of the one before: strict adjacency allows only 34 words in the whole list |
 | Swap Shop | Pairs count once (BAT ↔ BET is one find). Each day is a letter pair plus "any length" or a fixed length of 4–7, kept if it has 10–40 pairs (462 combinations qualify) |
 | Threader | 3 or 4 letters taken from a real word; shortest answer needs 2–4 extra letters, has at most 8 equals, and at least 20 words contain the thread |
+| Matryoshka | 2–3 letter seed cut from a real word; longest chain 5–7 words, at least 2 first steps; Undo keeps your longest chain |
+| Clean Sweep | 15 letters from 3–4 random words; exact minimum by iterative-deepening search; kept if the minimum is 3–4 words with at most 40 best sweeps |
+| Lockout | 8 banned, 1 required, at random; kept only if the longest word is 7–10 letters (random bans usually allow 12–16-letter words) |
+| Gutenberg Gap | 28 public-domain novels → 2,240 sentences (`npm run build:sentences`), walked in a fixed shuffled order, one a day; gap word 5–10 letters, in the word list, not among the 600 commonest; sentences with blocked or dated offensive words (`data/gutenberg-exclude.txt`) dropped |
 | Boards | Typed-word games share `src/ui/word-board.ts`; "best word counts" games add `src/ui/word-hunt.ts` (Price Tag, Threader; later Lockout, Keyhop) |
 | Look | Matches the card games (card-games/packages/card-kit): slate colours, terracotta accent, Figtree and Young Serif, sticky header, hero + card pages |
 | Pages | `/` lists the games; each game has `/<slug>/` and `/<slug>/how-to-play/`; `/about/` has privacy and credits |
@@ -30,8 +34,8 @@ accounts or ads. It's hosted on Azure Static Web Apps.
 
 1. ✅ Scaffold, dictionary build script, shared modules and tests
 2. ✅ Price Tag end to end (reference implementation), **waiting for feedback**
-3. ◐ Threader ✅, Swap Shop ✅; still to do: Matryoshka, Clean Sweep, Keyhop, Lockout, Gutenberg Gap
-4. ◐ Home page with today's status ✅, How to play pages ✅, About page with credits ✅ (Gutenberg credits to add with Gutenberg Gap)
+3. ✅ Threader, Swap Shop, Matryoshka, Clean Sweep, Keyhop, Lockout, Gutenberg Gap
+4. ✅ Home page with today's status, How to play pages, About page with word-list and Gutenberg credits
 5. ⬜ Azure Static Web Apps config, README
 
 ## Project layout
@@ -49,9 +53,9 @@ src/games/<slug>/      spec.ts, generate.ts, solve.ts, logic.ts, scoring.ts, rul
                        main.ts, how-to-play.ts, tests
 src/games/catalogue.ts names and taglines for navigation
 src/games/registry.ts  all game logic, for the generator script
-scripts/               build-dictionary.ts, generate-puzzles.ts
-data/                  hand-edited inputs (blocklist)
-public/                static files served as-is: word list, puzzles, favicon, theme-init.js
+scripts/               build-dictionary.ts, build-gutenberg.ts, generate-puzzles.ts
+data/                  hand-edited inputs (blocklist, Gutenberg book list and exclusions)
+public/                static files served as-is: word list, sentence bank, puzzles, favicon, theme-init.js
 tests/e2e/             Playwright specs
 ```
 

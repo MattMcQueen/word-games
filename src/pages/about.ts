@@ -1,5 +1,6 @@
 /** The About page: privacy, where the words come from, credits. Modelled on card-kit's AboutPage. */
 
+import books from '../../data/gutenberg-sources.json';
 import { h } from '../ui/dom.ts';
 import { renderPage, siteNav } from '../ui/page.ts';
 
@@ -63,6 +64,30 @@ renderPage({
       ),
       h(
         'li',
+        { class: 'wide', id: 'books' },
+        h('h2', null, 'The books in Gutenberg Gap'),
+        h(
+          'p',
+          null,
+          "Gutenberg Gap's sentences come from these novels, all in the public domain and free to read at ",
+          link('https://www.gutenberg.org/', 'Project Gutenberg'),
+          '. Thank you to its volunteers.',
+        ),
+        h(
+          'ul',
+          { class: 'points book-list' },
+          books.map((b) =>
+            h(
+              'li',
+              null,
+              link(`https://www.gutenberg.org/ebooks/${b.id}`, b.title),
+              ` by ${b.author}`,
+            ),
+          ),
+        ),
+      ),
+      h(
+        'li',
         null,
         h('h2', null, 'Keyboard'),
         h(
@@ -92,7 +117,7 @@ renderPage({
         h(
           'p',
           null,
-          'Fonts: Figtree, Young Serif and DM Sans, all under the SIL Open Font License. Word list: SCOWL, © Kevin Atkinson, used under its permissive licence.',
+          'Fonts: Figtree, Young Serif and DM Sans, all under the SIL Open Font License. Word list: SCOWL, © Kevin Atkinson, used under its permissive licence. Sentences: Project Gutenberg.',
         ),
       ),
       h(

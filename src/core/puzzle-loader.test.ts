@@ -51,4 +51,26 @@ describe('loadDailyPuzzle', () => {
     const loaded = await loadDailyPuzzle({ ...toyGame, slug: 'toy-d' }, '2040-06-02', getDict);
     expect(loaded.source).toBe('generated');
   });
+
+  it('fetches the sentence bank only for games that need it', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response('Not found', { status: 404 })),
+    );
+    const bank = { books: [], entries: [] };
+    const getSentences = vi.fn(async () => bank);
+    const needy = {
+      ...toyGame,
+      slug: 'toy-e',
+      needsSentences: true,
+      generate: vi.fn(toyGame.generate),
+    };
+    await loadDailyPuzzle(needy, '2040-06-03', getDict, getSentences);
+    expect(getSentences).toHaveBeenCalledOnce();
+    expect(needy.generate.mock.calls[0]?.[1].sentences).toBe(bank);
+
+    getSentences.mockClear();
+    await loadDailyPuzzle({ ...toyGame, slug: 'toy-f' }, '2040-06-03', getDict, getSentences);
+    expect(getSentences).not.toHaveBeenCalled();
+  });
 });

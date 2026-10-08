@@ -8,9 +8,9 @@ export const QWERTY_ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'] as const;
 const ROW_OFFSETS = [0, 0.5, 1];
 
 const position = new Map<string, { x: number; y: number }>();
-QWERTY_ROWS.forEach((row, y) => {
-  [...row].forEach((key, i) => position.set(key, { x: i + (ROW_OFFSETS[y] ?? 0), y }));
-});
+for (const [y, row] of QWERTY_ROWS.entries()) {
+  for (const [i, key] of [...row].entries()) position.set(key, { x: i + (ROW_OFFSETS[y] ?? 0), y });
+}
 
 /**
  * How many single-key hops apart two letter keys are, moving to touching keys

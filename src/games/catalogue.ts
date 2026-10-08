@@ -46,6 +46,11 @@ export const GAMES: readonly GameInfo[] = [
     name: 'Lockout',
     tagline: 'Eight letters are locked out. Find the longest word without them.',
   },
+  {
+    slug: 'gutenberg-gap',
+    name: 'Gutenberg Gap',
+    tagline: 'A line from a classic novel, with one word missing.',
+  },
 ];
 
 /** Look a game up by slug; throws for an unknown one, which is a programming error. */
