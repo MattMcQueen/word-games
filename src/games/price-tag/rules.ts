@@ -69,16 +69,5 @@ export const priceTagRules: HowToPlay = {
         ),
       ],
     },
-    {
-      title: 'Missed a day?',
-      wide: true,
-      body: [
-        h(
-          'p',
-          null,
-          'Every past puzzle is in the archive (the Archive button on the game page). Archive games count towards your stats but not your streak.',
-        ),
-      ],
-    },
   ],
 };

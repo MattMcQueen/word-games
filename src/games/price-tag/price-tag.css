@@ -1,4 +1,4 @@
-/* Price Tag board styles. Shared component styles are in src/styles/components.css. */
+/* Price Tag's budget panel. The rest of the board is the shared word hunt (components.css). */
 
 .pt-budget {
   display: grid;
@@ -18,64 +18,6 @@
   font: 800 2.4rem / 1.1 var(--sans); /* Young Serif's old-style figures read badly here */
 }
 
-.pt-best {
+.pt-budget .best-line {
   grid-column: 1 / -1;
-  margin: 0.35rem 0 0;
-}
-
-.pt-cost {
-  margin: -0.5rem 0 0;
-  text-align: center;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.pt-cost[data-over="true"] {
-  color: var(--bad);
-  font-weight: 700;
-}
-
-.pt-actions {
-  display: flex;
-  justify-content: center;
-}
-
-.pt-found-heading {
-  font: 700 1rem / 1.3 var(--sans); /* sans, so the count's figures read clearly */
-}
-
-.pt-found {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--line);
-}
-
-.pt-found li {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.25rem 0.75rem;
-  padding: 0.45rem 0.25rem;
-  border-bottom: 1px solid var(--line);
-}
-
-.pt-word {
-  letter-spacing: 0.05em;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.pt-word-meta {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-.pt-best-tag {
-  margin-left: auto;
-  padding: 0 0.5rem;
-  border-radius: var(--radius-sm);
-  background: var(--accent-soft);
-  font-size: 0.85rem;
-  font-weight: 700;
 }

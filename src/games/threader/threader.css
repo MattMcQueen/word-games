@@ -1,0 +1,44 @@
+/* Threader's thread panel and typing preview. The rest is the shared word hunt (components.css). */
+
+.th-label {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.th-thread {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.6rem 0 0.25rem;
+}
+
+.th-tile {
+  display: inline-grid;
+  place-items: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--accent-fg);
+  font: 800 1.7rem / 1 var(--sans);
+}
+
+.th-arrow {
+  color: var(--muted);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.th-preview {
+  letter-spacing: 0.08em;
+}
+
+/* Thread letters in the preview: bold and underlined as well as coloured. */
+.th-hit {
+  color: var(--accent);
+  font-weight: 800;
+  text-decoration: underline 2px;
+  text-underline-offset: 3px;
+}

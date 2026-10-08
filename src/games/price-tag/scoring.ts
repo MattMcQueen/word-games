@@ -7,10 +7,10 @@
 import type { Dictionary } from '../../core/dictionary.ts';
 import type { GameResult } from '../../core/progress.ts';
 import { scoreMeter } from '../../core/share.ts';
+import { letters } from '../../core/text.ts';
 import { basicWordProblem } from '../../core/validate.ts';
 import {
   compareScores,
-  letters,
   type PriceTagPuzzle,
   type PriceTagSolution,
   type WordScore,

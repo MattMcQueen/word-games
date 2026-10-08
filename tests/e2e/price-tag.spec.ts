@@ -79,7 +79,7 @@ test.describe('Price Tag', () => {
         .getByRole('button', { name: new RegExp(`^${letter.toUpperCase()},`) })
         .click();
     }
-    await expect(page.locator('.pt-cost')).toHaveText(
+    await expect(page.locator('.live-line')).toHaveText(
       `${wordCost(okWord, puzzle.prices)}p · ${puzzle.budget - wordCost(okWord, puzzle.prices)}p left`,
     );
     await page.getByRole('button', { name: 'Enter' }).click();

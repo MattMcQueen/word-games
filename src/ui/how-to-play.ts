@@ -21,8 +21,22 @@ export interface HowToPlay {
   sections: RuleSection[];
 }
 
+/** Every game has an archive, so every How to play page ends by explaining it. */
+const ARCHIVE_SECTION: RuleSection = {
+  title: 'Missed a day?',
+  wide: true,
+  body: [
+    h(
+      'p',
+      null,
+      'Every past puzzle is in the archive (the Archive button on the game page). Archive games count towards your stats but not your streak.',
+    ),
+  ],
+};
+
 export function renderHowToPlay(slug: string, rules: HowToPlay): void {
   const { name } = gameInfo(slug);
+  const sections = [...rules.sections, ARCHIVE_SECTION];
   renderPage({
     title: `How to play ${name}`,
     nav: gameNav(slug, 'how-to-play'),
@@ -41,7 +55,7 @@ export function renderHowToPlay(slug: string, rules: HowToPlay): void {
       h(
         'ul',
         { class: 'facts' },
-        rules.sections.map((s) =>
+        sections.map((s) =>
           h('li', { class: s.wide ? 'wide' : null }, h('h2', null, s.title), s.body),
         ),
       ),

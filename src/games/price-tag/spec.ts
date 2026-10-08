@@ -52,6 +52,3 @@ export function wordCost(word: string, prices: readonly number[]): number {
 
 /** Positive if a beats b, negative if b beats a, zero if equal. */
 export const compareScores = (a: WordScore, b: WordScore) => a.length - b.length || a.cost - b.cost;
-
-/** "1 letter" / "7 letters" */
-export const letters = (n: number) => `${n} letter${n === 1 ? '' : 's'}`;

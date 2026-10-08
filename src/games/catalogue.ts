@@ -16,6 +16,11 @@ export const GAMES: readonly GameInfo[] = [
     name: 'Price Tag',
     tagline: 'Every letter has a price. Find the longest word within budget.',
   },
+  {
+    slug: 'threader',
+    name: 'Threader',
+    tagline: 'Find the shortest word containing three or four letters in order.',
+  },
 ];
 
 /** Look a game up by slug; throws for an unknown one, which is a programming error. */
