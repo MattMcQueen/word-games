@@ -31,7 +31,7 @@ export interface WordBoardOptions<D> {
   /** Score the current state. A perfect result ends the game. */
   result(gaveUp: boolean): GameResult;
   /** Called after every redraw, for the game's own panels. */
-  onRender?(): void;
+  onRender?(finished: boolean): void;
   /** Extra word box options, e.g. to veto letters or react to typing. */
   allowLetter?(current: string, letter: string): boolean;
   onType?(word: string): void;
@@ -80,7 +80,7 @@ export function mountWordBoard<D>(opts: WordBoardOptions<D>): WordBoard {
     input.setDisabled(finished);
     for (const el of [keyboard.el, input.el, ...below]) (el as HTMLElement).hidden = finished;
     replaceChildren(actions, finished ? resultsButton : finishButton);
-    opts.onRender?.();
+    opts.onRender?.(finished);
   }
 
   function end(gaveUp: boolean) {
