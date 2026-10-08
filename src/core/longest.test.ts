@@ -18,13 +18,13 @@ describe('longest-word scoring', () => {
   });
 
   it('describes and shares the outcome without the words', () => {
-    expect(describeLongest(null, 5)).toBe(
-      "You didn't find a word; the longest possible was 5 letters.",
+    expect(describeLongest(null, 5, 'with J')).toBe(
+      "You didn't find a word with J. The longest has 5 letters.",
     );
-    expect(describeLongest('cat', 5)).toBe(
-      'Your longest word had 3 letters; the longest possible was 5 letters.',
+    expect(describeLongest('cat', 5, 'with J')).toBe(
+      "You didn't find the longest word. Yours had 3 letters; the longest has 5.",
     );
-    expect(describeLongest('horse', 5)).toBe('Your longest word had 5 letters: the best possible!');
+    expect(describeLongest('horse', 5, 'with J')).toBe('You found the longest word: 5 letters!');
     expect(shareLongest('🎹', ['cat', 'dog'], 5)).toEqual([
       '🎹 Longest: 3 letters (best 5)',
       '🟩🟩🟩⬜⬜',

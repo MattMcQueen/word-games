@@ -42,11 +42,9 @@ export function resultFor(
 
 export function describeOutcome(best: readonly string[] | null, min: number): string {
   const target = plural(min, 'word');
-  if (best === null) return `You didn't sweep every letter; it can be done in ${target}.`;
-  if (best.length <= min) {
-    return `You swept every letter in ${plural(best.length, 'word')}: the fewest possible!`;
-  }
-  return `You swept every letter in ${plural(best.length, 'word')}; the fewest possible was ${min}.`;
+  if (best === null) return `You didn't sweep every letter. It can be done in ${target}.`;
+  if (best.length <= min) return `You swept every letter in the fewest words: ${target}!`;
+  return `You swept every letter in ${plural(best.length, 'word')}, but it can be done in ${min}.`;
 }
 
 /** Spoiler-free share lines: word counts only, never the words. */

@@ -64,14 +64,18 @@ export function resultFor(
   };
 }
 
-/** One sentence comparing the player's best with the optimum. */
+/**
+ * How the player did, in terms of the goal: the best word. "No word" means
+ * none of their words fitted the budget, so say that rather than implying
+ * they found nothing at all.
+ */
 export function describeOutcome(best: ScoredWord | null, solution: PriceTagSolution): string {
   const target = `${letters(solution.bestLength)} (${pence(solution.bestCost)})`;
-  if (!best) return `You didn't find a word; the best possible was ${target}.`;
+  if (!best) return `You didn't find a word within budget. The best word has ${target}.`;
   if (best.length === solution.bestLength && best.cost === solution.bestCost) {
-    return `You found ${letters(best.length)} for ${pence(best.cost)}: the best possible!`;
+    return `You found the best word: ${letters(best.length)} for ${pence(best.cost)}!`;
   }
-  return `You found ${letters(best.length)} (${pence(best.cost)}); the best possible was ${target}.`;
+  return `You didn't find the best word. Yours had ${letters(best.length)} (${pence(best.cost)}); the best has ${target}.`;
 }
 
 /** Spoiler-free share lines: lengths and spend only, never the words. */

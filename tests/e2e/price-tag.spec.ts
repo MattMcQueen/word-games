@@ -109,7 +109,7 @@ test.describe('Price Tag', () => {
 
     const results = page.getByRole('dialog', { name: 'Perfect!' });
     await expect(results).toBeVisible();
-    await expect(results).toContainText('the best possible!');
+    await expect(results).toContainText('You found the best word');
     await expect(results.locator('.stat').first()).toContainText('1');
     await expectAccessible(page);
 
@@ -130,8 +130,8 @@ test.describe('Price Tag', () => {
     await page.getByRole('button', { name: 'Finish and see answers' }).click();
 
     const results = page.getByRole('dialog', { name: 'Nice try' });
-    await expect(results).toContainText(`You found 4 letters`);
-    await expect(results).toContainText(`the best possible was ${solution.bestLength} letters`);
+    await expect(results).toContainText("You didn't find the best word. Yours had 4 letters");
+    await expect(results).toContainText(`the best has ${solution.bestLength} letters`);
     await expect(results.locator('.best-answers')).toContainText(best);
 
     // After closing, the board stays finished and can reopen the results.

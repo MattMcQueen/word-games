@@ -112,9 +112,9 @@ export const threaderGame: GameModule<ThreaderPuzzle, ThreaderSolution, WordHunt
       keyboard.setKey(ch, { highlight: true, hint: order.join('&') });
   },
 
-  summarise({ solution, data, result, date }) {
+  summarise({ puzzle, solution, data, result, date }) {
     return {
-      detail: describeOutcome(shortestOf(data.words), solution),
+      detail: describeOutcome(shortestOf(data.words), solution, puzzle.letters),
       ...answersSummary(solution.answers),
       shareText: buildShareText({
         game: NAME,

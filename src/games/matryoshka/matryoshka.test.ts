@@ -111,13 +111,13 @@ describe('Matryoshka scoring', () => {
 
   it('describes and shares the outcome without the words', () => {
     expect(chainLabel(['at', 'cat'])).toBe('AT → CAT');
-    expect(describeOutcome(0, 4)).toBe(
-      "You didn't add a word; the longest possible chain was 4 words.",
+    expect(describeOutcome(0, 4, 'at')).toBe(
+      "You didn't add a word to AT. The longest chain has 4 words.",
     );
-    expect(describeOutcome(2, 4)).toBe(
-      'Your longest chain had 2 words; the longest possible was 4 words.',
+    expect(describeOutcome(2, 4, 'at')).toBe(
+      "You didn't build the longest chain. Yours had 2 words; the longest has 4.",
     );
-    expect(describeOutcome(4, 4)).toBe('Your chain had 4 words: the longest possible!');
+    expect(describeOutcome(4, 4, 'at')).toBe('You built the longest chain: 4 words!');
     expect(shareLines(2, 4)).toEqual(['🪆 Chain of 2 (best 4)', '🟩🟩🟩⬜⬜']);
     expect(shareLines(4, 4)[0]).toBe('🪆 ⭐ Chain of 4, the longest possible');
   });

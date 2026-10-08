@@ -35,11 +35,14 @@ export function resultFor(
   return { score: longest.length, best: solution.best, perfect, gaveUp: gaveUp && !perfect };
 }
 
-export function describeOutcome(longest: number, best: number): string {
+/** How the player did, in terms of the goal: the longest chain. */
+export function describeOutcome(longest: number, best: number, seed: string): string {
   const target = plural(best, 'word');
-  if (longest === 0) return `You didn't add a word; the longest possible chain was ${target}.`;
-  if (longest >= best) return `Your chain had ${plural(longest, 'word')}: the longest possible!`;
-  return `Your longest chain had ${plural(longest, 'word')}; the longest possible was ${target}.`;
+  if (longest === 0) {
+    return `You didn't add a word to ${seed.toUpperCase()}. The longest chain has ${target}.`;
+  }
+  if (longest >= best) return `You built the longest chain: ${target}!`;
+  return `You didn't build the longest chain. Yours had ${plural(longest, 'word')}; the longest has ${best}.`;
 }
 
 /** Spoiler-free share lines: chain lengths only, never the words. */

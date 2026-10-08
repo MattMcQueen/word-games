@@ -63,7 +63,7 @@ test.describe('Lockout', () => {
     );
     await enterWord(page, best);
     await expect(page.getByRole('dialog', { name: 'Perfect!' })).toContainText(
-      'the best possible!',
+      'You found the longest word',
     );
     await expectAccessible(page);
   });

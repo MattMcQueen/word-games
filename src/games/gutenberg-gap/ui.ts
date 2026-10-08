@@ -75,7 +75,7 @@ export const gutenbergGapGame: GameModule<
       belowInput: [progress],
       allowLetter: (typed) => typed.length < puzzle.length,
       submit(guess, { input, commit, end }) {
-        const problem = guessProblem(guess, puzzle, answer, dict, data.guesses);
+        const problem = guessProblem(guess, puzzle, dict, data.guesses);
         if (problem) return input.feedback(problem, 'bad');
         data.guesses.push(guess);
         input.setValue('');

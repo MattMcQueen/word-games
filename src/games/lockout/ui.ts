@@ -88,9 +88,13 @@ export const lockoutGame: GameModule<LockoutPuzzle, LockoutSolution, WordHuntDat
     for (const ch of puzzle.banned) keyboard.setKey(ch, { disabled: true, hint: 'out' });
   },
 
-  summarise({ solution, data, date }) {
+  summarise({ puzzle, solution, data, date }) {
     return {
-      detail: describeLongest(longestOf(data.words), solution.bestLength),
+      detail: describeLongest(
+        longestOf(data.words),
+        solution.bestLength,
+        `with ${puzzle.required.toUpperCase()} and none of the locked-out letters`,
+      ),
       ...answersSummary(solution.answers),
       shareText: buildShareText({
         game: NAME,

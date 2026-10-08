@@ -26,7 +26,7 @@ export const gutenbergGapRules: HowToPlay = {
           { class: 'points' },
           h('li', null, 'Type a word of the right length and press Enter.'),
           h('li', null, 'Each wrong guess reveals one more letter of the missing word.'),
-          h('li', null, 'Guesses must fit the letters already shown and be in the word list.'),
+          h('li', null, 'Guesses must be words of the right length, from the word list.'),
           h(
             'li',
             null,

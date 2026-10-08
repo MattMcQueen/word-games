@@ -62,14 +62,21 @@ export function resultFor(
   };
 }
 
-/** One sentence comparing the player's shortest word with the best possible. */
-export function describeOutcome(shortest: string | null, solution: ThreaderSolution): string {
+/**
+ * How the player did, in terms of the goal: the shortest word. "No word" means
+ * none of their words had the thread in order, so say that.
+ */
+export function describeOutcome(
+  shortest: string | null,
+  solution: ThreaderSolution,
+  thread: string,
+): string {
   const target = letters(solution.bestLength);
-  if (!shortest) return `You didn't find a word; the shortest possible was ${target}.`;
-  if (shortest.length === solution.bestLength) {
-    return `Your shortest word had ${letters(shortest.length)}: the best possible!`;
+  if (!shortest) {
+    return `You didn't find a word with ${threadInWords(thread)} in order. The shortest has ${target}.`;
   }
-  return `Your shortest word had ${letters(shortest.length)}; the shortest possible was ${target}.`;
+  if (shortest.length === solution.bestLength) return `You found the shortest word: ${target}!`;
+  return `You didn't find the shortest word. Yours had ${letters(shortest.length)}; the shortest has ${solution.bestLength}.`;
 }
 
 /** Spoiler-free share lines: lengths and counts only, never the words. */

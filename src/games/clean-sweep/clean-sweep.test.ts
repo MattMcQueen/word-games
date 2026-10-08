@@ -114,13 +114,13 @@ describe('Clean Sweep scoring', () => {
     });
     expect(resultFor(['cat', 'dog'], solution, false).perfect).toBe(true);
     expect(describeOutcome(null, 2)).toBe(
-      "You didn't sweep every letter; it can be done in 2 words.",
+      "You didn't sweep every letter. It can be done in 2 words.",
     );
     expect(describeOutcome(['a', 'b', 'c'], 2)).toBe(
-      'You swept every letter in 3 words; the fewest possible was 2.',
+      'You swept every letter in 3 words, but it can be done in 2.',
     );
     expect(describeOutcome(['a', 'b'], 2)).toBe(
-      'You swept every letter in 2 words: the fewest possible!',
+      'You swept every letter in the fewest words: 2 words!',
     );
     expect(shareLines(['a', 'b', 'c'], 2)).toEqual(['🧹 Swept in 3 words (best 2)', '🟩🟩🟩⬜⬜']);
     expect(shareLines(['a', 'b'], 2)[0]).toBe('🧹 ⭐ Swept in 2, the fewest possible');

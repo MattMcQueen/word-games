@@ -53,7 +53,7 @@ test.describe('Clean Sweep', () => {
     await enterWord(page, first);
     for (const word of rest) await enterWord(page, word);
     const results = page.getByRole('dialog', { name: 'Perfect!' });
-    await expect(results).toContainText('the fewest possible!');
+    await expect(results).toContainText('You swept every letter in the fewest words');
     await expectAccessible(page);
   });
 
@@ -63,7 +63,7 @@ test.describe('Clean Sweep', () => {
     await page.getByRole('button', { name: 'Finish' }).click();
     await page.getByRole('button', { name: 'Finish and see answers' }).click();
     const results = page.getByRole('dialog', { name: 'Better luck next time' });
-    await expect(results).toContainText(`it can be done in ${solution.min} words`);
+    await expect(results).toContainText(`It can be done in ${solution.min} words`);
     await expect(results.locator('.best-answers')).toContainText(best.join(' + ').toUpperCase());
   });
 

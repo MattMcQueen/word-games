@@ -57,7 +57,7 @@ test.describe('Matryoshka', () => {
     await page.goto('/matryoshka/');
     for (const word of chain) await enterWord(page, word);
     const results = page.getByRole('dialog', { name: 'Perfect!' });
-    await expect(results).toContainText('the longest possible!');
+    await expect(results).toContainText('You built the longest chain');
     await expect(page.getByRole('button', { name: 'Undo last word' })).toBeHidden();
     await expectAccessible(page);
   });
@@ -68,7 +68,7 @@ test.describe('Matryoshka', () => {
     await page.getByRole('button', { name: 'Finish' }).click();
     await page.getByRole('button', { name: 'Finish and see answers' }).click();
     const results = page.getByRole('dialog', { name: 'Nice try' });
-    await expect(results).toContainText(`the longest possible was ${solution.best} words`);
+    await expect(results).toContainText(`the longest has ${solution.best}.`);
     await expect(results.locator('.best-answers li').first()).toContainText(
       [puzzle.seed, ...chain].join(' → ').toUpperCase(),
     );

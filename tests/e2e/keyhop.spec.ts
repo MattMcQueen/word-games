@@ -65,7 +65,7 @@ test.describe('Keyhop', () => {
     );
     await enterWord(page, best);
     const results = page.getByRole('dialog', { name: 'Perfect!' });
-    await expect(results).toContainText('the best possible!');
+    await expect(results).toContainText('You found the longest word');
     await expectAccessible(page);
   });
 

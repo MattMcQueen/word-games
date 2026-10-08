@@ -64,7 +64,7 @@ test.describe('Swap Shop', () => {
     await page.getByRole('button', { name: 'Finish' }).click();
     await page.getByRole('button', { name: 'Finish and see answers' }).click();
     const results = page.getByRole('dialog', { name: 'Nice try' });
-    await expect(results).toContainText(`You found 1 of ${total} pairs.`);
+    await expect(results).toContainText(`You found 1 of the ${total} pairs.`);
     const missed = results.locator('.best-answers');
     await expect(missed).toContainText('Pairs you missed');
     await expect(missed.locator('li')).toHaveCount(total - 1);

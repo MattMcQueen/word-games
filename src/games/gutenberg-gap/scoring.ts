@@ -23,22 +23,21 @@ export function pattern(answer: string, shown: ReadonlySet<number>): string[] {
   return [...answer].map((ch, i) => (shown.has(i) ? ch : ''));
 }
 
-/** Why a guess can't be accepted, or null if it can. */
+/**
+ * Why a guess can't be accepted, or null if it can: it must be a word of the
+ * right length that hasn't been tried. Guesses needn't match the letters
+ * already revealed; insisting on that made every later guess bounce and the
+ * game feel like it allowed only one.
+ */
 export function guessProblem(
   guess: string,
   puzzle: GutenbergGapPuzzle,
-  answer: string,
   dict: Dictionary,
   guesses: readonly string[],
 ): string | null {
   if (guess.length !== puzzle.length) return `The missing word has ${puzzle.length} letters.`;
   const basic = basicWordProblem(guess, dict, guesses);
-  if (basic) return basic.replace("You've already found", "You've already tried");
-  const shown = revealed(puzzle, wrongCount(guesses, answer));
-  for (const i of shown) {
-    if (guess[i] !== answer[i]) return `${guess.toUpperCase()} doesn't fit the letters shown.`;
-  }
-  return null;
+  return basic?.replace("You've already found", "You've already tried") ?? null;
 }
 
 const solved = (guesses: readonly string[], answer: string) => guesses.includes(answer);

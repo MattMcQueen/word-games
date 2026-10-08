@@ -62,7 +62,7 @@ test.describe('Threader', () => {
 
     await enterWord(page, best);
     const results = page.getByRole('dialog', { name: 'Perfect!' });
-    await expect(results).toContainText('the best possible!');
+    await expect(results).toContainText('You found the shortest word');
     await expectAccessible(page);
   });
 
@@ -72,7 +72,9 @@ test.describe('Threader', () => {
     await page.getByRole('button', { name: 'Finish' }).click();
     await page.getByRole('button', { name: 'Finish and see answers' }).click();
     const results = page.getByRole('dialog', { name: 'Nice try' });
-    await expect(results).toContainText(`the shortest possible was ${solution.bestLength} letters`);
+    await expect(results).toContainText(
+      `You didn't find the shortest word. Yours had ${longer.length} letters; the shortest has ${solution.bestLength}.`,
+    );
     for (const answer of solution.answers) {
       await expect(results.locator('.best-answers')).toContainText(answer);
     }

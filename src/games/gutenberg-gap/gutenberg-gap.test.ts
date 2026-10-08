@@ -101,23 +101,17 @@ describe('Gutenberg Gap scoring', () => {
   });
 
   it('checks guesses', () => {
-    expect(guessProblem('teased', puzzle, answer, dict, [])).toBe(
-      'The missing word has 7 letters.',
-    );
-    expect(guessProblem('pleaded', puzzle, answer, dict, [])).toBeNull();
-    expect(guessProblem('pleaded', puzzle, answer, dict, ['pleaded'])).toBe(
+    expect(guessProblem('teased', puzzle, dict, [])).toBe('The missing word has 7 letters.');
+    expect(guessProblem('pleaded', puzzle, dict, [])).toBeNull();
+    expect(guessProblem('pleaded', puzzle, dict, ['pleaded'])).toBe(
       "You've already tried PLEADED.",
     );
   });
 
-  it('rejects guesses that clash with revealed letters', () => {
-    const p = { ...puzzle, reveal: [1, 0, 2, 3, 4, 5, 6] }; // L shows first
-    const d = createDictionary('pleased\nplacard\nblessed');
-    expect(guessProblem('blessed', p, answer, d, ['placard'])).toBeNull();
-    const d2 = createDictionary('pleased\nsnorted');
-    expect(guessProblem('snorted', p, answer, d2, ['zzzzzzz'])).toBe(
-      "SNORTED doesn't fit the letters shown.",
-    );
+  it('accepts any new word of the right length, whatever letters are showing', () => {
+    // After two wrong guesses P and D are showing; SNORTED fits neither, but still counts.
+    const d = createDictionary('pleased\nplacard\nblessed\nsnorted');
+    expect(guessProblem('snorted', puzzle, d, ['placard', 'blessed'])).toBeNull();
   });
 
   it('ends on a right answer or when every letter is out', () => {

@@ -20,14 +20,16 @@ export function longestResult(
   return { score: longest, best: bestLength, perfect, gaveUp: gaveUp && !perfect };
 }
 
-/** One sentence comparing the player's longest word with the best possible. */
-export function describeLongest(longest: string | null, bestLength: number): string {
+/**
+ * How the player did, in terms of the goal: the longest word. "No word" means
+ * none of their words followed the day's rules, which `rule` describes
+ * ("with J and none of the locked-out letters"), so say that.
+ */
+export function describeLongest(longest: string | null, bestLength: number, rule: string): string {
   const target = letters(bestLength);
-  if (!longest) return `You didn't find a word; the longest possible was ${target}.`;
-  if (longest.length >= bestLength) {
-    return `Your longest word had ${letters(longest.length)}: the best possible!`;
-  }
-  return `Your longest word had ${letters(longest.length)}; the longest possible was ${target}.`;
+  if (!longest) return `You didn't find a word ${rule}. The longest has ${target}.`;
+  if (longest.length >= bestLength) return `You found the longest word: ${target}!`;
+  return `You didn't find the longest word. Yours had ${letters(longest.length)}; the longest has ${bestLength}.`;
 }
 
 /** Spoiler-free share lines: lengths only, never the words. */

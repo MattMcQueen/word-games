@@ -45,13 +45,13 @@ describe('scoring the player', () => {
 
   it('describes the outcome', () => {
     expect(describeOutcome(null, solution)).toBe(
-      "You didn't find a word; the best possible was 5 letters (10p).",
+      "You didn't find a word within budget. The best word has 5 letters (10p).",
     );
     expect(describeOutcome({ word: 'cart', length: 4, cost: 8 }, solution)).toBe(
-      'You found 4 letters (8p); the best possible was 5 letters (10p).',
+      "You didn't find the best word. Yours had 4 letters (8p); the best has 5 letters (10p).",
     );
     expect(describeOutcome({ word: 'carts', length: 5, cost: 10 }, solution)).toBe(
-      'You found 5 letters for 10p: the best possible!',
+      'You found the best word: 5 letters for 10p!',
     );
   });
 

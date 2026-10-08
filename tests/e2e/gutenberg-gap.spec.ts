@@ -58,6 +58,21 @@ test.describe('Gutenberg Gap', () => {
     await expect(page.locator('.live-line')).toContainText(`${puzzle.length - 1} guesses left`);
   });
 
+  test('several wrong guesses each count, even if they ignore the letters shown', async ({
+    page,
+  }) => {
+    await page.goto('/gutenberg-gap/');
+    const others = WORDS.filter((w) => w.length === puzzle.length && w !== answer).slice(0, 3);
+    for (const [i, guess] of others.entries()) {
+      await enterWord(page, guess);
+      await expect(page.locator('.feedback')).toContainText(`Not ${guess.toUpperCase()}.`);
+      await expect(page.locator('.live-line')).toContainText(
+        `${puzzle.length - i - 1} guesses left`,
+      );
+    }
+    await expect(page.getByText('Your guesses: 3')).toBeVisible();
+  });
+
   test('guessing first time is perfect and credits the book', async ({ page }) => {
     await page.goto('/gutenberg-gap/');
     await enterWord(page, answer);

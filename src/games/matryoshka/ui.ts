@@ -116,7 +116,7 @@ export const matryoshkaGame: GameModule<MatryoshkaPuzzle, MatryoshkaSolution, Ma
 
   summarise({ puzzle, solution, data, date }) {
     return {
-      detail: describeOutcome(data.best.length, solution.best),
+      detail: describeOutcome(data.best.length, solution.best, puzzle.seed),
       answersLabel: solution.chains.length === 1 ? 'A longest chain' : 'Some longest chains',
       answers: solution.chains.map((c) => chainLabel([puzzle.seed, ...c])),
       shareText: buildShareText({

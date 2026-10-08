@@ -54,7 +54,8 @@ export function resultFor(
 
 export function describeOutcome(found: number, total: number): string {
   if (found >= total) return `You found all ${plural(total, 'pair')}!`;
-  return `You found ${found} of ${plural(total, 'pair')}.`;
+  if (found === 0) return `You didn't find any of the ${plural(total, 'pair')}.`;
+  return `You found ${found} of the ${plural(total, 'pair')}.`;
 }
 
 /** The pairs the player didn't find, in order. */

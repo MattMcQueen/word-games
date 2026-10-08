@@ -129,14 +129,14 @@ describe('Threader scoring', () => {
   });
 
   it('describes the outcome', () => {
-    expect(describeOutcome(null, solution)).toBe(
-      "You didn't find a word; the shortest possible was 4 letters.",
+    expect(describeOutcome(null, solution, 'rnt')).toBe(
+      "You didn't find a word with R, N and T in order. The shortest has 4 letters.",
     );
-    expect(describeOutcome('warrant', solution)).toBe(
-      'Your shortest word had 7 letters; the shortest possible was 4 letters.',
+    expect(describeOutcome('warrant', solution, 'rnt')).toBe(
+      "You didn't find the shortest word. Yours had 7 letters; the shortest has 4.",
     );
-    expect(describeOutcome('runt', solution)).toBe(
-      'Your shortest word had 4 letters: the best possible!',
+    expect(describeOutcome('runt', solution, 'rnt')).toBe(
+      'You found the shortest word: 4 letters!',
     );
   });
 

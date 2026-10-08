@@ -94,9 +94,13 @@ export const keyhopGame: GameModule<KeyhopPuzzle, KeyhopSolution, WordHuntData> 
     showKeys('');
   },
 
-  summarise({ solution, data, date }) {
+  summarise({ puzzle, solution, data, date }) {
     return {
-      detail: describeLongest(longestOf(data.words), solution.bestLength),
+      detail: describeLongest(
+        longestOf(data.words),
+        solution.bestLength,
+        `starting on ${puzzle.start.toUpperCase()} that hops ${reachText(puzzle.reach)}`,
+      ),
       ...answersSummary(solution.answers),
       shareText: buildShareText({
         game: NAME,

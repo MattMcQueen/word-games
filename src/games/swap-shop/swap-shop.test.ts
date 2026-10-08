@@ -124,7 +124,8 @@ describe('Swap Shop scoring', () => {
   });
 
   it('describes the outcome', () => {
-    expect(describeOutcome(1, 3)).toBe('You found 1 of 3 pairs.');
+    expect(describeOutcome(0, 3)).toBe("You didn't find any of the 3 pairs.");
+    expect(describeOutcome(1, 3)).toBe('You found 1 of the 3 pairs.');
     expect(describeOutcome(3, 3)).toBe('You found all 3 pairs!');
   });
 
