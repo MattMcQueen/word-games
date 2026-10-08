@@ -92,12 +92,20 @@ export function mountWordBoard<D>(opts: WordBoardOptions<D>): WordBoard {
   }
 
   function confirmFinish() {
+    // In case Finish was pressed instead of Enter: remind the player how to
+    // enter a word, naming the one they've typed if there is one.
+    const typed = input.value.toUpperCase();
+    const reminder = typed
+      ? `You haven't entered ${typed} yet. To enter a word, choose Keep playing and press Enter.`
+      : 'To enter a word, choose Keep playing, type it and press Enter.';
     confirmModal({
       title: 'Finish now?',
-      message: "You'll see the answers and won't be able to add more words.",
+      message: ["You'll see the answers and won't be able to add more words.", reminder],
       confirmLabel: 'Finish and see answers',
       cancelLabel: 'Keep playing',
       onConfirm: () => end(true),
+      // Back to the word box, not the Finish button, so Enter enters the word.
+      onCancel: () => input.focus(),
     });
   }
 

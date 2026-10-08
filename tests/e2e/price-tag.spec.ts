@@ -141,6 +141,25 @@ test.describe('Price Tag', () => {
     await expect(page.getByRole('dialog', { name: 'Nice try' })).toBeVisible();
   });
 
+  test('Finish reminds you to press Enter, naming a word typed but not entered', async ({
+    page,
+  }) => {
+    await setUp(page, DATE, { seenHelp: 'price-tag' });
+    await page.goto('/price-tag/');
+    await expect(page.getByRole('textbox', { name: 'Your word' })).toBeEditable();
+    await page.keyboard.type(okWord);
+    await page.getByRole('button', { name: 'Finish' }).click();
+    const dialog = page.getByRole('dialog', { name: 'Finish now?' });
+    await expect(dialog).toContainText(`You haven't entered ${okWord.toUpperCase()} yet.`);
+    await expect(dialog).toContainText('press Enter');
+
+    // Keep playing returns to the game with the word still typed, ready to enter.
+    await dialog.getByRole('button', { name: 'Keep playing' }).click();
+    await expect(page.getByRole('textbox', { name: 'Your word' })).toHaveValue(okWord);
+    await page.keyboard.press('Enter');
+    await expect(page.getByText('Words found: 1')).toBeVisible();
+  });
+
   test('plays an archive puzzle from the archive picker', async ({ page }) => {
     await setUp(page, DATE, { seenHelp: 'price-tag' });
     await page.goto('/price-tag/');

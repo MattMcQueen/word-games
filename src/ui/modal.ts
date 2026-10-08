@@ -55,11 +55,15 @@ export function openModal({ title, content, onClose }: ModalOptions): Modal {
 /** A yes/no confirmation, e.g. "Finish now?". The confirm button is the primary action. */
 export function confirmModal(opts: {
   title: string;
-  message: string;
+  /** One paragraph, or several. */
+  message: string | string[];
   confirmLabel: string;
   cancelLabel: string;
   onConfirm: () => void;
+  /** Called when the dialog closes any other way (cancel button, close button, Escape). */
+  onCancel?: () => void;
 }) {
+  let confirmed = false;
   const button = (label: string, primary: boolean, onClick: () => void) =>
     h(
       'button',
@@ -69,16 +73,17 @@ export function confirmModal(opts: {
   const modal = openModal({
     title: opts.title,
     content: [
-      h('p', null, opts.message),
+      [opts.message].flat().map((text) => h('p', null, text)),
       h(
         'div',
         { class: 'result-actions' },
         button(opts.confirmLabel, true, () => {
+          confirmed = true;
           modal.close();
-          opts.onConfirm();
         }),
         button(opts.cancelLabel, false, () => modal.close()),
       ),
     ],
+    onClose: () => (confirmed ? opts.onConfirm() : opts.onCancel?.()),
   });
 }
