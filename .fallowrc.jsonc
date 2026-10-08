@@ -1,11 +1,13 @@
 {
   "$schema": "./node_modules/fallow/schema.json",
   // Page scripts are referenced from pages/**/index.html, which fallow doesn't
-  // see because Vite's root is pages/. List them as entry points explicitly.
+  // see because Vite's root is pages/. List them as entry points explicitly,
+  // along with the 404 page's stylesheet (public/404.html links to it).
   "entry": [
     "src/games/*/main.ts",
     "src/games/*/how-to-play.ts",
     "src/pages/*.ts",
-    "public/theme-init.js"
+    "public/theme-init.js",
+    "public/404.css"
   ]
 }

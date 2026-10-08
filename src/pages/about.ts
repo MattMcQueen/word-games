@@ -39,7 +39,14 @@ renderPage({
           h(
             'li',
             null,
-            'No accounts, no cookies, no adverts and no analytics. Your progress, stats and streaks are kept in your own browser (its local storage) and never leave your device. Clearing your browsing data clears them.',
+            'No accounts, no cookies and no adverts. Your progress, stats and streaks are kept in your own browser (its local storage) and never leave your device. Clearing your browsing data clears them.',
+          ),
+          h(
+            'li',
+            null,
+            'Visits are counted with Cloudflare Web Analytics, which uses no cookies and does not follow you from site to site: it sees which page was opened, the browser and roughly which country, not who you are (',
+            link('https://www.cloudflare.com/web-analytics/', 'how it works'),
+            ').',
           ),
           h(
             'li',

@@ -1,4 +1,4 @@
-import { readdirSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite';
 
@@ -44,6 +44,25 @@ function sharedHead(): Plugin {
   };
 }
 
+/**
+ * The same security headers the live site sends (public/staticwebapp.config.json),
+ * so `vite preview`, and the Playwright tests that use it, behave like production
+ * and anything the policy blocks shows up locally. (As in card-kit's vite.ts.)
+ */
+function previewHeaders(): Record<string, string> {
+  const live = JSON.parse(
+    readFileSync(resolve(import.meta.dirname, 'public', 'staticwebapp.config.json'), 'utf8'),
+  ) as { globalHeaders: Record<string, string> };
+  const headers = { ...live.globalHeaders };
+  // The plain-http local preview mustn't be forced onto https.
+  headers['Content-Security-Policy'] = (headers['Content-Security-Policy'] ?? '').replace(
+    '; upgrade-insecure-requests',
+    '',
+  );
+  delete headers['Strict-Transport-Security'];
+  return headers;
+}
+
 export default defineConfig({
   plugins: [sharedHead()],
   root: pagesDir,
@@ -53,6 +72,8 @@ export default defineConfig({
   build: {
     outDir: resolve(import.meta.dirname, 'dist'),
     emptyOutDir: true,
+    // Keep fonts and images as real files: the security policy doesn't allow data: fonts.
+    assetsInlineLimit: 0,
     rollupOptions: { input: findHtmlEntries(pagesDir) },
   },
   // Pages reference scripts as /src/...; point that at the real src/ folder,
@@ -61,4 +82,5 @@ export default defineConfig({
     alias: [{ find: /^\/src\//, replacement: `${srcDir.replaceAll('\\', '/')}/` }],
   },
   server: { fs: { allow: [import.meta.dirname] } },
+  preview: { headers: previewHeaders() },
 });

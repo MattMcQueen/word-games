@@ -1,6 +1,13 @@
 /** Site-wide settings. Change these here rather than hunting through the code. */
 
+/** Live at https://words.matt-rarely-writes.co.uk (see README, Hosting). */
 export const SITE_NAME = 'Word Games';
+
+/**
+ * This site's token in Cloudflare Web Analytics (public: it's in every page).
+ * Leave empty to count nothing. See src/core/analytics.ts.
+ */
+export const ANALYTICS_TOKEN = '';
 
 /**
  * The first day with a puzzle. Puzzle numbers count from here (this date is #1),

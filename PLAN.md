@@ -28,15 +28,16 @@ accounts or ads. It's hosted on Azure Static Web Apps.
 | Look | Matches the card games (card-games/packages/card-kit): slate colours, terracotta accent, Figtree and Young Serif, sticky header, hero + card pages |
 | Pages | `/` lists the games; each game has `/<slug>/` and `/<slug>/how-to-play/`; `/about/` has privacy and credits |
 | Theme | Follows the device until the sun/moon button is pressed; the choice is remembered (unlike the card games) |
-| Support | Ko-fi "Support me" button, bottom-left; nothing is loaded from Ko-fi until it's opened. Phase 5's CSP must allow `frame-src https://ko-fi.com` |
+| Support | Ko-fi "Support me" button, bottom-left; nothing is loaded from Ko-fi until it's opened |
+| Hosting | Azure Static Web App `swa-word-games` (Free) at words.matt-rarely-writes.co.uk; GitHub Actions checks and deploys; Cloudflare Web Analytics on the live address only |
 
 ## Phases
 
 1. ✅ Scaffold, dictionary build script, shared modules and tests
-2. ✅ Price Tag end to end (reference implementation), **waiting for feedback**
+2. ✅ Price Tag end to end (reference implementation)
 3. ✅ Threader, Swap Shop, Matryoshka, Clean Sweep, Keyhop, Lockout, Gutenberg Gap
 4. ✅ Home page with today's status, How to play pages, About page with word-list and Gutenberg credits
-5. ⬜ Azure Static Web Apps config, README
+5. ✅ Azure Static Web Apps config, GitHub Actions, README
 
 ## Project layout
 

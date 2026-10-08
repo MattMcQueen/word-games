@@ -112,3 +112,37 @@ test.describe('Support me', () => {
     expect(popup.url()).toContain('ko-fi.com/mattrarelywrites');
   });
 });
+
+test.describe('Security headers', () => {
+  // Every page, served with the live site's Content-Security-Policy (vite.config.ts), must load
+  // without anything being blocked or any script error.
+  const pages = [
+    '/',
+    '/about/',
+    ...[
+      'price-tag',
+      'threader',
+      'swap-shop',
+      'matryoshka',
+      'clean-sweep',
+      'keyhop',
+      'lockout',
+      'gutenberg-gap',
+    ].flatMap((slug) => [`/${slug}/`, `/${slug}/how-to-play/`]),
+  ];
+
+  for (const path of pages) {
+    test(`${path} loads cleanly under the security policy`, async ({ page }) => {
+      const problems: string[] = [];
+      page.on('console', (m) => {
+        if (m.type() === 'error') problems.push(m.text());
+      });
+      page.on('pageerror', (e) => problems.push(e.message));
+      const res = await page.goto(path);
+      expect(res?.headers()['content-security-policy']).toContain("default-src 'self'");
+      await expect(page.locator('main')).not.toBeEmpty();
+      await page.waitForLoadState('networkidle');
+      expect(problems).toEqual([]);
+    });
+  }
+});

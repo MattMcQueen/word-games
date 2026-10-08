@@ -4,6 +4,8 @@
  * site-wide styles, so every page entry point gets them by importing this.
  */
 
+import { ANALYTICS_TOKEN } from '../config.ts';
+import { countVisits } from '../core/analytics.ts';
 import { gamePath, howToPlayPath } from '../games/catalogue.ts';
 import { type Child, h } from './dom.ts';
 import { type NavLink, renderHeader } from './header.ts';
@@ -32,6 +34,7 @@ export function renderPage({ title, nav, width, content }: PageOptions): HTMLEle
     main,
     renderSupportMe(),
   );
+  countVisits(ANALYTICS_TOKEN);
   return main;
 }
 

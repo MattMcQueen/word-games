@@ -1,0 +1,59 @@
+name: Site
+
+# Checks every pull request and push, and publishes main to the Azure Static Web App
+# (words.matt-rarely-writes.co.uk).
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  # Type-check, lint, unit tests, fallow, build, then the browser tests in Chromium and WebKit
+  # (the engine behind Safari and every iPhone browser), served with the live security headers.
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run check
+        env:
+          CI: true
+
+  # Until the app's deploy token has been added as the repository secret
+  # AZURE_STATIC_WEB_APPS_API_TOKEN, this only says so and does nothing.
+  deploy:
+    needs: check
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    env:
+      TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+    steps:
+      - if: env.TOKEN == ''
+        run: echo "::notice::Not deployed; add the AZURE_STATIC_WEB_APPS_API_TOKEN secret to publish the site."
+      - if: env.TOKEN != ''
+        uses: actions/checkout@v4
+      - if: env.TOKEN != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - if: env.TOKEN != ''
+        run: npm ci && npm run build
+      # The site is built above, so this only uploads dist/, which includes the
+      # headers and routes in staticwebapp.config.json.
+      - if: env.TOKEN != ''
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ env.TOKEN }}
+          action: upload
+          app_location: dist
+          skip_app_build: true
+          skip_api_build: true

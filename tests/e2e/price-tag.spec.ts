@@ -95,8 +95,14 @@ test.describe('Price Tag', () => {
     await expect(page.getByText('Words found: 1')).toBeVisible();
   });
 
-  test('finding the optimum ends the game with a perfect score', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  test('finding the optimum ends the game with a perfect score', async ({
+    page,
+    context,
+    browserName,
+  }) => {
+    // Playwright's WebKit can't grant clipboard access, so there we only check the toast.
+    const canReadClipboard = browserName === 'chromium';
+    if (canReadClipboard) await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     await setUp(page, DATE, { seenHelp: 'price-tag' });
     await page.goto('/price-tag/');
     await enterWord(page, best);
@@ -109,6 +115,7 @@ test.describe('Price Tag', () => {
 
     await results.getByRole('button', { name: 'Share result' }).click();
     await expect(page.getByText('Result copied to clipboard')).toBeVisible();
+    if (!canReadClipboard) return;
     const shared = await page.evaluate(() => navigator.clipboard.readText());
     expect(shared).toContain('Word Games · Price Tag #8');
     expect(shared).toContain('⭐');
