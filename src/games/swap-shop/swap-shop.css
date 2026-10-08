@@ -1,0 +1,51 @@
+/* Swap Shop's swap panel and progress meter. The rest is the shared word board (components.css). */
+
+.ss-swap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.ss-tile {
+  display: inline-grid;
+  place-items: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--accent-fg);
+  font: 800 1.8rem / 1 var(--sans);
+}
+
+.ss-arrows {
+  color: var(--muted);
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.ss-rule {
+  margin: 0.6rem 0 0;
+  color: var(--soft);
+  font-weight: 600;
+}
+
+.ss-counter {
+  margin: 0.6rem 0 0.4rem;
+  font-weight: 700;
+}
+
+/* The counter above says the same in words; this is just a picture of it. */
+.ss-meter {
+  height: 0.6rem;
+  border-radius: 999px;
+  background: var(--panel);
+  overflow: hidden;
+}
+.ss-meter span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}

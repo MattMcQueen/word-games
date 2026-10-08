@@ -21,6 +21,11 @@ export const GAMES: readonly GameInfo[] = [
     name: 'Threader',
     tagline: 'Find the shortest word containing three or four letters in order.',
   },
+  {
+    slug: 'swap-shop',
+    name: 'Swap Shop',
+    tagline: 'Two letters swap places. Find the words that survive the swap.',
+  },
 ];
 
 /** Look a game up by slug; throws for an unknown one, which is a programming error. */

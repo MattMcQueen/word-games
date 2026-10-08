@@ -3,6 +3,8 @@
  * Words are always lowercase a–z.
  */
 
+export const ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
+
 const A = 97; // char code of 'a'
 
 /** The letters of a word in alphabetical order: "cat" → "act". */

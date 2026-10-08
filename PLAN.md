@@ -18,9 +18,9 @@ accounts or ads. It's hosted on Azure Static Web Apps.
 | Streaks | Count only daily puzzles finished on the day; archive plays don't count |
 | Site name | "Word Games" (`SITE_NAME` in `src/config.ts`) |
 | Keyhop | Goal is the longest valid word from the start key (target length is a minimum) |
-| Swap Shop | Pairs count once (BAT ↔ BET is one find) |
+| Swap Shop | Pairs count once (BAT ↔ BET is one find). Each day is a letter pair plus "any length" or a fixed length of 4–7, kept if it has 10–40 pairs (462 combinations qualify) |
 | Threader | 3 or 4 letters taken from a real word; shortest answer needs 2–4 extra letters, has at most 8 equals, and at least 20 words contain the thread |
-| Word hunts | Games where you enter many words and your best counts share `src/ui/word-hunt.ts` (Price Tag, Threader; later Lockout, Keyhop) |
+| Boards | Typed-word games share `src/ui/word-board.ts`; "best word counts" games add `src/ui/word-hunt.ts` (Price Tag, Threader; later Lockout, Keyhop) |
 | Look | Matches the card games (card-games/packages/card-kit): slate colours, terracotta accent, Figtree and Young Serif, sticky header, hero + card pages |
 | Pages | `/` lists the games; each game has `/<slug>/` and `/<slug>/how-to-play/`; `/about/` has privacy and credits |
 | Theme | Follows the device until the sun/moon button is pressed; the choice is remembered (unlike the card games) |
@@ -30,7 +30,7 @@ accounts or ads. It's hosted on Azure Static Web Apps.
 
 1. ✅ Scaffold, dictionary build script, shared modules and tests
 2. ✅ Price Tag end to end (reference implementation), **waiting for feedback**
-3. ◐ Threader ✅; still to do: Swap Shop, Matryoshka, Clean Sweep, Keyhop, Lockout, Gutenberg Gap
+3. ◐ Threader ✅, Swap Shop ✅; still to do: Matryoshka, Clean Sweep, Keyhop, Lockout, Gutenberg Gap
 4. ◐ Home page with today's status ✅, How to play pages ✅, About page with credits ✅ (Gutenberg credits to add with Gutenberg Gap)
 5. ⬜ Azure Static Web Apps config, README
 
