@@ -7,7 +7,7 @@ export const SITE_NAME = 'Word Games';
  * This site's token in Cloudflare Web Analytics (public: it's in every page).
  * Leave empty to count nothing. See src/core/analytics.ts.
  */
-export const ANALYTICS_TOKEN = '';
+export const ANALYTICS_TOKEN = 'f526949ae1544ec7bd8d304f18779860';
 
 /**
  * The first day with a puzzle. Puzzle numbers count from here (this date is #1),
