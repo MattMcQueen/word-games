@@ -1,0 +1,14 @@
+{
+  "game": "lockout",
+  "month": "2029-10",
+  "days": {
+    "2029-10-01": {"puzzle":{"required":"x","banned":"efgjklnr"},"solution":{"bestLength":9,"answers":["axiomatic","shadowbox"],"total":45}},
+    "2029-10-02": {"puzzle":{"required":"w","banned":"beiknsvx"},"solution":{"bestLength":10,"answers":["roadworthy","throughway","watchfully","wrathfully"],"total":196}},
+    "2029-10-03": {"puzzle":{"required":"g","banned":"adeijkno"},"solution":{"bestLength":7,"answers":["gruffly","humbugs"],"total":77}},
+    "2029-10-04": {"puzzle":{"required":"j","banned":"eimrtvxy"},"solution":{"bestLength":10,"answers":["blackjacks"],"total":43}},
+    "2029-10-05": {"puzzle":{"required":"t","banned":"aeglnopv"},"solution":{"bestLength":10,"answers":["criticisms","drumsticks","fisticuffs","futuristic","witticisms"],"total":331}},
+    "2029-10-06": {"puzzle":{"required":"j","banned":"acghkops"},"solution":{"bestLength":9,"answers":["jewellery","jitterier","uninjured"],"total":47}},
+    "2029-10-07": {"puzzle":{"required":"j","banned":"defiopvz"},"solution":{"bestLength":10,"answers":["blackjacks","maharajahs"],"total":52}},
+    "2029-10-08": {"puzzle":{"required":"c","banned":"aeiluwxz"},"solution":{"bestLength":10,"answers":["cockscombs","cosponsors","shockproof","stockrooms"],"total":212}}
+  }
+}

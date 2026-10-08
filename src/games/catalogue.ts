@@ -41,6 +41,11 @@ export const GAMES: readonly GameInfo[] = [
     name: 'Keyhop',
     tagline: 'Hop across the keyboard to spell the longest word.',
   },
+  {
+    slug: 'lockout',
+    name: 'Lockout',
+    tagline: 'Eight letters are locked out. Find the longest word without them.',
+  },
 ];
 
 /** Look a game up by slug; throws for an unknown one, which is a programming error. */
