@@ -31,6 +31,11 @@ export const GAMES: readonly GameInfo[] = [
     name: 'Matryoshka',
     tagline: 'Grow a chain of words, one letter at a time.',
   },
+  {
+    slug: 'clean-sweep',
+    name: 'Clean Sweep',
+    tagline: 'Use every letter in as few words as you can.',
+  },
 ];
 
 /** Look a game up by slug; throws for an unknown one, which is a programming error. */

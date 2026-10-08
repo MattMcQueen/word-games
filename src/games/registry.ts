@@ -4,6 +4,7 @@
  */
 
 import type { GameLogic } from '../core/game.ts';
+import { cleanSweepLogic } from './clean-sweep/logic.ts';
 import { matryoshkaLogic } from './matryoshka/logic.ts';
 import { priceTagLogic } from './price-tag/logic.ts';
 import { swapShopLogic } from './swap-shop/logic.ts';
@@ -14,4 +15,5 @@ export const ALL_GAMES: readonly GameLogic<unknown, unknown>[] = [
   threaderLogic,
   swapShopLogic,
   matryoshkaLogic,
+  cleanSweepLogic,
 ];

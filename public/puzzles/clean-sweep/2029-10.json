@@ -1,0 +1,14 @@
+{
+  "game": "clean-sweep",
+  "month": "2029-10",
+  "days": {
+    "2029-10-01": {"puzzle":{"letters":"titxbtlxhgotees"},"solution":{"min":3,"solutions":5,"examples":[["bight","extol","texts"],["bight","extols","text"],["bights","extol","text"]]}},
+    "2029-10-02": {"puzzle":{"letters":"ytppmgwdaeicoep"},"solution":{"min":3,"solutions":11,"examples":[["cage","topped","wimpy"],["cagey","topped","wimp"],["dogma","peppy","twice"]]}},
+    "2029-10-03": {"puzzle":{"letters":"dpmharrpmlouwre"},"solution":{"min":3,"solutions":31,"examples":[["damper","rump","whorl"],["dram","hump","prowler"],["dram","pumper","whorl"]]}},
+    "2029-10-04": {"puzzle":{"letters":"wwrmfomuyientny"},"solution":{"min":3,"solutions":3,"examples":[["forwent","win","yummy"],["fret","winnow","yummy"],["frown","twine","yummy"]]}},
+    "2029-10-05": {"puzzle":{"letters":"smkyshmeuouhuyg"},"solution":{"min":3,"solutions":3,"examples":[["guys","hokey","hummus"],["gummy","house","husky"],["gushy","hummus","yoke"]]}},
+    "2029-10-06": {"puzzle":{"letters":"adayrodpsffdsex"},"solution":{"min":3,"solutions":12,"examples":[["add","affords","pyxes"],["address","daffy","pox"],["adds","afford","pyxes"]]}},
+    "2029-10-07": {"puzzle":{"letters":"tacmusrajsrgyak"},"solution":{"min":3,"solutions":34,"examples":[["carats","jags","murky"],["crag","jay","muskrats"],["crag","jays","muskrat"]]}},
+    "2029-10-08": {"puzzle":{"letters":"harvdeumafpnyrw"},"solution":{"min":3,"solutions":13,"examples":[["damn","purvey","wharf"],["draw","frumpy","haven"],["drawn","frumpy","have"]]}}
+  }
+}

@@ -1,0 +1,50 @@
+/* Clean Sweep's letter tiles. The rest is the shared word board (components.css). */
+
+.cs-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cs-tile {
+  display: inline-grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--accent-fg);
+  font: 800 1.35rem / 1 var(--sans);
+}
+
+/* A used letter: faded and crossed through, and labelled "(used)" for screen readers. */
+.cs-used {
+  background: var(--panel);
+  color: var(--muted);
+  text-decoration: line-through 2px;
+}
+
+.cs-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.cs-status {
+  margin: 0;
+  font-weight: 700;
+}
+
+.cs-take-back {
+  margin-left: auto;
+  min-height: 34px;
+  padding: 0 14px;
+  font-size: 0.85rem;
+}
