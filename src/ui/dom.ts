@@ -71,3 +71,8 @@ export function icon(name: IconName): SVGSVGElement {
   svg.append(path);
   return svg;
 }
+
+/** The day's target, shown in a game's panel so players know what they're aiming for. */
+export function targetLine(text: string): HTMLElement {
+  return h('p', { class: 'target-line' }, h('span', { class: 'target-label' }, 'Target'), text);
+}

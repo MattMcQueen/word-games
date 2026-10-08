@@ -3,8 +3,8 @@
  *
  * It's a real <input> (good for screen readers and physical keyboards) with
  * inputmode="none" so phones don't open their own keyboard over ours. The
- * value is kept to lowercase a–z, and games can veto letters (e.g. Keyhop
- * only allows keys next to the previous one).
+ * value is kept to lowercase a–z, and games can veto letters (e.g. Lockout
+ * blocks its locked-out letters).
  */
 
 import { h } from './dom.ts';

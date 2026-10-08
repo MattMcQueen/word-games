@@ -94,7 +94,7 @@ button {
 
 main {
   padding-top: 20px;
-  padding-bottom: 96px; /* room for the Support me button */
+  padding-bottom: 24px;
 }
 main:focus {
   outline: none;

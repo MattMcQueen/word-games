@@ -105,7 +105,7 @@ export function showResults(opts: {
           summary.answers.map((a) => h('li', null, a)),
         ),
       ),
-      summary.credit ? h('p', { class: 'result-credit' }, summary.credit) : null,
+      summary.credit ? h('div', { class: 'result-credit lw-credit' }, summary.credit) : null,
       h('h3', null, 'Your stats'),
       statsGrid(stats),
       h(

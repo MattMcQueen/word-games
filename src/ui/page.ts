@@ -4,7 +4,8 @@
  * site-wide styles, so every page entry point gets them by importing this.
  */
 
-import { ANALYTICS_TOKEN } from '../config.ts';
+import { ANALYTICS_TOKEN, KOFI_URL, SITE_NAME, SOURCE_URL } from '../config.ts';
+import { AMAZON_DISCLOSURE } from '../core/amazon.ts';
 import { countVisits } from '../core/analytics.ts';
 import { gamePath, howToPlayPath } from '../games/catalogue.ts';
 import { type Child, h } from './dom.ts';
@@ -32,10 +33,48 @@ export function renderPage({ title, nav, width, content }: PageOptions): HTMLEle
     h('a', { class: 'skip', href: '#main' }, 'Skip to content'),
     renderHeader(nav),
     main,
+    renderFooter(),
     renderSupportMe(),
   );
   countVisits(ANALYTICS_TOKEN);
   return main;
+}
+
+/** The footer every page shares: the site's links and credits. */
+function renderFooter(): HTMLElement {
+  const external = (href: string, text: string) =>
+    h('a', { href, rel: 'noopener', target: '_blank' }, text);
+  return h(
+    'footer',
+    { class: 'site-footer' },
+    h(
+      'div',
+      { class: 'wrap footer-inner' },
+      h(
+        'div',
+        { class: 'footer-brand' },
+        h('p', { class: 'footer-name' }, SITE_NAME),
+        h(
+          'p',
+          null,
+          'Original word puzzles, a new one every day. Free, with no ads and no cookies.',
+        ),
+      ),
+      h(
+        'nav',
+        { class: 'footer-nav', 'aria-label': 'Footer' },
+        h('a', { href: '/' }, 'All games'),
+        h('a', { href: '/about/' }, 'About and privacy'),
+        external(SOURCE_URL, 'Source code on GitHub'),
+        external(KOFI_URL, 'Support me on Ko-fi'),
+      ),
+      h(
+        'p',
+        { class: 'footer-small' },
+        `© ${new Date().getFullYear()} Matt McQueen. Words from SCOWL; sentences from public-domain novels. ${AMAZON_DISCLOSURE}`,
+      ),
+    ),
+  );
 }
 
 /** Links for the site's own pages (home and About). */

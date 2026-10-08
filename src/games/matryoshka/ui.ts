@@ -6,8 +6,8 @@
 
 import { puzzleNumber } from '../../core/date.ts';
 import { buildShareText } from '../../core/share.ts';
-import { letters } from '../../core/text.ts';
-import { h, replaceChildren } from '../../ui/dom.ts';
+import { letters, plural } from '../../core/text.ts';
+import { h, replaceChildren, targetLine } from '../../ui/dom.ts';
 import type { GameContext, GameModule } from '../../ui/game-shell.ts';
 import { foundItem, mountWordBoard, type WordBoard } from '../../ui/word-board.ts';
 import { gameUrl } from '../catalogue.ts';
@@ -75,6 +75,7 @@ export const matryoshkaGame: GameModule<MatryoshkaPuzzle, MatryoshkaSolution, Ma
           'section',
           { class: 'panel mt-panel', 'aria-label': 'Chain' },
           h('p', { class: 'mt-label' }, 'Add one letter at a time. Every step must be a word.'),
+          targetLine(`a chain of ${plural(solution.best, 'word')}`),
           stack,
           h('div', { class: 'mt-tools' }, undo),
         ),

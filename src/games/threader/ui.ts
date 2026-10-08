@@ -7,7 +7,7 @@
 import { puzzleNumber } from '../../core/date.ts';
 import { buildShareText } from '../../core/share.ts';
 import { letters } from '../../core/text.ts';
-import { type Child, h, replaceChildren } from '../../ui/dom.ts';
+import { type Child, h, replaceChildren, targetLine } from '../../ui/dom.ts';
 import type { GameModule } from '../../ui/game-shell.ts';
 import { answersSummary } from '../../ui/results.ts';
 import { mountWordHunt, type WordHuntData } from '../../ui/word-hunt.ts';
@@ -85,6 +85,7 @@ export const threaderGame: GameModule<ThreaderPuzzle, ThreaderSolution, WordHunt
           { class: 'panel th-panel', 'aria-label': 'Thread' },
           h('p', { class: 'th-label' }, 'Find the shortest word containing, in this order:'),
           threadTiles(thread),
+          targetLine(`a word of ${letters(solution.bestLength)}`),
           bestLine,
         ),
       ],

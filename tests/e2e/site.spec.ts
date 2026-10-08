@@ -14,7 +14,7 @@ test.describe('Home page', () => {
     await page.goto('/');
     await expect(page.getByRole('heading', { level: 1, name: 'Daily word games' })).toBeVisible();
     const card = page.getByRole('listitem').filter({ hasText: 'Price Tag' });
-    await expect(card).toContainText('Not played today');
+    await expect(card).toContainText('Not played yet');
     await expect(card.getByRole('link', { name: 'How to play' })).toHaveAttribute(
       'href',
       '/price-tag/how-to-play/',
@@ -28,7 +28,10 @@ test.describe('Home page', () => {
     await page.goto('/price-tag/');
     await enterWord(page, 'bags');
     await expect(page.getByText('Words found: 1')).toBeVisible();
-    await page.getByRole('link', { name: 'All games' }).click();
+    await page
+      .getByRole('navigation', { name: 'Sections' })
+      .getByRole('link', { name: 'All games' })
+      .click();
     const card = page.getByRole('listitem').filter({ hasText: 'Price Tag' });
     await expect(card).toContainText('In progress');
     await expect(card.getByRole('link', { name: 'Continue' })).toBeVisible();
@@ -105,6 +108,13 @@ test.describe('Support me', () => {
   test('opens Ko-fi in a new tab on phones', async ({ page, isMobile, context }) => {
     test.skip(!isMobile, 'Phones only.');
     await page.goto('/');
+    // The round button slides away while it would cover a card's buttons; at the foot of the
+    // page there's nothing under it, so it comes back.
+    const button = page.getByRole('button', { name: 'Support me on Ko-fi' });
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await expect(button).not.toHaveClass(/is-tucked/);
+    const box = await button.boundingBox();
+    expect(box?.width).toBeLessThanOrEqual(56); // compact on phones
     const [popup] = await Promise.all([
       context.waitForEvent('page'),
       page.getByRole('button', { name: 'Support me on Ko-fi' }).click(),
@@ -125,9 +135,9 @@ test.describe('Security headers', () => {
       'swap-shop',
       'matryoshka',
       'clean-sweep',
-      'keyhop',
+      'hinge',
       'lockout',
-      'gutenberg-gap',
+      'lost-for-words',
     ].flatMap((slug) => [`/${slug}/`, `/${slug}/how-to-play/`]),
   ];
 

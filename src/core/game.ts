@@ -17,22 +17,34 @@ import type { Dictionary } from './dictionary.ts';
 import { createRng, dailySeed, type Rng } from './rng.ts';
 import type { SentenceBank } from './sentences.ts';
 
+/**
+ * Extra data a generator can ask for (GameLogic.needs). The browser fetches
+ * these only when it has to generate a puzzle itself, and only for games that
+ * need them; the generator script reads them from public/data/.
+ */
+export type ResourceName = 'sentences' | 'common';
+
+export interface Resources {
+  /** The Gutenberg sentence bank (public/data/sentences.json). */
+  sentences?: SentenceBank;
+  /** Everyday words, a subset of the dictionary (public/data/common.txt). */
+  common?: ReadonlySet<string>;
+}
+
 /** Everything a generator or solver may use. */
-export interface GenerateContext {
+export interface GenerateContext extends Resources {
   dict: Dictionary;
   /** The date key the puzzle is for. */
   date: string;
   /** Days since launch: 0 on launch day. Lets a game walk through a fixed list without repeats. */
   dayIndex: number;
-  /** The Gutenberg sentence bank, supplied only to games with needsSentences. */
-  sentences?: SentenceBank;
 }
 
 export interface GameLogic<P, S> {
   /** URL-safe id, also used in storage keys, seeds and puzzle file paths. */
   slug: string;
-  /** True if generate() needs ctx.sentences (the puzzle loader fetches it only then). */
-  needsSentences?: boolean;
+  /** Extra data generate() and solve() need, supplied in the context. */
+  needs?: readonly ResourceName[];
   /** Make one candidate puzzle, or return null to try again with further random numbers. */
   generate(rng: Rng, ctx: GenerateContext): P | null;
   /** Solve a puzzle exactly, returning the optimum and the best answer(s). */
@@ -60,11 +72,9 @@ const MAX_ATTEMPTS = 5000;
 export function contextFor(
   dict: Dictionary,
   date: string,
-  sentences?: SentenceBank,
+  resources: Resources = {},
 ): GenerateContext {
-  const ctx: GenerateContext = { dict, date, dayIndex: daysBetween(LAUNCH_DATE, date) };
-  if (sentences) ctx.sentences = sentences;
-  return ctx;
+  return { ...resources, dict, date, dayIndex: daysBetween(LAUNCH_DATE, date) };
 }
 
 /**

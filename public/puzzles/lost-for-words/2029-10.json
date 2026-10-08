@@ -1,0 +1,14 @@
+{
+  "game": "lost-for-words",
+  "month": "2029-10",
+  "days": {
+    "2029-10-01": {"puzzle":{"entry":1714,"before":"Look at the table too, and satisfy ","after":" there is no trickery.","length":10,"reveal":[4,0,7,5,1,2,8,6,3,9],"book":{"id":35,"title":"The Time Machine","author":"H. G. Wells"}},"solution":{"word":"yourselves"}},
+    "2029-10-02": {"puzzle":{"entry":1740,"before":"Only those animals partake of intelligence that have to meet a huge variety of needs and ","after":".","length":7,"reveal":[0,3,2,1,4,6,5],"book":{"id":35,"title":"The Time Machine","author":"H. G. Wells"}},"solution":{"word":"dangers"}},
+    "2029-10-03": {"puzzle":{"entry":2098,"before":"\"Well, well, it can't be helped,\" said the Rat, after ","after":".","length":9,"reveal":[3,0,8,2,5,6,1,4,7],"book":{"id":289,"title":"The Wind in the Willows","author":"Kenneth Grahame"}},"solution":{"word":"pondering"}},
+    "2029-10-04": {"puzzle":{"entry":1690,"before":"Yet, for one thing I felt assured: ","after":" some other age had produced its exact duplicate, the machine could not have moved in time.","length":6,"reveal":[0,5,4,1,3,2],"book":{"id":35,"title":"The Time Machine","author":"H. G. Wells"}},"solution":{"word":"unless"}},
+    "2029-10-05": {"puzzle":{"entry":588,"before":"He died ","after":", Mr. Lockwood: he died so.","length":10,"reveal":[9,3,8,2,0,4,5,6,1,7],"book":{"id":768,"title":"Wuthering Heights","author":"Emily Brontë"}},"solution":{"word":"blissfully"}},
+    "2029-10-06": {"puzzle":{"entry":1254,"before":"They retired and I turned towards my friend, but he was sunk in ","after":" and almost deprived of life.","length":7,"reveal":[0,3,6,1,4,5,2],"book":{"id":84,"title":"Frankenstein","author":"Mary Shelley"}},"solution":{"word":"languor"}},
+    "2029-10-07": {"puzzle":{"entry":1847,"before":"His eyebrows were very black, and moved readily, and this gave him a look of some ","after":", not bad, you would say, but quick and high.","length":6,"reveal":[5,0,1,3,4,2],"book":{"id":120,"title":"Treasure Island","author":"Robert Louis Stevenson"}},"solution":{"word":"temper"}},
+    "2029-10-08": {"puzzle":{"entry":1524,"before":"On the death of Sir Charles we ","after":" for this young gentleman and found that he had been farming in Canada.","length":8,"reveal":[5,0,7,2,4,6,3,1],"book":{"id":2852,"title":"The Hound of the Baskervilles","author":"Arthur Conan Doyle"}},"solution":{"word":"inquired"}}
+  }
+}

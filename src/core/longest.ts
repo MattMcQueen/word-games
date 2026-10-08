@@ -1,4 +1,4 @@
-/** Scoring and wording shared by the "longest word wins" games (Keyhop, Lockout). */
+/** Scoring and wording for games where the longest word wins (Lockout), kept general for reuse. */
 
 import { bestWord } from './best-word.ts';
 import type { GameResult } from './progress.ts';

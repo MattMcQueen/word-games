@@ -24,6 +24,7 @@ import {
   type GameLogic,
   generateDaily,
   type PuzzleMonthFile,
+  type Resources,
 } from '../src/core/game.ts';
 import type { SentenceBank } from '../src/core/sentences.ts';
 import { ALL_GAMES } from '../src/games/registry.ts';
@@ -48,9 +49,17 @@ const games = args.game ? ALL_GAMES.filter((g) => g.slug === args.game) : ALL_GA
 if (games.length === 0) throw new Error(`Unknown game: ${args.game}`);
 
 const dict = createDictionary(readFileSync(join(ROOT, 'public', 'data', 'words.txt'), 'utf8'));
-const sentences = JSON.parse(
-  readFileSync(join(ROOT, 'public', 'data', 'sentences.json'), 'utf8'),
-) as SentenceBank;
+/** Extra data, read once and handed only to the games that ask for it. */
+const resources: Required<Resources> = {
+  sentences: JSON.parse(
+    readFileSync(join(ROOT, 'public', 'data', 'sentences.json'), 'utf8'),
+  ) as SentenceBank,
+  common: new Set(
+    createDictionary(readFileSync(join(ROOT, 'public', 'data', 'common.txt'), 'utf8')).words,
+  ),
+};
+const resourcesFor = (game: GameLogic<unknown, unknown>): Resources =>
+  Object.fromEntries((game.needs ?? []).map((name) => [name, resources[name]]));
 
 /**
  * Write a month file with one day per line, so diffs stay readable when the
@@ -87,7 +96,7 @@ function generateGame(game: GameLogic<unknown, unknown>) {
     if (!args.force && file.days[date]) continue;
     file.days[date] = generateDaily(
       game,
-      contextFor(dict, date, game.needsSentences ? sentences : undefined),
+      contextFor(dict, date, resourcesFor(game)),
     ) as DailyPuzzle<unknown, unknown>;
     created++;
   }

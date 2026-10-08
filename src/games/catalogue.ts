@@ -1,5 +1,6 @@
 /**
- * The list of games shown in navigation and on the home page. This is UI
+ * The list of games shown in navigation and on the home page, in the order
+ * they appear (the most approachable first). This is UI
  * metadata only, so importing it doesn't pull any game logic into a page.
  */
 
@@ -17,9 +18,19 @@ export const GAMES: readonly GameInfo[] = [
     tagline: 'Every letter has a price. Find the longest word within budget.',
   },
   {
+    slug: 'hinge',
+    name: 'Hinge',
+    tagline: 'Find the word that finishes one word and starts another.',
+  },
+  {
     slug: 'threader',
     name: 'Threader',
     tagline: 'Find the shortest word containing three or four letters in order.',
+  },
+  {
+    slug: 'lost-for-words',
+    name: 'Lost for Words',
+    tagline: 'A line from a classic novel, with one word missing.',
   },
   {
     slug: 'swap-shop',
@@ -32,24 +43,14 @@ export const GAMES: readonly GameInfo[] = [
     tagline: 'Grow a chain of words, one letter at a time.',
   },
   {
-    slug: 'clean-sweep',
-    name: 'Clean Sweep',
-    tagline: 'Use every letter in as few words as you can.',
-  },
-  {
-    slug: 'keyhop',
-    name: 'Keyhop',
-    tagline: 'Hop across the keyboard to spell the longest word.',
-  },
-  {
     slug: 'lockout',
     name: 'Lockout',
     tagline: 'Eight letters are locked out. Find the longest word without them.',
   },
   {
-    slug: 'gutenberg-gap',
-    name: 'Gutenberg Gap',
-    tagline: 'A line from a classic novel, with one word missing.',
+    slug: 'clean-sweep',
+    name: 'Clean Sweep',
+    tagline: 'Use every letter in as few words as you can.',
   },
 ];
 

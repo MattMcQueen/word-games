@@ -8,7 +8,7 @@
 import { puzzleNumber } from '../../core/date.ts';
 import { buildShareText } from '../../core/share.ts';
 import { letters, plural } from '../../core/text.ts';
-import { h, replaceChildren } from '../../ui/dom.ts';
+import { h, replaceChildren, targetLine } from '../../ui/dom.ts';
 import type { GameContext, GameModule } from '../../ui/game-shell.ts';
 import { mountWordBoard, type WordBoard } from '../../ui/word-board.ts';
 import { gameUrl } from '../catalogue.ts';
@@ -123,6 +123,7 @@ export const cleanSweepGame: GameModule<CleanSweepPuzzle, CleanSweepSolution, Cl
           { class: 'panel cs-panel', 'aria-label': 'Letters to sweep' },
           tiles,
           h('div', { class: 'cs-bar' }, status, shuffle),
+          targetLine(`every letter in ${plural(solution.min, 'word')}`),
         ),
       ],
       allowLetter: (current, letter) => {

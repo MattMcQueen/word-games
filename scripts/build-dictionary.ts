@@ -29,6 +29,9 @@ const SHA256 = '5587667caa20c4891390c2d42dbb4d5c4c3f41bee77af1457ece3ba23fb859cc
 const SIZES = [10, 20, 35, 40, 50];
 const LISTS = ['english-words', 'british-words'];
 const OUTPUT = join(ROOT, 'public', 'data', 'words.txt');
+/** Everyday words: the same lists up to this size (some games pick their clues from these). */
+const COMMON_MAX_SIZE = 35;
+const COMMON_OUTPUT = join(ROOT, 'public', 'data', 'common.txt');
 
 async function ensureSource(): Promise<string> {
   mkdirSync(CACHE_DIR, { recursive: true });
@@ -54,10 +57,13 @@ async function ensureSource(): Promise<string> {
 async function main() {
   const finalDir = await ensureSource();
   const raw: string[] = [];
+  const rawCommon: string[] = [];
   for (const list of LISTS) {
     for (const size of SIZES) {
       // SCOWL files are ISO-8859-1; accented words are filtered out anyway.
-      raw.push(...readFileSync(join(finalDir, `${list}.${size}`), 'latin1').split(/\r?\n/));
+      const lines = readFileSync(join(finalDir, `${list}.${size}`), 'latin1').split(/\r?\n/);
+      raw.push(...lines);
+      if (size <= COMMON_MAX_SIZE) rawCommon.push(...lines);
     }
   }
 
@@ -67,6 +73,10 @@ async function main() {
   mkdirSync(join(ROOT, 'public', 'data'), { recursive: true });
   writeFileSync(OUTPUT, `${words.join('\n')}\n`);
   console.log(`Wrote ${words.length} words to public/data/words.txt`);
+
+  const common = filterWords(rawCommon, blocklist);
+  writeFileSync(COMMON_OUTPUT, `${common.join('\n')}\n`);
+  console.log(`Wrote ${common.length} everyday words to public/data/common.txt`);
 }
 
 await main();

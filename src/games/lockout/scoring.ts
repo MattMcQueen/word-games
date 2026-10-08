@@ -1,6 +1,6 @@
 /**
  * Lockout's player-facing rules: checking a guess against the required and
- * banned letters. Scoring and wording are shared with Keyhop (core/longest.ts).
+ * banned letters. Scoring and wording are in core/longest.ts.
  */
 
 import type { Dictionary } from '../../core/dictionary.ts';

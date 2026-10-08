@@ -7,13 +7,14 @@
 
 import { puzzleMonthUrl } from '../config.ts';
 import { monthOf } from './date.ts';
-import { type Dictionary, loadDictionary } from './dictionary.ts';
+import { type Dictionary, loadCommonWords, loadDictionary } from './dictionary.ts';
 import {
   contextFor,
   type DailyPuzzle,
   type GameLogic,
   generateDaily,
   type PuzzleMonthFile,
+  type Resources,
 } from './game.ts';
 import { loadSentences, type SentenceBank } from './sentences.ts';
 
@@ -37,19 +38,37 @@ function fetchMonth(slug: string, month: string) {
   return pending;
 }
 
+/** Where the dictionary and extra data come from; tests swap these out. */
+export interface Loaders {
+  dictionary: () => Promise<Dictionary>;
+  sentences: () => Promise<SentenceBank>;
+  common: () => Promise<ReadonlySet<string>>;
+}
+
+const defaultLoaders: Loaders = {
+  dictionary: loadDictionary,
+  sentences: loadSentences,
+  common: loadCommonWords,
+};
+
 export async function loadDailyPuzzle<P, S>(
   game: GameLogic<P, S>,
   date: string,
-  getDictionary: () => Promise<Dictionary> = loadDictionary,
-  getSentences: () => Promise<SentenceBank> = loadSentences,
+  overrides: Partial<Loaders> = {},
 ): Promise<LoadedPuzzle<P, S>> {
   const file = (await fetchMonth(game.slug, monthOf(date))) as PuzzleMonthFile<P, S> | null;
   const day = file?.days?.[date];
   if (day) return { ...day, source: 'file' };
 
-  const [dict, sentences] = await Promise.all([
-    getDictionary(),
-    game.needsSentences ? getSentences() : undefined,
+  const load = { ...defaultLoaders, ...overrides };
+  const needs = game.needs ?? [];
+  const [dict, sentences, common] = await Promise.all([
+    load.dictionary(),
+    needs.includes('sentences') ? load.sentences() : undefined,
+    needs.includes('common') ? load.common() : undefined,
   ]);
-  return { ...generateDaily(game, contextFor(dict, date, sentences)), source: 'generated' };
+  const resources: Resources = {};
+  if (sentences) resources.sentences = sentences;
+  if (common) resources.common = common;
+  return { ...generateDaily(game, contextFor(dict, date, resources)), source: 'generated' };
 }

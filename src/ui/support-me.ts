@@ -11,10 +11,8 @@
  */
 
 import kofiLogo from '../assets/kofi-logo.png';
-import { SITE_NAME } from '../config.ts';
+import { KOFI_URL, SITE_NAME } from '../config.ts';
 import { h, icon } from './dom.ts';
-
-const KOFI_URL = 'https://ko-fi.com/mattrarelywrites';
 
 export function renderSupportMe(): HTMLElement {
   const panel = h(

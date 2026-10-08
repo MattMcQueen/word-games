@@ -7,7 +7,7 @@
  * scripts. Indexes are built lazily the first time a game asks for them.
  */
 
-import { WORDS_URL } from '../config.ts';
+import { COMMON_URL, WORDS_URL } from '../config.ts';
 import { sortedLetters } from '../solvers/letters.ts';
 
 export interface Dictionary {
@@ -71,4 +71,24 @@ export function loadDictionary(): Promise<Dictionary> {
       throw err;
     });
   return cached;
+}
+
+let commonCached: Promise<ReadonlySet<string>> | undefined;
+
+/**
+ * Everyday words (SCOWL size 35, a subset of the dictionary), for generators
+ * that want their clues to be familiar. Fetched only for in-browser generation.
+ */
+export function loadCommonWords(): Promise<ReadonlySet<string>> {
+  commonCached ??= fetch(COMMON_URL)
+    .then((res) => {
+      if (!res.ok) throw new Error(`Could not load the common words (HTTP ${res.status})`);
+      return res.text();
+    })
+    .then((text) => new Set(createDictionary(text).words))
+    .catch((err: unknown) => {
+      commonCached = undefined;
+      throw err;
+    });
+  return commonCached;
 }

@@ -13,9 +13,9 @@ is funded by a Ko-fi "Support me" button.
 | Swap Shop | [`src/games/swap-shop`](src/games/swap-shop) | Two letters swap; find the words that survive |
 | Matryoshka | [`src/games/matryoshka`](src/games/matryoshka) | Grow a chain of words, one letter at a time |
 | Clean Sweep | [`src/games/clean-sweep`](src/games/clean-sweep) | Use all 15 letters in as few words as possible |
-| Keyhop | [`src/games/keyhop`](src/games/keyhop) | Hop across the keyboard to spell the longest word |
+| Hinge | [`src/games/hinge`](src/games/hinge) | Find the word that finishes one word and starts another |
 | Lockout | [`src/games/lockout`](src/games/lockout) | Eight letters banned, one required; longest word |
-| Gutenberg Gap | [`src/games/gutenberg-gap`](src/games/gutenberg-gap) | Guess the missing word in a line from a classic novel |
+| Lost for Words | [`src/games/lost-for-words`](src/games/lost-for-words) | Guess the missing word in a line from a classic novel |
 
 [`PLAN.md`](PLAN.md) records the design decisions (difficulty bounds, rule interpretations) and how to add a game.
 
@@ -57,8 +57,9 @@ Everything generated is committed, so these are only needed to change it. Run th
 step uses the one before.
 
 1. **Dictionary.** Edit `data/blocklist.txt` if you like, then `npm run build:dictionary`. It downloads the pinned
-   SCOWL release once, into `.cache/`.
-2. **Gutenberg sentences.** Edit `data/gutenberg-sources.json` (the books) or `data/gutenberg-exclude.txt` (extra
+   SCOWL release once, into `.cache/`, and writes `public/data/words.txt` (every game's word list) and
+   `public/data/common.txt` (everyday words, SCOWL size 35, which Hinge picks its clues from).
+2. **Lost for Words sentences.** Edit `data/gutenberg-sources.json` (the books) or `data/gutenberg-exclude.txt` (extra
    words that rule a sentence out), then `npm run build:sentences`. The books are downloaded once from Project
    Gutenberg into `.cache/gutenberg/`.
 3. **Puzzles.** `npm run generate` fills every game from the launch date to three years from today. It only adds
@@ -73,8 +74,12 @@ Then run `npm run check` and commit.
 
 ## Settings
 
-`src/config.ts` holds the site name, the launch date (puzzle #1 and the start of the archive), the live address and
-the Cloudflare Web Analytics token. Changing `LAUNCH_DATE` renumbers every puzzle.
+`src/config.ts` holds the site name, the launch date (puzzle #1 and the start of the archive), the source code and
+Ko-fi addresses, the Amazon Associates tracking ID used for book links (empty hides them) and the Cloudflare Web
+Analytics token. Changing `LAUNCH_DATE` renumbers every puzzle.
+
+Book links go to an Amazon UK search for the title and author (`src/core/amazon.ts`, as on Brand New), marked
+`rel="sponsored nofollow"`, with the Associates disclosure beside them, on the About page and in the footer.
 
 ## Hosting
 

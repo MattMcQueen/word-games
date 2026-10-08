@@ -45,12 +45,32 @@ describe('Swap Shop rules', () => {
 describe('solveSwapShop', () => {
   it('finds each pair once', () => {
     // bean → baen isn't a word, and cat has neither letter.
-    expect(solveSwapShop(ae, ctx)).toEqual({ pairs: ['ate/eta', 'bat/bet', 'panel/penal'] });
+    expect(solveSwapShop(ae, ctx)).toEqual({
+      pairs: ['ate/eta', 'bat/bet', 'panel/penal'],
+      also: {},
+    });
   });
 
   it('honours the length rule', () => {
     expect(solveSwapShop({ letters: 'ae', length: 3 }, ctx)).toEqual({
       pairs: ['ate/eta', 'bat/bet'],
+      also: {},
+    });
+  });
+
+  it('folds inflected pairs into their family', () => {
+    const dict = createDictionary(
+      ['bat', 'bats', 'bet', 'bets', 'jape', 'japed', 'japing', 'vape', 'vaped', 'vaping'].join(
+        '\n',
+      ),
+    );
+    expect(solveSwapShop({ letters: 'ae', length: null }, contextFor(dict, '2026-10-08'))).toEqual({
+      pairs: ['bat/bet'],
+      also: { 'bat/bet': ['bats/bets'] },
+    });
+    expect(solveSwapShop({ letters: 'jv', length: null }, contextFor(dict, '2026-10-08'))).toEqual({
+      pairs: ['jape/vape'],
+      also: { 'jape/vape': ['japed/vaped', 'japing/vaping'] },
     });
   });
 });
@@ -67,7 +87,7 @@ describe('generateSwapShop', () => {
   });
 
   it('rejects days with too few or too many pairs', () => {
-    const sol = (n: number) => ({ pairs: Array(n).fill('a/b') });
+    const sol = (n: number) => ({ pairs: Array(n).fill('a/b'), also: {} });
     expect(acceptSwapShop(ae, sol(MIN_PAIRS - 1))).toBe(false);
     expect(acceptSwapShop(ae, sol(MIN_PAIRS))).toBe(true);
     expect(acceptSwapShop(ae, sol(MAX_PAIRS))).toBe(true);
@@ -93,20 +113,30 @@ describe('generateSwapShop', () => {
 });
 
 describe('Swap Shop scoring', () => {
-  const solution = { pairs: ['ate/eta', 'bat/bet', 'panel/penal'] };
+  const solution = {
+    pairs: ['ate/eta', 'bat/bet', 'panel/penal'],
+    also: { 'bat/bet': ['bats/bets'] },
+  };
 
   it('checks guesses', () => {
-    expect(swapProblem('bet', ae, small, [])).toBeNull();
-    expect(swapProblem('cat', { letters: 'ou', length: null }, small, [])).toBe(
+    expect(swapProblem('bet', ae, solution, small, [])).toBeNull();
+    expect(swapProblem('cat', { letters: 'ou', length: null }, solution, small, [])).toBe(
       'CAT has no O or U to swap.',
     );
-    expect(swapProblem('bean', ae, small, [])).toBe(
+    expect(swapProblem('bean', ae, solution, small, [])).toBe(
       "BEAN becomes BAEN, which isn't in the word list.",
     );
-    expect(swapProblem('panel', { letters: 'ae', length: 3 }, small, [])).toBe(
+    expect(swapProblem('panel', { letters: 'ae', length: 3 }, solution, small, [])).toBe(
       "Today's words have 3 letters.",
     );
-    expect(swapProblem('bet', ae, small, ['bat/bet'])).toBe("You've already found BAT ↔ BET.");
+    expect(swapProblem('bet', ae, solution, small, ['bat/bet'])).toBe(
+      "You've already found BAT ↔ BET.",
+    );
+    // An inflected form counts as its family, so it's already found too.
+    const withPlurals = createDictionary('bat\nbats\nbet\nbets');
+    expect(swapProblem('bets', ae, solution, withPlurals, ['bat/bet'])).toBe(
+      "You've already found BAT ↔ BET.",
+    );
   });
 
   it('scores pairs found against the total', () => {

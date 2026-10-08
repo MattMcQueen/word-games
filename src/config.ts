@@ -3,6 +3,15 @@
 /** Live at https://words.matt-rarely-writes.co.uk (see README, Hosting). */
 export const SITE_NAME = 'Word Games';
 
+/** The source code, linked from the About page and the footer. */
+export const SOURCE_URL = 'https://github.com/MattMcQueen/word-games';
+
+/** Amazon Associates UK tracking ID for book links (public: it's in every link). Empty hides them. */
+export const AMAZON_TAG = 'matsbasblo-21';
+
+/** Where the Support me button and links go. */
+export const KOFI_URL = 'https://ko-fi.com/mattrarelywrites';
+
 /**
  * This site's token in Cloudflare Web Analytics (public: it's in every page).
  * Leave empty to count nothing. See src/core/analytics.ts.
@@ -21,4 +30,5 @@ export const GENERATE_YEARS_AHEAD = 3;
 /** Paths of the static data files, relative to the site root. */
 export const WORDS_URL = '/data/words.txt';
 export const SENTENCES_URL = '/data/sentences.json';
+export const COMMON_URL = '/data/common.txt';
 export const puzzleMonthUrl = (slug: string, month: string) => `/puzzles/${slug}/${month}.json`;

@@ -97,8 +97,14 @@ export function startGame<P, S, D>(game: GameModule<P, S, D>): void {
     if (openResults) return openResults();
     openModal({ title: `${game.name} stats`, content: statsGrid(loadStats(slug, today)) });
   };
+  // On phones these shrink to round icon buttons (the label stays for screen readers).
   const toolButton = (iconName: IconName, label: string, onclick: () => void) =>
-    h('button', { class: 'btn quiet', type: 'button', onclick }, icon(iconName), label);
+    h(
+      'button',
+      { class: 'btn quiet tool-btn', type: 'button', title: label, onclick },
+      icon(iconName),
+      h('span', { class: 'tool-label' }, label),
+    );
 
   const main = renderPage({ title: game.name, nav: gameNav(slug, 'play'), width: 'game' });
   main.append(

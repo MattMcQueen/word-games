@@ -27,8 +27,22 @@ export interface SwapShopPuzzle {
 }
 
 export interface SwapShopSolution {
-  /** Every pair as "first/second" (alphabetical within and between pairs). */
+  /**
+   * The pairs to find, as "first/second" (alphabetical within and between pairs).
+   * Each stands for a family: inflected pairs count as part of it (see `also`).
+   */
   pairs: string[];
+  /** For a pair with inflected forms, those pairs: "bat/bet" → ["bats/bets"]. */
+  also: Record<string, string[]>;
+}
+
+/** The pair to count when a player finds `key`: the head of its family. */
+export function familyHead(key: string, solution: SwapShopSolution): string {
+  if (solution.pairs.includes(key)) return key;
+  for (const [head, members] of Object.entries(solution.also)) {
+    if (members.includes(key)) return head;
+  }
+  return key;
 }
 
 /** Swap two letters everywhere in a word, simultaneously: swapLetters("bat", "a", "e") → "bet". */

@@ -1,0 +1,14 @@
+{
+  "game": "hinge",
+  "month": "2029-10",
+  "days": {
+    "2029-10-01": {"puzzle":{"pairs":[{"left":"inform","right":"eater","length":3},{"left":"sea","right":"net","length":3},{"left":"per","right":"less","length":4},{"left":"ship","right":"age","length":5},{"left":"pick","right":"book","length":6}]},"solution":{"answers":["ant","son","form","wreck","pocket"]}},
+    "2029-10-02": {"puzzle":{"pairs":[{"left":"cob","right":"bed","length":3},{"left":"out","right":"stock","length":4},{"left":"soft","right":"room","length":4},{"left":"sweet","right":"less","length":5},{"left":"girl","right":"ship","length":6}]},"solution":{"answers":["web","live","ball","heart","friend"]}},
+    "2029-10-03": {"puzzle":{"pairs":[{"left":"cam","right":"sure","length":3},{"left":"blue","right":"hop","length":4},{"left":"jar","right":"leader","length":4},{"left":"over","right":"tier","length":4},{"left":"sea","right":"stuff","length":4}]},"solution":{"answers":["era","bell","ring","hear","food"]}},
+    "2029-10-04": {"puzzle":{"pairs":[{"left":"brace","right":"down","length":3},{"left":"tail","right":"way","length":4},{"left":"tear","right":"out","length":4},{"left":"fore","right":"hood","length":6},{"left":"over","right":"some","length":6}]},"solution":{"answers":["let","gate","drop","father","burden"]}},
+    "2029-10-05": {"puzzle":{"pairs":[{"left":"after","right":"like","length":4},{"left":"before","right":"out","length":4},{"left":"break","right":"stream","length":4},{"left":"over","right":"away","length":5},{"left":"inter","right":"ion","length":7}]},"solution":{"answers":["life","hand","down","throw","connect"]}},
+    "2029-10-06": {"puzzle":{"pairs":[{"left":"arm","right":"fall","length":3},{"left":"post","right":"car","length":3},{"left":"health","right":"fuller","length":4},{"left":"nick","right":"less","length":4},{"left":"super","right":"place","length":6}]},"solution":{"answers":["pit","box","care","name","market"]}},
+    "2029-10-07": {"puzzle":{"pairs":[{"left":"arm","right":"selves","length":3},{"left":"end","right":"mark","length":3},{"left":"finger","right":"toe","length":3},{"left":"over","right":"bridge","length":4},{"left":"con","right":"head","length":6}]},"solution":{"answers":["our","ear","tip","draw","figure"]}},
+    "2029-10-08": {"puzzle":{"pairs":[{"left":"dam","right":"chant","length":3},{"left":"out","right":"her","length":3},{"left":"inter","right":"point","length":4},{"left":"needle","right":"book","length":4},{"left":"gang","right":"ton","length":5}]},"solution":{"answers":["pen","wit","view","work","plank"]}}
+  }
+}

@@ -14,6 +14,7 @@ import { gameUrl } from '../catalogue.ts';
 import { swapShopLogic } from './logic.ts';
 import { describeOutcome, missedPairs, resultFor, shareLines, swapProblem } from './scoring.ts';
 import {
+  familyHead,
   lengthRule,
   NAME,
   pairKey,
@@ -75,19 +76,29 @@ export const swapShopGame: GameModule<SwapShopPuzzle, SwapShopSolution, SwapShop
       belowInput: [previewLine],
       onType: showPreview,
       submit(word, { input, commit }) {
-        const problem = swapProblem(word, puzzle, dict, data.pairs);
+        const problem = swapProblem(word, puzzle, solution, dict, data.pairs);
         if (problem) return input.feedback(problem, 'bad');
-        const key = pairKey(word, swapLetters(word, a, b));
+        const typed = pairKey(word, swapLetters(word, a, b));
+        const key = familyHead(typed, solution);
         data.pairs.push(key);
         input.setValue('');
-        input.feedback(`${pairLabel(key)}: a pair!`, 'good');
+        input.feedback(
+          key === typed
+            ? `${pairLabel(key)}: a pair!`
+            : `${pairLabel(typed)} counts as ${pairLabel(key)}: a pair!`,
+          'good',
+        );
         commit();
       },
       found: () => ({
         heading: `Pairs found: ${data.pairs.length}`,
-        items: [...data.pairs]
-          .sort()
-          .map((key) => foundItem(pairLabel(key), letters(key.indexOf('/')))),
+        items: [...data.pairs].sort().map((key) => {
+          const more = solution.also[key]?.length ?? 0;
+          const meta = more
+            ? `${letters(key.indexOf('/'))}, and ${more} more forms`
+            : letters(key.indexOf('/'));
+          return foundItem(pairLabel(key), meta);
+        }),
       }),
       result: (gaveUp) => resultFor(data.pairs, solution, gaveUp),
       onRender() {

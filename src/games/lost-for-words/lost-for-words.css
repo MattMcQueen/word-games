@@ -1,0 +1,62 @@
+/* Lost for Words' sentence panel. The rest is the shared word board (components.css). */
+
+.lw-label {
+  margin: 0 0 0.5rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* The sentence reads like a book: serif, generous line height. */
+.lw-sentence {
+  margin: 0;
+  font: 400 1.25rem / 1.9 var(--serif);
+}
+
+.lw-gap {
+  display: inline-flex;
+  gap: 2px;
+  vertical-align: middle;
+  margin: 0 0.15em;
+}
+
+.lw-box {
+  display: inline-grid;
+  place-items: center;
+  width: 1.45rem;
+  height: 1.8rem;
+  border-bottom: 3px solid var(--accent);
+  background: var(--panel);
+  border-radius: 4px 4px 0 0;
+  font: 800 1rem / 1 var(--sans);
+}
+
+.lw-filled .lw-box {
+  background: var(--accent-soft);
+}
+
+.lw-credit {
+  margin: 0.75rem 0 0;
+  color: var(--soft);
+}
+
+.lw-credit:empty {
+  display: none;
+}
+
+.lw-credit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lw-buy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+}
+
+.lw-disclosure {
+  color: var(--muted);
+  font-size: 0.8rem;
+}

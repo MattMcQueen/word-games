@@ -1,6 +1,8 @@
 /** The About page: privacy, where the words come from, credits. Modelled on card-kit's AboutPage. */
 
 import books from '../../data/gutenberg-sources.json';
+import { SOURCE_URL } from '../config.ts';
+import { AMAZON_DISCLOSURE } from '../core/amazon.ts';
 import { h } from '../ui/dom.ts';
 import { renderPage, siteNav } from '../ui/page.ts';
 
@@ -55,6 +57,12 @@ renderPage({
             link('https://more.ko-fi.com/privacy', "Ko-fi's privacy policy"),
             ' applies to that form.',
           ),
+          h(
+            'li',
+            null,
+            'After a Lost for Words puzzle there is a link to buy the book on Amazon. It is an ordinary link: nothing is loaded from Amazon unless you follow it. ',
+            h('strong', null, AMAZON_DISCLOSURE),
+          ),
         ),
       ),
       h(
@@ -72,25 +80,18 @@ renderPage({
       h(
         'li',
         { class: 'wide', id: 'books' },
-        h('h2', null, 'The books in Gutenberg Gap'),
+        h('h2', null, 'The books in Lost for Words'),
         h(
           'p',
           null,
-          "Gutenberg Gap's sentences come from these novels, all in the public domain and free to read at ",
+          "Lost for Words' sentences come from these novels, all in the public domain. The texts were taken from ",
           link('https://www.gutenberg.org/', 'Project Gutenberg'),
-          '. Thank you to its volunteers.',
+          '; thank you to its volunteers.',
         ),
         h(
           'ul',
           { class: 'points book-list' },
-          books.map((b) =>
-            h(
-              'li',
-              null,
-              link(`https://www.gutenberg.org/ebooks/${b.id}`, b.title),
-              ` by ${b.author}`,
-            ),
-          ),
+          books.map((b) => h('li', null, h('cite', null, b.title), ` by ${b.author}`)),
         ),
       ),
       h(
@@ -124,7 +125,7 @@ renderPage({
         h(
           'p',
           null,
-          'Fonts: Figtree, Young Serif and DM Sans, all under the SIL Open Font License. Word list: SCOWL, © Kevin Atkinson, used under its permissive licence. Sentences: Project Gutenberg.',
+          'Fonts: Figtree, Young Serif and DM Sans, all under the SIL Open Font License. Word list: SCOWL, © Kevin Atkinson, used under its permissive licence. Sentences: public-domain texts from Project Gutenberg.',
         ),
       ),
       h(
@@ -139,6 +140,13 @@ renderPage({
           ' blog and makes the ',
           link('https://blackjack.matt-rarely-writes.co.uk/', 'card games'),
           '.',
+        ),
+        h(
+          'p',
+          null,
+          'The code is open source under the MIT licence: ',
+          link(SOURCE_URL, 'see it on GitHub'),
+          '. Suggestions and bug reports are welcome there.',
         ),
       ),
     ),

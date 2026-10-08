@@ -10,6 +10,7 @@ import { scoreMeter } from '../../core/share.ts';
 import { plural } from '../../core/text.ts';
 import { basicWordProblem } from '../../core/validate.ts';
 import {
+  familyHead,
   pairKey,
   pairLabel,
   type SwapShopPuzzle,
@@ -21,6 +22,7 @@ import {
 export function swapProblem(
   word: string,
   puzzle: SwapShopPuzzle,
+  solution: SwapShopSolution,
   dict: Dictionary,
   found: readonly string[],
 ): string | null {
@@ -37,8 +39,8 @@ export function swapProblem(
   const swapped = swapLetters(word, a, b);
   if (!dict.has(swapped))
     return `${W} becomes ${swapped.toUpperCase()}, which isn't in the word list.`;
-  const key = pairKey(word, swapped);
-  if (found.includes(key)) return `You've already found ${pairLabel(key)}.`;
+  const head = familyHead(pairKey(word, swapped), solution);
+  if (found.includes(head)) return `You've already found ${pairLabel(head)}.`;
   return null;
 }
 

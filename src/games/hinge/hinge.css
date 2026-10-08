@@ -1,0 +1,95 @@
+/* Hinge's list of pairs. The rest is the shared word board (components.css). */
+
+.hg-label {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.hg-pairs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hg-pair {
+  padding: 0.5rem 0.4rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  text-align: center;
+}
+
+.hg-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.hg-word {
+  font: 800 1.05rem / 1.2 var(--sans);
+  letter-spacing: 0.06em;
+}
+
+.hg-boxes {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.hg-box {
+  display: inline-grid;
+  place-items: center;
+  width: 1.55rem;
+  height: 1.9rem;
+  border-bottom: 3px solid var(--accent);
+  border-radius: 4px 4px 0 0;
+  background: var(--panel);
+  font: 800 1rem / 1 var(--sans);
+}
+
+/* Found pairs: the hinge filled in, with a tick and the two words it makes. */
+.hg-found .hg-box,
+.hg-helped .hg-box {
+  background: var(--accent-soft);
+}
+
+.hg-missed .hg-box {
+  color: var(--muted);
+}
+
+.hg-made {
+  margin: 0.35rem 0 0;
+  color: var(--soft);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.hg-found .hg-made {
+  color: var(--good);
+}
+
+/* A small Hint button at the end of each pair, so every pair stays on one line. */
+.hg-hint {
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--fg);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.hg-hint:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.hg-hint:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -7,7 +7,7 @@
 import { puzzleNumber } from '../../core/date.ts';
 import { buildShareText } from '../../core/share.ts';
 import { letters } from '../../core/text.ts';
-import { h } from '../../ui/dom.ts';
+import { h, targetLine } from '../../ui/dom.ts';
 import type { GameModule } from '../../ui/game-shell.ts';
 import { answersSummary } from '../../ui/results.ts';
 import { mountWordHunt, type WordHuntData } from '../../ui/word-hunt.ts';
@@ -61,6 +61,7 @@ export const priceTagGame: GameModule<PriceTagPuzzle, PriceTagSolution, WordHunt
           { class: 'panel pt-budget', 'aria-label': 'Budget' },
           h('p', { class: 'pt-budget-label' }, 'Budget'),
           h('p', { class: 'pt-budget-value' }, pence(puzzle.budget)),
+          targetLine(`${letters(solution.bestLength)} for up to ${pence(puzzle.budget)}`),
           bestLine,
         ),
       ],

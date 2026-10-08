@@ -5,7 +5,7 @@ import { contextFor, generateDaily } from './game.ts';
 import { loadDailyPuzzle } from './puzzle-loader.ts';
 
 const dict = createDictionary('ant\nbee\ncat\ndog\nemu');
-const getDict = async () => dict;
+const getDict = { dictionary: async () => dict };
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -62,15 +62,18 @@ describe('loadDailyPuzzle', () => {
     const needy = {
       ...toyGame,
       slug: 'toy-e',
-      needsSentences: true,
+      needs: ['sentences'] as const,
       generate: vi.fn(toyGame.generate),
     };
-    await loadDailyPuzzle(needy, '2040-06-03', getDict, getSentences);
+    await loadDailyPuzzle(needy, '2040-06-03', { ...getDict, sentences: getSentences });
     expect(getSentences).toHaveBeenCalledOnce();
     expect(needy.generate.mock.calls[0]?.[1].sentences).toBe(bank);
 
     getSentences.mockClear();
-    await loadDailyPuzzle({ ...toyGame, slug: 'toy-f' }, '2040-06-03', getDict, getSentences);
+    await loadDailyPuzzle({ ...toyGame, slug: 'toy-f' }, '2040-06-03', {
+      ...getDict,
+      sentences: getSentences,
+    });
     expect(getSentences).not.toHaveBeenCalled();
   });
 });
