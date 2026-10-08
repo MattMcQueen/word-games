@@ -10,14 +10,12 @@
 .pt-budget-label {
   margin: 0;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--muted);
 }
 
 .pt-budget-value {
   margin: 0;
-  font-size: 2rem;
-  font-weight: 800;
-  line-height: 1.1;
+  font: 800 2.4rem / 1.1 var(--sans); /* Young Serif's old-style figures read badly here */
 }
 
 .pt-best {
@@ -28,7 +26,7 @@
 .pt-cost {
   margin: -0.5rem 0 0;
   text-align: center;
-  color: var(--text-muted);
+  color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
 
@@ -43,14 +41,14 @@
 }
 
 .pt-found-heading {
-  font-size: 1rem;
+  font: 700 1rem / 1.3 var(--sans); /* sans, so the count's figures read clearly */
 }
 
 .pt-found {
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--line);
 }
 
 .pt-found li {
@@ -59,17 +57,17 @@
   flex-wrap: wrap;
   gap: 0.25rem 0.75rem;
   padding: 0.45rem 0.25rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--line);
 }
 
 .pt-word {
-  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .pt-word-meta {
-  color: var(--text-muted);
+  color: var(--muted);
   font-size: 0.9rem;
 }
 

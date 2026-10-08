@@ -63,7 +63,7 @@ export function confirmModal(opts: {
   const button = (label: string, primary: boolean, onClick: () => void) =>
     h(
       'button',
-      { class: primary ? 'btn btn-primary' : 'btn', type: 'button', onclick: onClick },
+      { class: primary ? 'btn primary' : 'btn', type: 'button', onclick: onClick },
       label,
     );
   const modal = openModal({

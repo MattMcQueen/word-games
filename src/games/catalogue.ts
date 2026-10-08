@@ -18,7 +18,15 @@ export const GAMES: readonly GameInfo[] = [
   },
 ];
 
+/** Look a game up by slug; throws for an unknown one, which is a programming error. */
+export function gameInfo(slug: string): GameInfo {
+  const info = GAMES.find((g) => g.slug === slug);
+  if (!info) throw new Error(`Unknown game: ${slug}`);
+  return info;
+}
+
 export const gamePath = (slug: string) => `/${slug}/`;
+export const howToPlayPath = (slug: string) => `/${slug}/how-to-play/`;
 
 /** Absolute link to a game, for share text. */
 export const gameUrl = (slug: string) => `${location.origin}${gamePath(slug)}`;

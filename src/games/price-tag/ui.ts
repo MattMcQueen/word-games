@@ -99,7 +99,7 @@ function mount(ctx: Ctx) {
   );
   const resultsButton = h(
     'button',
-    { class: 'btn btn-primary', type: 'button', onclick: () => ctx.showResults() },
+    { class: 'btn primary', type: 'button', onclick: () => ctx.showResults() },
     'See results',
   );
 
@@ -188,38 +188,6 @@ export const priceTagGame: GameModule<PriceTagPuzzle, PriceTagSolution, PriceTag
   name: NAME,
   initialData: () => ({ words: [] }),
   mount,
-
-  help: () => [
-    h(
-      'p',
-      null,
-      'Every letter has a price, from 1p to 9p, shown on the keyboard. You have a budget for the day.',
-    ),
-    h(
-      'p',
-      null,
-      h('strong', null, 'Find the longest word you can afford.'),
-      ' If two words are the same length, the one that spends closer to the budget wins.',
-    ),
-    h(
-      'p',
-      null,
-      'You can enter as many words as you like; your best one counts. Words need at least 3 letters and must be in the word list.',
-    ),
-    h(
-      'p',
-      null,
-      'The game ends when you find the best possible word, or when you press ',
-      h('strong', null, 'Finish'),
-      ". Then you'll see how you did and the best answer.",
-    ),
-    h('h3', null, 'Example'),
-    h(
-      'p',
-      null,
-      'With a budget of 20p, if C costs 4p, A costs 2p and T costs 5p, then CAT costs 11p and leaves 9p to spare.',
-    ),
-  ],
 
   summarise({ puzzle, solution, data, result, date }) {
     const best: ScoredWord | null = bestOf(data.words, puzzle.prices);

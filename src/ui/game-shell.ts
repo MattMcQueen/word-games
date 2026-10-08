@@ -1,11 +1,12 @@
 /**
  * The shared page shell every game runs inside. It handles everything that
  * isn't specific to one game:
+ *   - the page frame (header, Support me button) and the game's title bar
  *   - picking the date (today, or ?date=YYYY-MM-DD for the archive)
  *   - loading the puzzle and dictionary, with an error state and retry
  *   - restoring and saving progress, recording stats
- *   - header buttons for help, archive and stats/results
- *   - showing help on a first visit, and a notice when midnight passes
+ *   - archive and stats buttons, a pointer to How to play on a first visit,
+ *     and a notice when midnight passes
  *
  * A game provides a GameModule; its mount() only has to draw the board.
  */
@@ -23,11 +24,11 @@ import type { GameLogic } from '../core/game.ts';
 import { finishDay, type GameResult, loadDay, loadStats, saveDay } from '../core/progress.ts';
 import { loadDailyPuzzle } from '../core/puzzle-loader.ts';
 import { readJson, writeJson } from '../core/storage.ts';
-import { gamePath } from '../games/catalogue.ts';
+import { gamePath, howToPlayPath } from '../games/catalogue.ts';
 import { openArchive } from './archive.ts';
-import { type Child, h, replaceChildren } from './dom.ts';
-import { renderHeader } from './header.ts';
+import { h, type IconName, icon, replaceChildren } from './dom.ts';
 import { openModal } from './modal.ts';
+import { gameNav, renderPage } from './page.ts';
 import { type ResultSummary, showResults, statsGrid } from './results.ts';
 import { toast } from './toast.ts';
 
@@ -58,8 +59,6 @@ export interface GameContext<P, S, D> {
 export interface GameModule<P, S, D> {
   logic: GameLogic<P, S>;
   name: string;
-  /** Rules shown in the help dialog. */
-  help(): Child;
   /** Fresh state for a puzzle nobody has started. */
   initialData(puzzle: P): D;
   mount(ctx: GameContext<P, S, D>): void;
@@ -93,40 +92,50 @@ export function startGame<P, S, D>(game: GameModule<P, S, D>): void {
   // Set once the puzzle has loaded; the stats button behaves differently before and after.
   let openResults: (() => void) | undefined;
 
-  const showHelp = () => openModal({ title: `How to play ${game.name}`, content: game.help() });
   const showArchive = () => openArchive({ slug, path, today, current: date });
   const showStats = () => {
     if (openResults) return openResults();
     openModal({ title: `${game.name} stats`, content: statsGrid(loadStats(slug, today)) });
   };
+  const toolButton = (iconName: IconName, label: string, onclick: () => void) =>
+    h('button', { class: 'btn quiet', type: 'button', onclick }, icon(iconName), label);
 
-  const main = h('main', { id: 'main' });
-  document.title = `${game.name} – ${document.title}`;
-  document.body.replaceChildren(
-    h('a', { class: 'skip-link', href: '#main' }, 'Skip to game'),
-    renderHeader({
-      title: game.name,
-      actions: [
-        { icon: 'help', label: 'How to play', onClick: showHelp },
-        { icon: 'calendar', label: 'Archive', onClick: showArchive },
-        { icon: 'chart', label: 'Stats and results', onClick: showStats },
-      ],
-    }),
-    main,
+  const main = renderPage({ title: game.name, nav: gameNav(slug, 'play'), width: 'game' });
+  main.append(
+    h(
+      'div',
+      { class: 'game-bar' },
+      h(
+        'div',
+        { class: 'game-title' },
+        h('h1', null, game.name),
+        h('p', { class: 'date-line' }, `#${puzzleNumber(date)} · ${formatLongDate(date)}`),
+      ),
+      h(
+        'div',
+        { class: 'game-tools' },
+        toolButton('calendar', 'Archive', showArchive),
+        toolButton('chart', 'Stats', showStats),
+      ),
+    ),
   );
+  if (!isToday) {
+    main.append(
+      h(
+        'p',
+        { class: 'notice' },
+        "You're playing a puzzle from the archive. ",
+        h('a', { href: path }, "Go to today's puzzle"),
+      ),
+    );
+  }
 
-  const dateLine = h(
-    'p',
-    { class: 'date-line' },
-    h('span', null, `#${puzzleNumber(date)} · ${formatLongDate(date)}`),
-    isToday ? null : h('a', { href: path }, "Go to today's puzzle"),
-  );
   const board = h(
     'div',
     { class: 'board', 'aria-busy': 'true' },
     h('p', { class: 'muted' }, 'Loading puzzle…'),
   );
-  main.append(dateLine, board);
+  main.append(board);
 
   async function load() {
     try {
@@ -195,23 +204,33 @@ export function startGame<P, S, D>(game: GameModule<P, S, D>): void {
 
   void load();
 
-  // First visit to this game: explain the rules.
+  // First visit to this game: point to the rules.
   if (!readJson<boolean>(`${slug}:seen-help`, false)) {
     writeJson(`${slug}:seen-help`, true);
-    showHelp();
+    board.before(
+      h(
+        'p',
+        { class: 'notice' },
+        `New to ${game.name}? `,
+        h('a', { href: howToPlayPath(slug) }, 'Read how to play'),
+        ' first.',
+      ),
+    );
   }
 
   // If the page is left open past midnight, offer the new puzzle.
   if (isToday) {
     setTimeout(() => {
-      main.prepend(
-        h(
-          'p',
-          { class: 'notice', role: 'status' },
-          "It's past midnight, so there's a new puzzle. ",
-          h('a', { href: path }, 'Play it now'),
-        ),
-      );
+      main
+        .querySelector('.game-bar')
+        ?.after(
+          h(
+            'p',
+            { class: 'notice', role: 'status' },
+            "It's past midnight, so there's a new puzzle. ",
+            h('a', { href: path }, 'Play it now'),
+          ),
+        );
     }, msUntilMidnight() + 1000);
   }
 }

@@ -19,13 +19,17 @@ accounts or ads. It's hosted on Azure Static Web Apps.
 | Site name | "Word Games" (`SITE_NAME` in `src/config.ts`) |
 | Keyhop | Goal is the longest valid word from the start key (target length is a minimum) |
 | Swap Shop | Pairs count once (BAT ↔ BET is one find) |
+| Look | Matches the card games (card-games/packages/card-kit): slate colours, terracotta accent, Figtree and Young Serif, sticky header, hero + card pages |
+| Pages | `/` lists the games; each game has `/<slug>/` and `/<slug>/how-to-play/`; `/about/` has privacy and credits |
+| Theme | Follows the device until the sun/moon button is pressed; the choice is remembered (unlike the card games) |
+| Support | Ko-fi "Support me" button, bottom-left; nothing is loaded from Ko-fi until it's opened. Phase 5's CSP must allow `frame-src https://ko-fi.com` |
 
 ## Phases
 
 1. ✅ Scaffold, dictionary build script, shared modules and tests
 2. ✅ Price Tag end to end (reference implementation), **waiting for feedback**
 3. ⬜ Threader, Swap Shop, Matryoshka, Clean Sweep, Keyhop, Lockout, Gutenberg Gap
-4. ⬜ Home page with today's status, help page, about page with credits
+4. ◐ Home page with today's status ✅, How to play pages ✅, About page with credits ✅ (Gutenberg credits to add with Gutenberg Gap)
 5. ⬜ Azure Static Web Apps config, README
 
 ## Project layout
@@ -35,8 +39,12 @@ pages/                 HTML entry points (Vite root); pages/<slug>/index.html �
 src/config.ts          site name, launch date, data URLs
 src/core/              dictionary, rng, date, game interface, puzzle loader, storage, progress, share, validate
 src/solvers/           letter helpers shared by solvers and generators
-src/ui/                dom helper, header, keyboard, word input, modal, results, archive, toast, game shell
-src/games/<slug>/      spec.ts, generate.ts, solve.ts, logic.ts, scoring.ts, ui.ts, main.ts, tests
+src/ui/                dom helper, page frame, header, theme toggle, Support me, How to play layout,
+                       keyboard, word input, modal, results, archive, toast, game shell
+src/pages/             home and About page scripts
+src/assets/            fonts (with licences) and the Ko-fi logo, shared with the card games
+src/games/<slug>/      spec.ts, generate.ts, solve.ts, logic.ts, scoring.ts, rules.ts, ui.ts,
+                       main.ts, how-to-play.ts, tests
 src/games/catalogue.ts names and taglines for navigation
 src/games/registry.ts  all game logic, for the generator script
 scripts/               build-dictionary.ts, generate-puzzles.ts
@@ -50,7 +58,8 @@ tests/e2e/             Playwright specs
 1. `src/games/<slug>/spec.ts`: types, constants and difficulty bounds.
 2. `generate.ts` and `solve.ts`: pure functions with no DOM or Node APIs. Then `logic.ts` combines them into a `GameLogic`.
 3. `ui.ts`: a `GameModule` whose `mount()` draws the board; `main.ts` calls `startGame()`.
-4. `pages/<slug>/index.html` (copy an existing one).
+   `rules.ts` holds the How to play words; `how-to-play.ts` calls `renderHowToPlay()`.
+4. `pages/<slug>/index.html` and `pages/<slug>/how-to-play/index.html` (copy Price Tag's).
 5. Register it in `src/games/registry.ts` and `src/games/catalogue.ts`.
 6. Unit tests for the solver and generator, plus a Playwright spec.
 7. `npm run generate -- --game <slug>`, then `npm run check`.

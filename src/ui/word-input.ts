@@ -81,7 +81,7 @@ export function createWordInput(options: WordInputOptions): WordInput {
     el: h(
       'div',
       { class: 'word-entry' },
-      h('label', { class: 'visually-hidden', for: id }, label),
+      h('label', { class: 'sr-only', for: id }, label),
       input,
       message,
     ),

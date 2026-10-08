@@ -75,7 +75,7 @@ export function showResults(opts: {
   const share = h(
     'button',
     {
-      class: 'btn btn-primary',
+      class: 'btn primary',
       type: 'button',
       onclick: async () => {
         toast(

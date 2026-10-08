@@ -1,6 +1,6 @@
 import { readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
-import { defineConfig } from 'vite';
+import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite';
 
 // HTML entry points live in pages/, one folder per URL (pages/price-tag/index.html
 // is served at /price-tag/). We find them all so adding a game needs no config change.
@@ -21,7 +21,31 @@ function findHtmlEntries(dir: string): Record<string, string> {
   return entries;
 }
 
+/**
+ * Tags every page shares, added to every index.html under pages/ at build time so
+ * the HTML files only hold what differs: language, title, description and script.
+ */
+function sharedHead(): Plugin {
+  const meta = (attrs: Record<string, string>): HtmlTagDescriptor => ({ tag: 'meta', attrs });
+  return {
+    name: 'shared-head',
+    transformIndexHtml: () => [
+      meta({
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, viewport-fit=cover',
+      }),
+      meta({ name: 'color-scheme', content: 'light dark' }),
+      meta({ name: 'theme-color', content: '#f5f7fa', media: '(prefers-color-scheme: light)' }),
+      meta({ name: 'theme-color', content: '#13171d', media: '(prefers-color-scheme: dark)' }),
+      { tag: 'link', attrs: { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' } },
+      // Not deferred: applies a chosen light/dark theme before the page paints.
+      { tag: 'script', attrs: { src: '/theme-init.js' } },
+    ],
+  };
+}
+
 export default defineConfig({
+  plugins: [sharedHead()],
   root: pagesDir,
   // Multi-page app: unknown URLs 404 (as on the live site) instead of serving index.html.
   appType: 'mpa',

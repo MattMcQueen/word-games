@@ -23,14 +23,16 @@ const dearWord = WORDS.find(
 ) as string;
 
 test.describe('Price Tag', () => {
-  test('shows the rules on a first visit', async ({ page }) => {
+  test('points to How to play on a first visit only', async ({ page }) => {
     await setUp(page, DATE);
     await page.goto('/price-tag/');
-    const help = page.getByRole('dialog', { name: 'How to play Price Tag' });
-    await expect(help).toBeVisible();
-    await expectAccessible(page);
-    await help.getByRole('button', { name: 'Close' }).click();
-    await expect(help).toBeHidden();
+    const notice = page.getByText('New to Price Tag?');
+    await expect(notice).toBeVisible();
+    await page.getByRole('link', { name: 'Read how to play' }).click();
+    await expect(page).toHaveURL(/\/price-tag\/how-to-play\/$/);
+    await page.getByRole('link', { name: "Play today's puzzle" }).click();
+    await expect(page.locator('.pt-budget-value')).toBeVisible();
+    await expect(page.getByText('New to Price Tag?')).toBeHidden();
   });
 
   test('shows the budget and letter prices', async ({ page }) => {
@@ -170,7 +172,6 @@ test.describe('Price Tag', () => {
     });
     await setUp(page, DATE);
     await page.goto('/price-tag/');
-    await page.getByRole('dialog').getByRole('button', { name: 'Close' }).click();
     await enterWord(page, okWord);
     await expect(page.getByText('Words found: 1')).toBeVisible();
   });

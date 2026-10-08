@@ -1,4 +1,4 @@
-/* Reset, page layout and typography. Mobile-first: wider screens just get more margin. */
+/* Reset, page layout and typography, as in card-kit's app.css. Mobile-first. */
 
 *,
 *::before,
@@ -9,36 +9,28 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  scroll-padding-top: 96px; /* in-page links land below the sticky header */
 }
 
 body {
   margin: 0;
   min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
   background: var(--bg);
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 1rem;
-  line-height: 1.5;
-}
-
-main {
-  flex: 1;
-  width: 100%;
-  max-width: var(--page-width);
-  margin: 0 auto;
-  padding: 1rem var(--gutter) 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  color: var(--fg);
+  font: 16px / 1.5 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+  touch-action: manipulation;
 }
 
 h1,
 h2,
 h3 {
-  line-height: 1.2;
   margin: 0 0 0.5rem;
+  font-family: var(--serif);
+  font-weight: 400; /* Young Serif has one weight */
+  line-height: 1.15;
 }
 
 p {
@@ -47,6 +39,7 @@ p {
 
 a {
   color: var(--accent);
+  text-underline-offset: 2px;
 }
 
 button {
@@ -57,6 +50,7 @@ button {
 :focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* Make the hidden attribute win over component display rules (e.g. display: flex). */
@@ -64,20 +58,50 @@ button {
   display: none !important;
 }
 
-.visually-hidden {
-  position: absolute !important;
+.sr-only {
+  position: absolute;
   width: 1px;
   height: 1px;
-  padding: 0;
-  margin: -1px;
   overflow: hidden;
-  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
   white-space: nowrap;
-  border: 0;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+.skip:focus {
+  left: 16px;
+  top: 8px;
+  z-index: 30;
+  padding: 8px 12px;
+  background: var(--surface);
+}
+
+/* The page column. Games use the narrow one; home, About and How to play the wide one. */
+.wrap {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-inline: 16px;
+}
+@media (min-width: 640px) {
+  .wrap {
+    padding-inline: 24px;
+  }
+}
+
+main {
+  padding-top: 20px;
+  padding-bottom: 96px; /* room for the Support me button */
+}
+main:focus {
+  outline: none;
 }
 
 .muted {
-  color: var(--text-muted);
+  color: var(--muted);
 }
 
 @media (prefers-reduced-motion: reduce) {
