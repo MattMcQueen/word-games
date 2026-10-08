@@ -7,9 +7,8 @@
  * Pressing a key keeps focus in the word input so typing can continue.
  */
 
+import { QWERTY_ROWS } from '../solvers/qwerty.ts';
 import { h, icon } from './dom.ts';
-
-const QWERTY_ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'] as const;
 
 export interface KeyState {
   disabled?: boolean;
