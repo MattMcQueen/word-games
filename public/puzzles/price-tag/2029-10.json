@@ -1,0 +1,14 @@
+{
+  "game": "price-tag",
+  "month": "2029-10",
+  "days": {
+    "2029-10-01": {"puzzle":{"prices":[4,7,2,5,5,1,5,4,8,7,1,6,8,5,4,5,3,8,9,8,6,6,3,9,2,9],"budget":25},"solution":{"bestLength":8,"bestCost":25,"answers":["efficacy","paycheck","woodcock"]}},
+    "2029-10-02": {"puzzle":{"prices":[6,1,5,2,7,4,6,1,9,5,1,5,1,5,5,3,7,4,4,3,6,5,4,5,3,5],"budget":28},"solution":{"bestLength":9,"bestCost":28,"answers":["biorhythm","bookmarks","hobnobbed","humpbacks","matchbook"]}},
+    "2029-10-03": {"puzzle":{"prices":[6,4,7,1,5,6,3,9,6,7,3,6,9,3,7,8,4,8,7,7,4,4,2,8,3,6],"budget":29},"solution":{"bestLength":8,"bestCost":29,"answers":["bandaged","bandying","buddings","dandling","deluding","depended","doddered","doggedly","drudging","granddad","indulged","reddened","saddened","swaddled","twaddled","twiddled","unkindly","widening","windward","winnowed","woodwind","wounding"]}},
+    "2029-10-04": {"puzzle":{"prices":[9,6,2,8,8,6,3,1,9,4,8,6,8,8,1,9,5,9,5,1,8,5,5,4,7,6],"budget":20},"solution":{"bestLength":8,"bestCost":19,"answers":["shootout"]}},
+    "2029-10-05": {"puzzle":{"prices":[8,6,6,4,9,5,9,7,2,8,1,2,9,6,6,7,2,5,7,1,6,7,6,4,3,3],"budget":31},"solution":{"bestLength":9,"bestCost":31,"answers":["antiquity","dutifully","edibility","fittingly","flintlock","hostility","stylistic","torpidity"]}},
+    "2029-10-06": {"puzzle":{"prices":[1,2,8,5,8,4,6,5,6,9,6,4,5,8,7,4,4,3,3,4,1,2,5,4,8,2],"budget":25},"solution":{"bestLength":9,"bestCost":25,"answers":["aardvarks","aquariums","barracuda","madrassas","survivals"]}},
+    "2029-10-07": {"puzzle":{"prices":[4,7,8,8,2,5,6,1,5,6,3,3,5,3,9,4,2,1,6,9,2,6,8,3,7,1],"budget":20},"solution":{"bestLength":8,"bestCost":20,"answers":["freezers","hurrahed","puzzlers","reveller"]}},
+    "2029-10-08": {"puzzle":{"prices":[8,4,3,4,4,4,3,8,3,3,6,9,7,7,1,1,7,3,8,9,5,2,3,7,7,1],"budget":23},"solution":{"bestLength":9,"bestCost":23,"answers":["voodooing"]}}
+  }
+}

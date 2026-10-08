@@ -9,7 +9,7 @@
 
 import { h, icon } from './dom.ts';
 
-export const QWERTY_ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'] as const;
+const QWERTY_ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'] as const;
 
 export interface KeyState {
   disabled?: boolean;

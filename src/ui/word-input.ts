@@ -122,25 +122,41 @@ export function createWordInput(options: WordInputOptions): WordInput {
     }
   });
 
-  // Typing anywhere on the page goes into the box, unless a dialog is open
-  // or the player is in another form control.
+  // Typing anywhere on the page goes into the box (see shouldCapture).
   document.addEventListener('keydown', (e) => {
-    if (input.disabled || e.ctrlKey || e.metaKey || e.altKey) return;
-    const target = e.target as HTMLElement | null;
-    if (target === input || target?.closest('input, textarea, select, dialog[open]')) return;
-    if (document.querySelector('dialog[open]')) return;
-    if (/^[a-z]$/i.test(e.key)) {
-      e.preventDefault();
+    if (!shouldCapture(e, input)) return;
+    const action = pageKeyAction(e.key);
+    if (!action) return;
+    e.preventDefault();
+    if (action === 'backspace') api.backspace();
+    else if (action === 'enter') api.submit();
+    else {
       api.focus();
-      api.addLetter(e.key.toLowerCase());
-    } else if (e.key === 'Backspace') {
-      e.preventDefault();
-      api.backspace();
-    } else if (e.key === 'Enter' && target?.tagName !== 'BUTTON' && target?.tagName !== 'A') {
-      e.preventDefault();
-      api.submit();
+      api.addLetter(action);
     }
   });
 
   return api;
+}
+
+/**
+ * Whether a keypress elsewhere on the page should be redirected into the word
+ * box: not when the box is disabled, a modifier is held, a dialog is open, or
+ * the player is in a form field (including the box itself, which handles its
+ * own keys). Enter on a focused button or link must still activate it.
+ */
+function shouldCapture(e: KeyboardEvent, input: HTMLInputElement): boolean {
+  if (input.disabled || e.ctrlKey || e.metaKey || e.altKey) return false;
+  if (document.querySelector('dialog[open]')) return false;
+  const target = e.target as Element | null;
+  if (target?.closest('input, textarea, select')) return false;
+  return !(e.key === 'Enter' && target?.closest('button, a'));
+}
+
+/** Map a key to what it does in the word box: a letter, 'backspace', 'enter', or nothing. */
+function pageKeyAction(key: string): string | null {
+  if (/^[a-z]$/i.test(key)) return key.toLowerCase();
+  if (key === 'Backspace') return 'backspace';
+  if (key === 'Enter') return 'enter';
+  return null;
 }

@@ -19,3 +19,6 @@ export const GAMES: readonly GameInfo[] = [
 ];
 
 export const gamePath = (slug: string) => `/${slug}/`;
+
+/** Absolute link to a game, for share text. */
+export const gameUrl = (slug: string) => `${location.origin}${gamePath(slug)}`;

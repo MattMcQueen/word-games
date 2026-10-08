@@ -51,3 +51,34 @@ export function openModal({ title, content, onClose }: ModalOptions): Modal {
   dialog.showModal();
   return { dialog, close: () => dialog.close() };
 }
+
+/** A yes/no confirmation, e.g. "Finish now?". The confirm button is the primary action. */
+export function confirmModal(opts: {
+  title: string;
+  message: string;
+  confirmLabel: string;
+  cancelLabel: string;
+  onConfirm: () => void;
+}) {
+  const button = (label: string, primary: boolean, onClick: () => void) =>
+    h(
+      'button',
+      { class: primary ? 'btn btn-primary' : 'btn', type: 'button', onclick: onClick },
+      label,
+    );
+  const modal = openModal({
+    title: opts.title,
+    content: [
+      h('p', null, opts.message),
+      h(
+        'div',
+        { class: 'result-actions' },
+        button(opts.confirmLabel, true, () => {
+          modal.close();
+          opts.onConfirm();
+        }),
+        button(opts.cancelLabel, false, () => modal.close()),
+      ),
+    ],
+  });
+}

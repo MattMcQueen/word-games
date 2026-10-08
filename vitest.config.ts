@@ -6,5 +6,13 @@ export default defineConfig({
   test: {
     include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
     environment: 'node',
+    // Coverage feeds fallow's CRAP scores (npm run fallow). Browser UI code is
+    // covered by the Playwright tests instead, which this doesn't measure.
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.ts', 'scripts/**/*.ts'],
+      exclude: ['**/*.test.ts'],
+      reporter: ['json', 'text-summary'],
+    },
   },
 });

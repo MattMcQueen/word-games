@@ -5,6 +5,7 @@ import { defineConfig } from 'vite';
 // HTML entry points live in pages/, one folder per URL (pages/price-tag/index.html
 // is served at /price-tag/). We find them all so adding a game needs no config change.
 const pagesDir = resolve(import.meta.dirname, 'pages');
+const srcDir = resolve(import.meta.dirname, 'src');
 
 function findHtmlEntries(dir: string): Record<string, string> {
   const entries: Record<string, string> = {};
@@ -29,6 +30,11 @@ export default defineConfig({
     outDir: resolve(import.meta.dirname, 'dist'),
     emptyOutDir: true,
     rollupOptions: { input: findHtmlEntries(pagesDir) },
+  },
+  // Pages reference scripts as /src/...; point that at the real src/ folder,
+  // which sits outside the pages/ root.
+  resolve: {
+    alias: [{ find: /^\/src\//, replacement: `${srcDir.replaceAll('\\', '/')}/` }],
   },
   server: { fs: { allow: [import.meta.dirname] } },
 });

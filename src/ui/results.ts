@@ -115,3 +115,16 @@ export function showResults(opts: {
     ],
   });
 }
+
+/** Label and list for the best answers, capped so a long list stays readable. */
+export function answersSummary(
+  answers: readonly string[],
+  max = 12,
+): Pick<ResultSummary, 'answersLabel' | 'answers'> {
+  const shown = answers.slice(0, max);
+  const extra = answers.length - shown.length;
+  return {
+    answersLabel: answers.length === 1 ? 'Best answer' : 'Best answers',
+    answers: extra > 0 ? [...shown, `and ${extra} more`] : shown,
+  };
+}
