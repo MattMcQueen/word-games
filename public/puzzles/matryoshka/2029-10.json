@@ -2,13 +2,14 @@
   "game": "matryoshka",
   "month": "2029-10",
   "days": {
-    "2029-10-01": {"puzzle":{"seed":"im"},"solution":{"best":5,"firstSteps":8,"chains":[["aim","maim","maxim","maxima","maximal"],["dim","dime","dimer","dimmer","dimmers"],["rim","prim","prime","primed","primped"]]}},
+    "2029-10-01": {"puzzle":{"seed":"im"},"solution":{"best":5,"firstSteps":8,"chains":[["aim","maim","maxim","maxima","maximal"],["rim","prim","prime","primed","primped"],["rim","prim","prime","primer","primers"]]}},
     "2029-10-02": {"puzzle":{"seed":"pa"},"solution":{"best":6,"firstSteps":11,"chains":[["par","pare","pared","parked","sparked","sparkled"],["par","pare","pares","spares","sparest","sparsest"],["pas","pass","pasts","pastes","pasties","pastiest"]]}},
-    "2029-10-03": {"puzzle":{"seed":"ob"},"solution":{"best":5,"firstSteps":11,"chains":[["lob","lobe","lobed","lobbed","blobbed"],["lob","lobe","lobed","lobbed","lobbied"]]}},
-    "2029-10-04": {"puzzle":{"seed":"ing"},"solution":{"best":7,"firstSteps":8,"chains":[["sing","sting","siting","sitting","slitting","splitting","splittings"]]}},
-    "2029-10-05": {"puzzle":{"seed":"fe"},"solution":{"best":6,"firstSteps":9,"chains":[["fie","fine","fines","finest","fainest","faintest"],["foe","foes","fores","forges","forages","foragers"],["foe","foes","fores","forges","forgoes","foregoes"]]}},
-    "2029-10-06": {"puzzle":{"seed":"te"},"solution":{"best":7,"firstSteps":7,"chains":[["ate","late","later","latter","platter","platters","splatters"],["ate","sate","state","estate","restate","restated","restarted"]]}},
-    "2029-10-07": {"puzzle":{"seed":"er"},"solution":{"best":5,"firstSteps":8,"chains":[["ear","dear","dears","debars","debarks"],["ear","ears","hears","hearse","hearses"],["ear","ears","hears","hearts","hearths"]]}},
-    "2029-10-08": {"puzzle":{"seed":"ee"},"solution":{"best":6,"firstSteps":14,"chains":[["eve","eave","eaves","heaves","heavies","heaviest"],["eve","eave","eaves","leaves","cleaves","cleavers"]]}}
+    "2029-10-03": {"puzzle":{"seed":"li"},"solution":{"best":6,"firstSteps":6,"chains":[["lie","like","liker","linker","blinker","blinkers"]]}},
+    "2029-10-04": {"puzzle":{"seed":"te"},"solution":{"best":7,"firstSteps":7,"chains":[["ate","late","later","latter","platter","platters","splatters"]]}},
+    "2029-10-05": {"puzzle":{"seed":"fe"},"solution":{"best":6,"firstSteps":9,"chains":[["foe","foes","fores","forges","forgoes","foregoes"]]}},
+    "2029-10-06": {"puzzle":{"seed":"te"},"solution":{"best":7,"firstSteps":7,"chains":[["ate","late","later","latter","platter","platters","splatters"]]}},
+    "2029-10-07": {"puzzle":{"seed":"er"},"solution":{"best":5,"firstSteps":8,"chains":[["ear","ears","hears","hearse","hearses"],["ear","ears","hears","hearts","hearths"],["era","eras","erase","eraser","erasers"]]}},
+    "2029-10-08": {"puzzle":{"seed":"ee"},"solution":{"best":6,"firstSteps":14,"chains":[["eve","eave","eaves","heaves","heavies","heaviest"],["eve","eave","eaves","leaves","cleaves","cleavers"]]}},
+    "2029-10-09": {"puzzle":{"seed":"es"},"solution":{"best":7,"firstSteps":4,"chains":[["hes","shes","ashes","lashes","flashes","flashest","flashiest"]]}}
   }
 }

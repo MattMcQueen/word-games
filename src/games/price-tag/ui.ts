@@ -10,7 +10,7 @@ import { letters } from '../../core/text.ts';
 import { h, targetLine } from '../../ui/dom.ts';
 import type { GameModule } from '../../ui/game-shell.ts';
 import { answersSummary } from '../../ui/results.ts';
-import { mountWordHunt, type WordHuntData } from '../../ui/word-hunt.ts';
+import { hintNote, mountWordHunt, type WordHuntData } from '../../ui/word-hunt.ts';
 import { gameUrl } from '../catalogue.ts';
 import { priceTagLogic } from './logic.ts';
 import { bestOf, describeOutcome, pence, resultFor, shareLines, wordProblem } from './scoring.ts';
@@ -55,6 +55,7 @@ export const priceTagGame: GameModule<PriceTagPuzzle, PriceTagSolution, WordHunt
 
     const { keyboard } = mountWordHunt({
       ctx,
+      hintWord: solution.answers[0] ?? '',
       top: [
         h(
           'section',
@@ -89,7 +90,7 @@ export const priceTagGame: GameModule<PriceTagPuzzle, PriceTagSolution, WordHunt
   summarise({ puzzle, solution, data, result, date }) {
     const best = bestOf(data.words, puzzle.prices);
     return {
-      detail: describeOutcome(best, solution),
+      detail: `${describeOutcome(best, solution)}${hintNote(data)}`,
       ...answersSummary(solution.answers),
       shareText: buildShareText({
         game: NAME,

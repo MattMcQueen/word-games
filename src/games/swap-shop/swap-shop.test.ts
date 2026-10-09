@@ -73,6 +73,16 @@ describe('solveSwapShop', () => {
       also: { 'jape/vape': ['japed/vaped', 'japing/vaping'] },
     });
   });
+
+  it('makes pairs of rarer words bonuses', () => {
+    const everyday = new Set(['ate', 'bat', 'bet', 'panel', 'penal']);
+    // eta isn't an everyday word, so ate/eta is a bonus.
+    expect(solveSwapShop(ae, contextFor(small, '2026-10-08', { common: everyday }))).toEqual({
+      pairs: ['bat/bet', 'panel/penal'],
+      also: {},
+      bonus: ['ate/eta'],
+    });
+  });
 });
 
 describe('generateSwapShop', () => {
@@ -158,10 +168,12 @@ describe('Swap Shop scoring', () => {
     expect(describeOutcome(0, 3)).toBe("You didn't find any of the 3 pairs.");
     expect(describeOutcome(1, 3)).toBe('You found 1 of the 3 pairs.');
     expect(describeOutcome(3, 3)).toBe('You found all 3 pairs!');
+    expect(describeOutcome(3, 3, 2)).toBe('You found all 3 pairs! You also found 2 bonus pairs.');
   });
 
   it('shares the swap and the count, never the words', () => {
     expect(shareLines(1, ae, solution)).toEqual(['🔁 A ↔ E · 1/3 pairs', '🟩🟩⬜⬜⬜']);
     expect(shareLines(3, ae, solution)[0]).toBe('🔁 A ↔ E · ⭐ 3/3 pairs');
+    expect(shareLines(3, ae, solution, 1)[0]).toBe('🔁 A ↔ E · ⭐ 3/3 pairs +1 bonus');
   });
 });

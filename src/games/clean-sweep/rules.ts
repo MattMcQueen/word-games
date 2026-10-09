@@ -2,6 +2,7 @@
 
 import { h } from '../../ui/dom.ts';
 import type { HowToPlay } from '../../ui/how-to-play.ts';
+import { everydaySection } from '../hunt-rules.ts';
 
 export const cleanSweepRules: HowToPlay = {
   intro:
@@ -44,6 +45,7 @@ export const cleanSweepRules: HowToPlay = {
         ),
       ],
     },
+    everydaySection('The best sweep'),
     {
       title: 'Finishing',
       body: [

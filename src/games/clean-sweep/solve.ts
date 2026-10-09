@@ -10,7 +10,7 @@
  * Sweeps found more than once (in a different order) are counted once.
  */
 
-import type { Dictionary } from '../../core/dictionary.ts';
+import { type Dictionary, everydayDictionary } from '../../core/dictionary.ts';
 import type { GenerateContext } from '../../core/game.ts';
 import { canSpell, letterCounts, subtractLetters } from '../../solvers/letters.ts';
 import {
@@ -85,8 +85,13 @@ export function sweep(letters: string, dict: Dictionary, maxWords: number): Clea
 
 export function solveCleanSweep(
   puzzle: CleanSweepPuzzle,
-  { dict }: GenerateContext,
+  { dict, common }: GenerateContext,
   maxWords = 4,
 ): CleanSweepSolution {
-  return sweep(puzzle.letters, dict, maxWords);
+  const best = sweep(puzzle.letters, dict, maxWords);
+  if (!common || best.min === 0) return best;
+  // Show everyday sweeps when they're as short as the best, so the examples
+  // are words most players know.
+  const everyday = sweep(puzzle.letters, everydayDictionary(dict, common), best.min);
+  return everyday.min === best.min ? { ...best, examples: everyday.examples } : best;
 }

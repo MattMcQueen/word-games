@@ -1,5 +1,7 @@
 /** Lockout generator: one required and eight banned letters at random, kept if the longest word is a sensible length. */
 
+import { hasEverydayAnswer } from '../../core/dictionary.ts';
+import type { GenerateContext } from '../../core/game.ts';
 import type { Rng } from '../../core/rng.ts';
 import { ALPHABET } from '../../solvers/letters.ts';
 import {
@@ -17,8 +19,14 @@ export function generateLockout(rng: Rng): LockoutPuzzle {
   return { required, banned: rest.slice(0, BANNED_COUNT).sort().join('') };
 }
 
-export function acceptLockout(_puzzle: LockoutPuzzle, solution: LockoutSolution): boolean {
+/** Difficulty bounds, and at least one longest answer must be an everyday word. */
+export function acceptLockout(
+  _puzzle: LockoutPuzzle,
+  solution: LockoutSolution,
+  ctx: GenerateContext,
+): boolean {
   return (
+    hasEverydayAnswer(solution.answers, ctx.common) &&
     solution.bestLength >= MIN_BEST &&
     solution.bestLength <= MAX_BEST &&
     solution.answers.length <= MAX_BEST_ANSWERS &&

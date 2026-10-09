@@ -1,9 +1,13 @@
 /** Lockout solver: one pass over the dictionary, keeping the longest allowed words. */
 
+import { everydayFirst } from '../../core/dictionary.ts';
 import type { GenerateContext } from '../../core/game.ts';
 import { isAllowed, type LockoutPuzzle, type LockoutSolution } from './spec.ts';
 
-export function solveLockout(puzzle: LockoutPuzzle, { dict }: GenerateContext): LockoutSolution {
+export function solveLockout(
+  puzzle: LockoutPuzzle,
+  { dict, common }: GenerateContext,
+): LockoutSolution {
   let bestLength = 0;
   let answers: string[] = [];
   let total = 0;
@@ -17,5 +21,5 @@ export function solveLockout(puzzle: LockoutPuzzle, { dict }: GenerateContext): 
       answers.push(word);
     }
   }
-  return { bestLength, answers, total };
+  return { bestLength, answers: everydayFirst(answers, common), total };
 }

@@ -2,7 +2,8 @@
  * Swap Shop solver: every word whose swapped twin is also a word, as pairs,
  * with inflected pairs folded into their family. BATS ↔ BETS is part of
  * BAT ↔ BET, and JAPING ↔ VAPING part of JAPE ↔ VAPE, so the counter counts
- * ideas rather than plurals.
+ * ideas rather than plurals. Families with a pair of everyday words are the
+ * ones to find; the rest are bonuses.
  */
 
 import type { GenerateContext } from '../../core/game.ts';
@@ -35,7 +36,10 @@ function familyOf(key: string, all: ReadonlySet<string>): string {
   return base;
 }
 
-export function solveSwapShop(puzzle: SwapShopPuzzle, { dict }: GenerateContext): SwapShopSolution {
+export function solveSwapShop(
+  puzzle: SwapShopPuzzle,
+  { dict, common }: GenerateContext,
+): SwapShopSolution {
   const [a = '', b = ''] = puzzle.letters;
   const words = puzzle.length === null ? dict.words : dict.ofLength(puzzle.length);
   const all = new Set<string>();
@@ -55,5 +59,14 @@ export function solveSwapShop(puzzle: SwapShopPuzzle, { dict }: GenerateContext)
     also[family] ??= [];
     also[family].push(key);
   }
-  return { pairs: [...heads].sort(), also };
+  if (!common) return { pairs: [...heads].sort(), also };
+
+  // A family is everyday if any of its pairs is two everyday words.
+  const everyday = (key: string) => key.split('/').every((w) => common.has(w));
+  const pairs: string[] = [];
+  const bonus: string[] = [];
+  for (const head of [...heads].sort()) {
+    (everyday(head) || (also[head] ?? []).some(everyday) ? pairs : bonus).push(head);
+  }
+  return { pairs, also, bonus };
 }

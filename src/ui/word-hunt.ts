@@ -7,13 +7,21 @@
 
 import { bestWord, type CompareWords } from '../core/best-word.ts';
 import type { GameResult } from '../core/progress.ts';
+import { plural } from '../core/text.ts';
+import { h } from './dom.ts';
 import type { GameContext } from './game-shell.ts';
 import { foundItem, mountWordBoard, type WordBoard } from './word-board.ts';
 
 /** Saved state for a word hunt: the accepted words, in the order found. */
 export interface WordHuntData {
   words: string[];
+  /** Letters of a best answer revealed by hints (missing in games saved before hints). */
+  hints?: number;
 }
+
+/** " with 2 letters revealed", for results; empty with no hints. */
+export const hintNote = (data: WordHuntData) =>
+  data.hints ? ` You had ${plural(data.hints, 'letter')} revealed.` : '';
 
 export interface WordHuntOptions<P, S> {
   ctx: GameContext<P, S, WordHuntData>;
@@ -36,17 +44,39 @@ export interface WordHuntOptions<P, S> {
   /** Extra word box options, e.g. to veto letters or react to typing. */
   allowLetter?(current: string, letter: string): boolean;
   onType?(word: string): void;
+  /** A best answer, revealed a letter at a time by the hint button. */
+  hintWord: string;
 }
 
 export function mountWordHunt<P, S>(opts: WordHuntOptions<P, S>): WordBoard {
-  const data: WordHuntData = { words: [...opts.ctx.data.words] };
+  const data: WordHuntData = { words: [...opts.ctx.data.words], hints: opts.ctx.data.hints ?? 0 };
   const { words } = data;
   const best = () => bestWord(words, opts.compare);
+  let board: WordBoard | undefined;
 
-  return mountWordBoard({
+  // "Stuck?": reveal a best answer a letter at a time, all but its last letter.
+  const word = opts.hintWord;
+  const hintLine = h('p', { class: 'hunt-hint-line' });
+  const hintButton = h(
+    'button',
+    {
+      class: 'btn quiet hunt-hint-btn',
+      type: 'button',
+      onclick: () => {
+        data.hints = (data.hints ?? 0) + 1;
+        board?.input.feedback(`Revealed letter ${data.hints} of a best answer.`);
+        board?.commit();
+        board?.input.focus();
+      },
+    },
+    'Reveal a letter',
+  );
+  const hintRow = h('div', { class: 'hunt-hint' }, hintLine, hintButton);
+
+  board = mountWordBoard({
     ctx: opts.ctx as GameContext<unknown, unknown, WordHuntData>,
     data,
-    top: opts.top,
+    top: [...opts.top, hintRow],
     ...(opts.belowInput ? { belowInput: opts.belowInput } : {}),
     ...(opts.allowLetter ? { allowLetter: opts.allowLetter } : {}),
     ...(opts.onType ? { onType: opts.onType } : {}),
@@ -68,7 +98,21 @@ export function mountWordHunt<P, S>(opts: WordHuntOptions<P, S>): WordBoard {
         items: sorted.map((w) => foundItem(w, opts.describe(w), w === top ? '★ Best' : undefined)),
       };
     },
-    result: (gaveUp) => opts.result(words, gaveUp),
-    onRender: () => opts.onRender?.(best()),
+    // Finding a best answer ends the game; it's perfect only without hints.
+    result: (gaveUp) => {
+      const result = opts.result(words, gaveUp);
+      return data.hints ? { ...result, perfect: false } : result;
+    },
+    done: () => opts.result(words, false).perfect,
+    onRender: (finished) => {
+      const shown = data.hints ?? 0;
+      hintRow.hidden = finished;
+      hintLine.textContent = shown
+        ? `A best answer starts ${word.slice(0, shown).toUpperCase()}…`
+        : 'Stuck? Reveal a best answer a letter at a time.';
+      hintButton.disabled = shown >= word.length - 1;
+      opts.onRender?.(best());
+    },
   });
+  return board;
 }

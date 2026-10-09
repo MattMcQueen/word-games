@@ -27,8 +27,15 @@ export function generateMatryoshka(rng: Rng, { dict }: GenerateContext): Matryos
   return { seed: source.slice(start, start + size) };
 }
 
-export function acceptMatryoshka(_puzzle: MatryoshkaPuzzle, solution: MatryoshkaSolution) {
+/** Difficulty bounds, and at least one longest chain must be made of everyday words. */
+export function acceptMatryoshka(
+  _puzzle: MatryoshkaPuzzle,
+  solution: MatryoshkaSolution,
+  ctx: GenerateContext,
+) {
+  const { common } = ctx;
   return (
+    (!common || solution.chains.some((chain) => chain.every((w) => common.has(w)))) &&
     solution.best >= MIN_CHAIN &&
     solution.best <= MAX_CHAIN &&
     solution.firstSteps >= MIN_FIRST_STEPS

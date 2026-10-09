@@ -24,6 +24,9 @@ const small = createDictionary(
 const ctx = contextFor(small, '2026-10-08');
 const puzzle: LockoutPuzzle = { required: 'r', banned: 'aeilnstu' };
 
+/** A context with no everyday word list, so only the difficulty bounds apply. */
+const noList = contextFor(createDictionary(''), '2027-01-01');
+
 describe('Lockout rules', () => {
   it('lists the banned letters a word uses', () => {
     expect(bannedIn('words', puzzle.banned)).toEqual(['s']);
@@ -66,12 +69,12 @@ describe('generateLockout', () => {
       answers: Array(answers).fill('x'),
       total,
     });
-    expect(acceptLockout(puzzle, sol(MIN_BEST - 1))).toBe(false);
-    expect(acceptLockout(puzzle, sol(MIN_BEST))).toBe(true);
-    expect(acceptLockout(puzzle, sol(MAX_BEST))).toBe(true);
-    expect(acceptLockout(puzzle, sol(MAX_BEST + 1))).toBe(false);
-    expect(acceptLockout(puzzle, sol(8, MAX_BEST_ANSWERS + 1))).toBe(false);
-    expect(acceptLockout(puzzle, sol(8, 2, MIN_TOTAL - 1))).toBe(false);
+    expect(acceptLockout(puzzle, sol(MIN_BEST - 1), noList)).toBe(false);
+    expect(acceptLockout(puzzle, sol(MIN_BEST), noList)).toBe(true);
+    expect(acceptLockout(puzzle, sol(MAX_BEST), noList)).toBe(true);
+    expect(acceptLockout(puzzle, sol(MAX_BEST + 1), noList)).toBe(false);
+    expect(acceptLockout(puzzle, sol(8, MAX_BEST_ANSWERS + 1), noList)).toBe(false);
+    expect(acceptLockout(puzzle, sol(8, 2, MIN_TOTAL - 1), noList)).toBe(false);
   });
 
   it('produces daily puzzles whose answers are allowed', () => {
@@ -96,5 +99,18 @@ describe('lockoutProblem', () => {
       'WORLD uses L and D, which are locked out.',
     );
     expect(lockoutProblem('dog', puzzle, small, [])).toBe('Words must include R.');
+  });
+});
+
+describe('Lockout best answers', () => {
+  const dict = createDictionary(readFileSync('public/data/words.txt', 'utf8'));
+  const common = new Set(createDictionary(readFileSync('public/data/common.txt', 'utf8')).words);
+
+  it('always include an everyday word, shown first', () => {
+    for (let d = 1; d <= 10; d++) {
+      const date = `2027-04-${String(d).padStart(2, '0')}`;
+      const { solution } = generateDaily(lockoutLogic, contextFor(dict, date, { common }));
+      expect(common.has(solution.answers[0] as string), date).toBe(true);
+    }
   });
 });

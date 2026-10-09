@@ -7,6 +7,7 @@ import { SLUG, type ThreaderPuzzle, type ThreaderSolution } from './spec.ts';
 
 export const threaderLogic: GameLogic<ThreaderPuzzle, ThreaderSolution> = {
   slug: SLUG,
+  needs: ['common'],
   generate: generateThreader,
   solve: solveThreader,
   accept: acceptThreader,

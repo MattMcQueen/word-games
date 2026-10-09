@@ -26,6 +26,9 @@ const small = createDictionary(
 );
 const ctx = contextFor(small, '2026-10-08');
 
+/** A context with no everyday word list, so only the difficulty bounds apply. */
+const noList = contextFor(createDictionary(''), '2027-01-01');
+
 describe('Price Tag rules', () => {
   it('prices words by summing letter prices', () => {
     expect(wordCost('cat', pricesWith(1, { c: 4, a: 2, t: 5 }))).toBe(11);
@@ -78,10 +81,10 @@ describe('generatePriceTag', () => {
   it('rejects optimums that are too short or too long', () => {
     const p = { prices: [], budget: 0 };
     const sol = (bestLength: number) => ({ bestLength, bestCost: 0, answers: [] });
-    expect(acceptPriceTag(p, sol(MIN_BEST_LENGTH - 1))).toBe(false);
-    expect(acceptPriceTag(p, sol(MIN_BEST_LENGTH))).toBe(true);
-    expect(acceptPriceTag(p, sol(MAX_BEST_LENGTH))).toBe(true);
-    expect(acceptPriceTag(p, sol(MAX_BEST_LENGTH + 1))).toBe(false);
+    expect(acceptPriceTag(p, sol(MIN_BEST_LENGTH - 1), noList)).toBe(false);
+    expect(acceptPriceTag(p, sol(MIN_BEST_LENGTH), noList)).toBe(true);
+    expect(acceptPriceTag(p, sol(MAX_BEST_LENGTH), noList)).toBe(true);
+    expect(acceptPriceTag(p, sol(MAX_BEST_LENGTH + 1), noList)).toBe(false);
   });
 });
 
@@ -100,6 +103,19 @@ describe('Price Tag with the real dictionary', () => {
         expect(wordCost(word, puzzle.prices)).toBe(solution.bestCost);
       }
       expect(solution.bestCost).toBeLessThanOrEqual(puzzle.budget);
+    }
+  });
+});
+
+describe('PriceTag best answers', () => {
+  const dict = createDictionary(readFileSync('public/data/words.txt', 'utf8'));
+  const common = new Set(createDictionary(readFileSync('public/data/common.txt', 'utf8')).words);
+
+  it('always include an everyday word, shown first', () => {
+    for (let d = 1; d <= 10; d++) {
+      const date = `2027-04-${String(d).padStart(2, '0')}`;
+      const { solution } = generateDaily(priceTagLogic, contextFor(dict, date, { common }));
+      expect(common.has(solution.answers[0] as string), date).toBe(true);
     }
   });
 });

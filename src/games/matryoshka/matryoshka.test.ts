@@ -14,6 +14,9 @@ const small = createDictionary(
 );
 const ctx = contextFor(small, '2026-10-08');
 
+/** A context with no everyday word list, so only the difficulty bounds apply. */
+const noList = contextFor(createDictionary(''), '2027-01-01');
+
 describe('Matryoshka rules', () => {
   it('recognises a single inserted letter', () => {
     expect(isOneLetterInsertion('cat', 'chat')).toBe(true);
@@ -62,11 +65,11 @@ describe('generateMatryoshka', () => {
   it('rejects chains that are too short, too long or forced', () => {
     const sol = (best: number, firstSteps = 5) => ({ best, firstSteps, chains: [] });
     const p = { seed: 'at' };
-    expect(acceptMatryoshka(p, sol(MIN_CHAIN - 1))).toBe(false);
-    expect(acceptMatryoshka(p, sol(MIN_CHAIN))).toBe(true);
-    expect(acceptMatryoshka(p, sol(MAX_CHAIN))).toBe(true);
-    expect(acceptMatryoshka(p, sol(MAX_CHAIN + 1))).toBe(false);
-    expect(acceptMatryoshka(p, sol(MIN_CHAIN, MIN_FIRST_STEPS - 1))).toBe(false);
+    expect(acceptMatryoshka(p, sol(MIN_CHAIN - 1), noList)).toBe(false);
+    expect(acceptMatryoshka(p, sol(MIN_CHAIN), noList)).toBe(true);
+    expect(acceptMatryoshka(p, sol(MAX_CHAIN), noList)).toBe(true);
+    expect(acceptMatryoshka(p, sol(MAX_CHAIN + 1), noList)).toBe(false);
+    expect(acceptMatryoshka(p, sol(MIN_CHAIN, MIN_FIRST_STEPS - 1), noList)).toBe(false);
   });
 
   it('produces daily puzzles whose example chains are valid and longest', () => {
@@ -119,5 +122,22 @@ describe('Matryoshka scoring', () => {
     expect(describeOutcome(4, 4, 'at')).toBe('You built the longest chain: 4 words!');
     expect(shareLines(2, 4)).toEqual(['🪆 Chain of 2 (best 4)', '🟩🟩🟩⬜⬜']);
     expect(shareLines(4, 4)[0]).toBe('🪆 ⭐ Chain of 4, the longest possible');
+  });
+});
+
+describe('Matryoshka with everyday words', () => {
+  const dict = createDictionary(readFileSync('public/data/words.txt', 'utf8'));
+  const common = new Set(createDictionary(readFileSync('public/data/common.txt', 'utf8')).words);
+
+  it('shows a best answer made only of everyday words', () => {
+    for (let d = 1; d <= 6; d++) {
+      const date = `2027-04-${String(d).padStart(2, '0')}`;
+      const { solution } = generateDaily(matryoshkaLogic, contextFor(dict, date, { common }));
+      const words = solution.chains[0] as string[];
+      expect(
+        words.every((w) => common.has(w)),
+        `${date}: ${words.join(' ')}`,
+      ).toBe(true);
+    }
   });
 });

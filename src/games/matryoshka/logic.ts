@@ -7,6 +7,7 @@ import { type MatryoshkaPuzzle, type MatryoshkaSolution, SLUG } from './spec.ts'
 
 export const matryoshkaLogic: GameLogic<MatryoshkaPuzzle, MatryoshkaSolution> = {
   slug: SLUG,
+  needs: ['common'],
   generate: generateMatryoshka,
   solve: solveMatryoshka,
   accept: acceptMatryoshka,

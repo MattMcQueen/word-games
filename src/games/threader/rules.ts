@@ -2,6 +2,7 @@
 
 import { h } from '../../ui/dom.ts';
 import type { HowToPlay } from '../../ui/how-to-play.ts';
+import { everydaySection, huntHintsSection } from '../hunt-rules.ts';
 
 export const threaderRules: HowToPlay = {
   intro:
@@ -49,6 +50,8 @@ export const threaderRules: HowToPlay = {
         ),
       ],
     },
+    everydaySection('The shortest word'),
+    huntHintsSection,
     {
       title: 'Finishing',
       body: [

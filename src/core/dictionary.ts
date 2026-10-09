@@ -56,6 +56,36 @@ export function createDictionary(text: string): Dictionary {
   };
 }
 
+const everydayCache = new WeakMap<Dictionary, WeakMap<ReadonlySet<string>, Dictionary>>();
+
+/**
+ * The dictionary cut down to everyday words (those also in `common`), for
+ * solvers that want their best answers to be words most players know.
+ * Built once per pair of lists.
+ */
+export function everydayDictionary(dict: Dictionary, common: ReadonlySet<string>): Dictionary {
+  const known = everydayCache.get(dict)?.get(common);
+  if (known) return known;
+  const everyday = createDictionary(dict.words.filter((w) => common.has(w)).join('\n'));
+  const byCommon = everydayCache.get(dict) ?? new WeakMap();
+  byCommon.set(common, everyday);
+  everydayCache.set(dict, byCommon);
+  return everyday;
+}
+
+/** Answers with the everyday ones first (each group keeps its order), for showing as "best answers". */
+export const everydayFirst = (answers: readonly string[], common?: ReadonlySet<string>) =>
+  common
+    ? [...answers.filter((w) => common.has(w)), ...answers.filter((w) => !common.has(w))]
+    : [...answers];
+
+/**
+ * True if at least one answer is an everyday word, so a perfect score never
+ * depends on knowing an obscure one. (True if there's no everyday list.)
+ */
+export const hasEverydayAnswer = (answers: readonly string[], common?: ReadonlySet<string>) =>
+  !common || answers.some((w) => common.has(w));
+
 let cached: Promise<Dictionary> | undefined;
 
 /** Fetch and parse the word list once per page; later calls reuse the same promise. */

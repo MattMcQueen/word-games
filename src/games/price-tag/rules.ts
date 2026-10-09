@@ -2,6 +2,7 @@
 
 import { h } from '../../ui/dom.ts';
 import type { HowToPlay } from '../../ui/how-to-play.ts';
+import { everydaySection, huntHintsSection } from '../hunt-rules.ts';
 
 export const priceTagRules: HowToPlay = {
   intro:
@@ -40,6 +41,8 @@ export const priceTagRules: HowToPlay = {
         ),
       ],
     },
+    everydaySection('The best word'),
+    huntHintsSection,
     {
       title: 'Finishing',
       body: [

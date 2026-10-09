@@ -29,8 +29,17 @@ export function generateCleanSweep(rng: Rng, { dict }: GenerateContext): CleanSw
   return { letters: rng.shuffle([...words.join('')]).join('') };
 }
 
-export function acceptCleanSweep(_puzzle: CleanSweepPuzzle, solution: CleanSweepSolution) {
+/** Difficulty bounds, and at least one best sweep must be made of everyday words. */
+export function acceptCleanSweep(
+  _puzzle: CleanSweepPuzzle,
+  solution: CleanSweepSolution,
+  ctx: GenerateContext,
+) {
+  const { common } = ctx;
   return (
-    solution.min >= MIN_WORDS && solution.min <= MAX_WORDS && solution.solutions <= MAX_SOLUTIONS
+    (!common || solution.examples.some((words) => words.every((w) => common.has(w)))) &&
+    solution.min >= MIN_WORDS &&
+    solution.min <= MAX_WORDS &&
+    solution.solutions <= MAX_SOLUTIONS
   );
 }

@@ -5,7 +5,7 @@
  * and chains are short, so this takes milliseconds.
  */
 
-import type { Dictionary } from '../../core/dictionary.ts';
+import { type Dictionary, everydayDictionary } from '../../core/dictionary.ts';
 import type { GenerateContext } from '../../core/game.ts';
 import { ALPHABET } from '../../solvers/letters.ts';
 import { EXAMPLE_CHAINS, type MatryoshkaPuzzle, type MatryoshkaSolution } from './spec.ts';
@@ -38,10 +38,23 @@ function chainLengths(dict: Dictionary) {
 
 export function solveMatryoshka(
   puzzle: MatryoshkaPuzzle,
-  { dict }: GenerateContext,
+  { dict, common }: GenerateContext,
 ): MatryoshkaSolution {
-  const longest = chainLengths(dict);
-  const best = longest(puzzle.seed);
+  const fullLongest = chainLengths(dict);
+  const best = fullLongest(puzzle.seed);
+
+  // The example chains use everyday words when they reach the longest length,
+  // so the answers shown are ones most players know.
+  let words = dict;
+  let longest = fullLongest;
+  if (common) {
+    const everyday = everydayDictionary(dict, common);
+    const everydayLongest = chainLengths(everyday);
+    if (everydayLongest(puzzle.seed) === best) {
+      words = everyday;
+      longest = everydayLongest;
+    }
+  }
 
   // Collect a few longest chains by always stepping to a child that still has
   // the most steps left, preferring chains that end in different words.
@@ -57,7 +70,7 @@ export function solveMatryoshka(
       }
       return;
     }
-    for (const next of nextWords(word, dict)) {
+    for (const next of nextWords(word, words)) {
       if (longest(next) === left - 1) walk(next, [...path, next]);
     }
   };

@@ -93,3 +93,29 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* Narrow phones: smaller boxes and words, so each pair and its Hint fit on one line. */
+@media (max-width: 420px) {
+  .hg-pair {
+    padding-inline: 0.25rem;
+  }
+  .hg-line {
+    gap: 0.3rem;
+  }
+  .hg-word {
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+  }
+  .hg-box {
+    width: 1.3rem;
+    height: 1.7rem;
+    font-size: 0.9rem;
+  }
+  .hg-boxes {
+    gap: 2px;
+  }
+  .hg-hint {
+    min-height: 28px;
+    padding: 0 8px;
+  }
+}

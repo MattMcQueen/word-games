@@ -732,7 +732,39 @@
 
 /* ---------- Fitting a game on a phone screen ---------- */
 
+/* The word box, its messages and the keyboard (word-board.ts). */
+.dock {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.dock[hidden] {
+  display: none;
+}
+
 @media (max-width: 639px) {
+  /* The header scrolls away, leaving the screen to the puzzle… */
+  .site-header {
+    position: static;
+  }
+  /* …and the dock stays at the bottom, so you can always type. */
+  .dock {
+    position: sticky;
+    bottom: 0;
+    z-index: 4;
+    gap: 0.4rem;
+    margin-inline: -16px;
+    padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line);
+    background: var(--bg);
+  }
+  .dock .feedback {
+    min-height: 1.25rem;
+    margin: 0;
+  }
+  .dock .live-line {
+    margin: 0;
+  }
   main {
     padding-top: 12px;
   }
@@ -748,7 +780,7 @@
   }
   /* Keys shrink a little on short screens so the whole keyboard fits. */
   .key {
-    min-height: clamp(2.8rem, 6.8dvh, 3.5rem);
+    min-height: clamp(2.6rem, 6.2dvh, 3.5rem);
   }
   .keyboard {
     gap: 0.35rem;
@@ -913,4 +945,28 @@
     transform: translateY(105vh) rotate(var(--spin));
     opacity: 0.3;
   }
+}
+
+/* A word hunt's hint row, under the puzzle (word-hunt.ts). */
+.hunt-hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  margin-top: -0.4rem;
+}
+.hunt-hint[hidden] {
+  display: none;
+}
+.hunt-hint-line {
+  margin: 0;
+  color: var(--soft);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+.hunt-hint-btn {
+  min-height: 34px;
+  padding: 0 14px;
+  font-size: 0.85rem;
 }

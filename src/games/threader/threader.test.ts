@@ -26,6 +26,9 @@ import {
 const small = createDictionary(['rant', 'return', 'runner', 'runt', 'tryst', 'warrant'].join('\n'));
 const ctx = contextFor(small, '2026-10-08');
 
+/** A context with no everyday word list, so only the difficulty bounds apply. */
+const noList = contextFor(createDictionary(''), '2027-01-01');
+
 describe('solveThreader', () => {
   it('finds every shortest word containing the thread in order', () => {
     expect(solveThreader({ letters: 'rnt' }, ctx)).toEqual({
@@ -66,12 +69,12 @@ describe('generateThreader', () => {
       total,
     });
     const p = { letters: 'abc' };
-    expect(acceptThreader(p, sol(3 + MIN_EXTRA - 1))).toBe(false);
-    expect(acceptThreader(p, sol(3 + MIN_EXTRA))).toBe(true);
-    expect(acceptThreader(p, sol(3 + MAX_EXTRA))).toBe(true);
-    expect(acceptThreader(p, sol(3 + MAX_EXTRA + 1))).toBe(false);
-    expect(acceptThreader(p, sol(6, MAX_BEST_ANSWERS + 1))).toBe(false);
-    expect(acceptThreader(p, sol(6, 1, MIN_TOTAL - 1))).toBe(false);
+    expect(acceptThreader(p, sol(3 + MIN_EXTRA - 1), noList)).toBe(false);
+    expect(acceptThreader(p, sol(3 + MIN_EXTRA), noList)).toBe(true);
+    expect(acceptThreader(p, sol(3 + MAX_EXTRA), noList)).toBe(true);
+    expect(acceptThreader(p, sol(3 + MAX_EXTRA + 1), noList)).toBe(false);
+    expect(acceptThreader(p, sol(6, MAX_BEST_ANSWERS + 1), noList)).toBe(false);
+    expect(acceptThreader(p, sol(6, 1, MIN_TOTAL - 1), noList)).toBe(false);
   });
 
   it('produces daily puzzles within the difficulty bounds', () => {
@@ -150,5 +153,18 @@ describe('Threader scoring', () => {
       '🧵 ⭐ 4 letters, the shortest possible',
     );
     expect(shareLines([], solution, false)[0]).toBe('🧵 Shortest: none (best 4)');
+  });
+});
+
+describe('Threader best answers', () => {
+  const dict = createDictionary(readFileSync('public/data/words.txt', 'utf8'));
+  const common = new Set(createDictionary(readFileSync('public/data/common.txt', 'utf8')).words);
+
+  it('always include an everyday word, shown first', () => {
+    for (let d = 1; d <= 10; d++) {
+      const date = `2027-04-${String(d).padStart(2, '0')}`;
+      const { solution } = generateDaily(threaderLogic, contextFor(dict, date, { common }));
+      expect(common.has(solution.answers[0] as string), date).toBe(true);
+    }
   });
 });

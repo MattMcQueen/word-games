@@ -16,7 +16,7 @@ import { letters } from '../../core/text.ts';
 import { h, targetLine } from '../../ui/dom.ts';
 import type { GameModule } from '../../ui/game-shell.ts';
 import { answersSummary } from '../../ui/results.ts';
-import { mountWordHunt, type WordHuntData } from '../../ui/word-hunt.ts';
+import { hintNote, mountWordHunt, type WordHuntData } from '../../ui/word-hunt.ts';
 import { gameUrl } from '../catalogue.ts';
 import { lockoutLogic } from './logic.ts';
 import { lockoutProblem } from './scoring.ts';
@@ -43,6 +43,7 @@ export const lockoutGame: GameModule<LockoutPuzzle, LockoutSolution, WordHuntDat
 
     const { keyboard } = mountWordHunt({
       ctx,
+      hintWord: solution.answers[0] ?? '',
       top: [
         h(
           'section',
@@ -91,11 +92,11 @@ export const lockoutGame: GameModule<LockoutPuzzle, LockoutSolution, WordHuntDat
 
   summarise({ puzzle, solution, data, date }) {
     return {
-      detail: describeLongest(
+      detail: `${describeLongest(
         longestOf(data.words),
         solution.bestLength,
         `with ${puzzle.required.toUpperCase()} and none of the locked-out letters`,
-      ),
+      )}${hintNote(data)}`,
       ...answersSummary(solution.answers),
       shareText: buildShareText({
         game: NAME,

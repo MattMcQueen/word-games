@@ -122,6 +122,20 @@ test.describe('Price Tag', () => {
     expect(shared.toLowerCase()).not.toContain(best); // spoiler-free
   });
 
+  test("a hint reveals a best answer a letter at a time, and a hinted win isn't perfect", async ({
+    page,
+  }) => {
+    await setUp(page, DATE, { seenHelp: 'price-tag' });
+    await page.goto('/price-tag/');
+    await page.getByRole('button', { name: 'Reveal a letter' }).click();
+    await expect(page.locator('.hunt-hint-line')).toHaveText(
+      `A best answer starts ${best.slice(0, 1).toUpperCase()}…`,
+    );
+    await enterWord(page, best);
+    const results = page.getByRole('dialog', { name: 'Well played' });
+    await expect(results).toContainText('You had 1 letter revealed.');
+  });
+
   test('finishing early reveals the best answer', async ({ page }) => {
     await setUp(page, DATE, { seenHelp: 'price-tag' });
     await page.goto('/price-tag/');

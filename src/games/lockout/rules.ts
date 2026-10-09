@@ -2,6 +2,7 @@
 
 import { h } from '../../ui/dom.ts';
 import type { HowToPlay } from '../../ui/how-to-play.ts';
+import { everydaySection, huntHintsSection } from '../hunt-rules.ts';
 
 export const lockoutRules: HowToPlay = {
   intro:
@@ -44,6 +45,8 @@ export const lockoutRules: HowToPlay = {
         ),
       ],
     },
+    everydaySection('The longest word'),
+    huntHintsSection,
     {
       title: 'Finishing',
       body: [

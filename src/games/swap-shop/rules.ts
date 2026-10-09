@@ -23,7 +23,7 @@ export const swapShopRules: HowToPlay = {
         h(
           'p',
           null,
-          'A word and its swapped twin count as one pair, so typing either one finds both. Try to find every pair.',
+          'A word and its swapped twin count as one pair, so typing either one finds both. Try to find every pair of everyday words. Pairs of rarer words, like PONDS ↔ PONES, count as bonuses: welcome, but not needed for a perfect day.',
         ),
       ],
     },
@@ -69,7 +69,7 @@ export const swapShopRules: HowToPlay = {
         h(
           'p',
           null,
-          'The counter shows how many pairs there are. The game ends when you find them all, or when you press ',
+          'The counter shows how many everyday pairs there are. The game ends when you find them all, or when you press ',
           h('strong', null, 'Finish'),
           ". You'll then see the pairs you missed.",
         ),

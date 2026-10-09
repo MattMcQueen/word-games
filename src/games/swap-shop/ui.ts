@@ -16,6 +16,7 @@ import { swapShopLogic } from './logic.ts';
 import { describeOutcome, missedPairs, resultFor, shareLines, swapProblem } from './scoring.ts';
 import {
   familyHead,
+  isBonus,
   lengthRule,
   NAME,
   pairKey,
@@ -28,8 +29,10 @@ import {
 import './swap-shop.css';
 
 interface SwapShopData {
-  /** Pair keys ("bat/bet") in the order found. */
+  /** Pair keys ("bat/bet") in the order found: the pairs to find. */
   pairs: string[];
+  /** Bonus pairs found (rarer words). Missing from games saved before bonuses existed. */
+  bonus?: string[];
 }
 
 export const swapShopGame: GameModule<SwapShopPuzzle, SwapShopSolution, SwapShopData> = {
@@ -41,7 +44,8 @@ export const swapShopGame: GameModule<SwapShopPuzzle, SwapShopSolution, SwapShop
     const { puzzle, solution, dict } = ctx;
     const [a = '', b = ''] = puzzle.letters;
     const [A, B] = [a.toUpperCase(), b.toUpperCase()];
-    const data: SwapShopData = { pairs: [...ctx.data.pairs] };
+    const data: SwapShopData = { pairs: [...ctx.data.pairs], bonus: [...(ctx.data.bonus ?? [])] };
+    const bonus = data.bonus ?? [];
     const total = solution.pairs.length;
 
     const counter = h('p', { class: 'ss-counter' });
@@ -77,33 +81,36 @@ export const swapShopGame: GameModule<SwapShopPuzzle, SwapShopSolution, SwapShop
       belowInput: [previewLine],
       onType: showPreview,
       submit(word, { input, commit }) {
-        const problem = swapProblem(word, puzzle, solution, dict, data.pairs);
+        const problem = swapProblem(word, puzzle, solution, dict, [...data.pairs, ...bonus]);
         if (problem) return input.feedback(problem, 'bad');
         const typed = pairKey(word, swapLetters(word, a, b));
         const key = familyHead(typed, solution);
-        data.pairs.push(key);
+        const extra = isBonus(key, solution);
+        (extra ? bonus : data.pairs).push(key);
         input.setValue('');
+        const found =
+          key === typed ? pairLabel(key) : `${pairLabel(typed)} counts as ${pairLabel(key)}`;
         input.feedback(
-          key === typed
-            ? `${pairLabel(key)}: a pair!`
-            : `${pairLabel(typed)} counts as ${pairLabel(key)}: a pair!`,
+          extra
+            ? `${found}: a bonus pair! Rarer words don't count towards the ${total}.`
+            : `${found}: a pair!`,
           'good',
         );
         commit();
       },
       found: () => ({
-        heading: `Pairs found: ${data.pairs.length}`,
-        items: [...data.pairs].sort().map((key) => {
+        heading: `Pairs found: ${data.pairs.length}${bonus.length ? ` + ${bonus.length} bonus` : ''}`,
+        items: [...data.pairs, ...bonus].sort().map((key) => {
           const more = solution.also[key]?.length ?? 0;
           const meta = more
             ? `${letters(key.indexOf('/'))}, and ${more} more forms`
             : letters(key.indexOf('/'));
-          return foundItem(pairLabel(key), meta);
+          return foundItem(pairLabel(key), meta, bonus.includes(key) ? 'Bonus' : undefined);
         }),
       }),
       result: (gaveUp) => resultFor(data.pairs, solution, gaveUp),
       onRender() {
-        counter.textContent = `Found ${data.pairs.length} of ${total} pairs`;
+        counter.textContent = `Found ${data.pairs.length} of ${total} pairs${bonus.length ? ` · ${bonus.length} bonus` : ''}`;
         (meter.firstChild as HTMLElement).style.width = `${(100 * data.pairs.length) / total}%`;
       },
     });
@@ -114,8 +121,9 @@ export const swapShopGame: GameModule<SwapShopPuzzle, SwapShopSolution, SwapShop
 
   summarise({ puzzle, solution, data, date }) {
     const missed = missedPairs(data.pairs, solution);
+    const bonus = data.bonus?.length ?? 0;
     return {
-      detail: describeOutcome(data.pairs.length, solution.pairs.length),
+      detail: describeOutcome(data.pairs.length, solution.pairs.length, bonus),
       answersLabel: missed.length > 0 ? 'Pairs you missed' : 'Every pair',
       answers: (missed.length > 0 ? missed : solution.pairs).map((key) =>
         lookUpAll(pairLabel(key)),
@@ -123,7 +131,7 @@ export const swapShopGame: GameModule<SwapShopPuzzle, SwapShopSolution, SwapShop
       shareText: buildShareText({
         game: NAME,
         puzzleNumber: puzzleNumber(date),
-        lines: shareLines(data.pairs.length, puzzle, solution),
+        lines: shareLines(data.pairs.length, puzzle, solution, bonus),
         url: gameUrl(SLUG),
       }),
     };

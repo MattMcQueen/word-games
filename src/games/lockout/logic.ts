@@ -7,6 +7,7 @@ import { type LockoutPuzzle, type LockoutSolution, SLUG } from './spec.ts';
 
 export const lockoutLogic: GameLogic<LockoutPuzzle, LockoutSolution> = {
   slug: SLUG,
+  needs: ['common'],
   generate: generateLockout,
   solve: solveLockout,
   accept: acceptLockout,

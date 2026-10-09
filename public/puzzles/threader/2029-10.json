@@ -2,13 +2,14 @@
   "game": "threader",
   "month": "2029-10",
   "days": {
-    "2029-10-01": {"puzzle":{"letters":"umn"},"solution":{"bestLength":5,"answers":["cumin","human","unman"],"total":605}},
+    "2029-10-01": {"puzzle":{"letters":"umn"},"solution":{"bestLength":5,"answers":["human","unman","cumin"],"total":605}},
     "2029-10-02": {"puzzle":{"letters":"kpe"},"solution":{"bestLength":6,"answers":["keeper","kipper","kopeck"],"total":79}},
-    "2029-10-03": {"puzzle":{"letters":"buii"},"solution":{"bestLength":7,"answers":["builtin","bulimia","bulimic"],"total":40}},
-    "2029-10-04": {"puzzle":{"letters":"atn"},"solution":{"bestLength":5,"answers":["atone","baton","eaten","oaten","satin"],"total":3530}},
-    "2029-10-05": {"puzzle":{"letters":"cdr"},"solution":{"bestLength":5,"answers":["cadre","cedar","cider"],"total":197}},
-    "2029-10-06": {"puzzle":{"letters":"uti"},"solution":{"bestLength":5,"answers":["mufti","multi","untie","until","uteri"],"total":2167}},
+    "2029-10-03": {"puzzle":{"letters":"tia"},"solution":{"bestLength":5,"answers":["tiara","tidal","trial","atria","tibia","titan","triad"],"total":1747}},
+    "2029-10-04": {"puzzle":{"letters":"atn"},"solution":{"bestLength":5,"answers":["atone","baton","eaten","satin","oaten"],"total":3530}},
+    "2029-10-05": {"puzzle":{"letters":"ccr"},"solution":{"bestLength":5,"answers":["occur"],"total":390}},
+    "2029-10-06": {"puzzle":{"letters":"uti"},"solution":{"bestLength":5,"answers":["multi","untie","until","uteri","mufti"],"total":2167}},
     "2029-10-07": {"puzzle":{"letters":"eway"},"solution":{"bestLength":6,"answers":["leeway","seaway"],"total":41}},
-    "2029-10-08": {"puzzle":{"letters":"itio"},"solution":{"bestLength":6,"answers":["initio"],"total":1249}}
+    "2029-10-08": {"puzzle":{"letters":"giss"},"solution":{"bestLength":6,"answers":["guises","gneiss"],"total":225}},
+    "2029-10-09": {"puzzle":{"letters":"bcr"},"solution":{"bestLength":6,"answers":["backer","bicker","boxcar"],"total":186}}
   }
 }

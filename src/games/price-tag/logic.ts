@@ -7,6 +7,7 @@ import { type PriceTagPuzzle, type PriceTagSolution, SLUG } from './spec.ts';
 
 export const priceTagLogic: GameLogic<PriceTagPuzzle, PriceTagSolution> = {
   slug: SLUG,
+  needs: ['common'],
   generate: generatePriceTag,
   solve: solvePriceTag,
   accept: acceptPriceTag,

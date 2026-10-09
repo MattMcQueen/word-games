@@ -10,7 +10,7 @@ import { letters } from '../../core/text.ts';
 import { type Child, h, replaceChildren, targetLine } from '../../ui/dom.ts';
 import type { GameModule } from '../../ui/game-shell.ts';
 import { answersSummary } from '../../ui/results.ts';
-import { mountWordHunt, type WordHuntData } from '../../ui/word-hunt.ts';
+import { hintNote, mountWordHunt, type WordHuntData } from '../../ui/word-hunt.ts';
 import { gameUrl } from '../catalogue.ts';
 import { threaderLogic } from './logic.ts';
 import {
@@ -79,6 +79,7 @@ export const threaderGame: GameModule<ThreaderPuzzle, ThreaderSolution, WordHunt
 
     const { keyboard } = mountWordHunt({
       ctx,
+      hintWord: solution.answers[0] ?? '',
       top: [
         h(
           'section',
@@ -115,7 +116,7 @@ export const threaderGame: GameModule<ThreaderPuzzle, ThreaderSolution, WordHunt
 
   summarise({ puzzle, solution, data, result, date }) {
     return {
-      detail: describeOutcome(shortestOf(data.words), solution, puzzle.letters),
+      detail: `${describeOutcome(shortestOf(data.words), solution, puzzle.letters)}${hintNote(data)}`,
       ...answersSummary(solution.answers),
       shareText: buildShareText({
         game: NAME,

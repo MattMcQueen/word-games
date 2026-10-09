@@ -4,6 +4,7 @@
  * acceptThreader then filters out threads that are too easy or too hard.
  */
 
+import { hasEverydayAnswer } from '../../core/dictionary.ts';
 import type { GenerateContext } from '../../core/game.ts';
 import type { Rng } from '../../core/rng.ts';
 import {
@@ -32,9 +33,15 @@ export function generateThreader(rng: Rng, { dict }: GenerateContext): ThreaderP
   return { letters: positions.map((i) => source[i]).join('') };
 }
 
-export function acceptThreader(puzzle: ThreaderPuzzle, solution: ThreaderSolution): boolean {
+/** Difficulty bounds, and at least one shortest answer must be an everyday word. */
+export function acceptThreader(
+  puzzle: ThreaderPuzzle,
+  solution: ThreaderSolution,
+  ctx: GenerateContext,
+): boolean {
   const extra = solution.bestLength - puzzle.letters.length;
   return (
+    hasEverydayAnswer(solution.answers, ctx.common) &&
     extra >= MIN_EXTRA &&
     extra <= MAX_EXTRA &&
     solution.answers.length <= MAX_BEST_ANSWERS &&

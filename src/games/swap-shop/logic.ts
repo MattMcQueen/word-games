@@ -7,6 +7,7 @@ import { SLUG, type SwapShopPuzzle, type SwapShopSolution } from './spec.ts';
 
 export const swapShopLogic: GameLogic<SwapShopPuzzle, SwapShopSolution> = {
   slug: SLUG,
+  needs: ['common'],
   generate: generateSwapShop,
   solve: solveSwapShop,
   accept: acceptSwapShop,

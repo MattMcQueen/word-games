@@ -28,8 +28,10 @@ export interface WordBoardOptions<D> {
   submit(word: string, board: WordBoard): void;
   /** The found list's heading and items, redrawn after every change. */
   found(): { heading: string; items: Node[] };
-  /** Score the current state. A perfect result ends the game. */
+  /** Score the current state. A perfect result ends the game (unless `done` says otherwise). */
   result(gaveUp: boolean): GameResult;
+  /** True when the puzzle is solved and the game should end; defaults to a perfect result. */
+  done?(): boolean;
   /** Called after every redraw, for the game's own panels. */
   onRender?(finished: boolean): void;
   /** Extra word box options, e.g. to veto letters or react to typing. */
@@ -77,12 +79,16 @@ export function mountWordBoard<D>(opts: WordBoardOptions<D>): WordBoard {
     'See results',
   );
 
+  // The word box, its messages and the keyboard: on phones they stay docked at
+  // the bottom of the screen (components.css .dock), so typing never needs a scroll.
+  const dock = h('div', { class: 'dock' }, input.el, ...below, keyboard.el);
+
   function render() {
     const { heading, items } = opts.found();
     foundHeading.textContent = heading;
     replaceChildren(foundList, items);
     input.setDisabled(finished);
-    for (const el of [keyboard.el, input.el, ...below]) (el as HTMLElement).hidden = finished;
+    dock.hidden = finished;
     replaceChildren(actions, finished ? resultsButton : finishButton);
     opts.onRender?.(finished);
   }
@@ -116,7 +122,7 @@ export function mountWordBoard<D>(opts: WordBoardOptions<D>): WordBoard {
     keyboard,
     end,
     commit() {
-      if (opts.result(false).perfect) return end(false);
+      if (opts.done ? opts.done() : opts.result(false).perfect) return end(false);
       ctx.save(data);
       render();
     },
@@ -124,9 +130,7 @@ export function mountWordBoard<D>(opts: WordBoardOptions<D>): WordBoard {
 
   ctx.root.append(
     ...opts.top,
-    input.el,
-    ...below,
-    keyboard.el,
+    dock,
     actions,
     h('section', { class: 'found-section', 'aria-label': 'Found so far' }, foundHeading, foundList),
   );

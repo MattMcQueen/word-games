@@ -7,6 +7,7 @@ import { type CleanSweepPuzzle, type CleanSweepSolution, SLUG } from './spec.ts'
 
 export const cleanSweepLogic: GameLogic<CleanSweepPuzzle, CleanSweepSolution> = {
   slug: SLUG,
+  needs: ['common'],
   generate: generateCleanSweep,
   solve: (puzzle, ctx) => solveCleanSweep(puzzle, ctx),
   accept: acceptCleanSweep,

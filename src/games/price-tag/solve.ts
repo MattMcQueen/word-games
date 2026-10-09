@@ -3,10 +3,14 @@
  * (length, cost) seen among affordable words. ~60k words, so it's instant.
  */
 
+import { everydayFirst } from '../../core/dictionary.ts';
 import type { GenerateContext } from '../../core/game.ts';
 import { compareScores, type PriceTagPuzzle, type PriceTagSolution, wordCost } from './spec.ts';
 
-export function solvePriceTag(puzzle: PriceTagPuzzle, { dict }: GenerateContext): PriceTagSolution {
+export function solvePriceTag(
+  puzzle: PriceTagPuzzle,
+  { dict, common }: GenerateContext,
+): PriceTagSolution {
   let best = { length: 0, cost: 0 };
   let answers: string[] = [];
 
@@ -22,5 +26,5 @@ export function solvePriceTag(puzzle: PriceTagPuzzle, { dict }: GenerateContext)
     }
   }
 
-  return { bestLength: best.length, bestCost: best.cost, answers };
+  return { bestLength: best.length, bestCost: best.cost, answers: everydayFirst(answers, common) };
 }

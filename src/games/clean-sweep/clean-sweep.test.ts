@@ -19,6 +19,9 @@ import { MAX_SOLUTIONS, MAX_WORDS, MIN_WORDS, TOTAL_LETTERS } from './spec.ts';
 
 const small = createDictionary(['act', 'cat', 'dog', 'god', 'catdog', 'tac', 'sun'].join('\n'));
 
+/** A context with no everyday word list, so only the difficulty bounds apply. */
+const noList = contextFor(createDictionary(''), '2027-01-01');
+
 describe('sweep (the solver)', () => {
   it('finds the true minimum, preferring one long word', () => {
     expect(sweep('dogcat', small, 3)).toMatchObject({
@@ -61,11 +64,11 @@ describe('generateCleanSweep', () => {
   it('rejects sweeps that are too easy or too hard', () => {
     const p = { letters: '' };
     const sol = (min: number, solutions = 5) => ({ min, solutions, examples: [] });
-    expect(acceptCleanSweep(p, sol(MIN_WORDS - 1))).toBe(false);
-    expect(acceptCleanSweep(p, sol(MIN_WORDS))).toBe(true);
-    expect(acceptCleanSweep(p, sol(MAX_WORDS))).toBe(true);
-    expect(acceptCleanSweep(p, sol(MAX_WORDS + 1))).toBe(false);
-    expect(acceptCleanSweep(p, sol(MIN_WORDS, MAX_SOLUTIONS + 1))).toBe(false);
+    expect(acceptCleanSweep(p, sol(MIN_WORDS - 1), noList)).toBe(false);
+    expect(acceptCleanSweep(p, sol(MIN_WORDS), noList)).toBe(true);
+    expect(acceptCleanSweep(p, sol(MAX_WORDS), noList)).toBe(true);
+    expect(acceptCleanSweep(p, sol(MAX_WORDS + 1), noList)).toBe(false);
+    expect(acceptCleanSweep(p, sol(MIN_WORDS, MAX_SOLUTIONS + 1), noList)).toBe(false);
   });
 
   it('produces daily puzzles whose example sweeps use every letter exactly once', () => {
@@ -125,5 +128,22 @@ describe('Clean Sweep scoring', () => {
     expect(shareLines(['a', 'b', 'c'], 2)).toEqual(['🧹 Swept in 3 words (best 2)', '🟩🟩🟩⬜⬜']);
     expect(shareLines(['a', 'b'], 2)[0]).toBe('🧹 ⭐ Swept in 2, the fewest possible');
     expect(shareLines(null, 2)[0]).toBe('🧹 Not swept (best 2)');
+  });
+});
+
+describe('CleanSweep with everyday words', () => {
+  const dict = createDictionary(readFileSync('public/data/words.txt', 'utf8'));
+  const common = new Set(createDictionary(readFileSync('public/data/common.txt', 'utf8')).words);
+
+  it('shows a best answer made only of everyday words', () => {
+    for (let d = 1; d <= 6; d++) {
+      const date = `2027-04-${String(d).padStart(2, '0')}`;
+      const { solution } = generateDaily(cleanSweepLogic, contextFor(dict, date, { common }));
+      const words = solution.examples[0] as string[];
+      expect(
+        words.every((w) => common.has(w)),
+        `${date}: ${words.join(' ')}`,
+      ).toBe(true);
+    }
   });
 });

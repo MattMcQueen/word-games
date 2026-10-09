@@ -131,3 +131,8 @@
     gap: 0.6rem 0.7rem;
   }
 }
+
+/* The count of letters placed, under the line. */
+.cp-panel .live-line {
+  margin: 0.9rem 0 0;
+}

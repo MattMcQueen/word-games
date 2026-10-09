@@ -2,6 +2,7 @@
 
 import { h } from '../../ui/dom.ts';
 import type { HowToPlay } from '../../ui/how-to-play.ts';
+import { everydaySection } from '../hunt-rules.ts';
 
 export const matryoshkaRules: HowToPlay = {
   intro:
@@ -55,6 +56,7 @@ export const matryoshkaRules: HowToPlay = {
         ),
       ],
     },
+    everydaySection('The longest chain'),
     {
       title: 'Finishing',
       body: [

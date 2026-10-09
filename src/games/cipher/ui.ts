@@ -276,12 +276,17 @@ export const cipherGame: GameModule<CipherPuzzle, CipherSolution, CipherData> = 
           'Each letter stands for a different one. Crack the code to read a line from a classic novel.',
         ),
         line,
+        progress,
         creditBox,
       ),
-      h('div', { class: 'cp-bar' }, status, hintButton),
-      progress,
-      feedback,
-      keyboard.el,
+      // Docked at the bottom of the screen on phones, like the word games' keyboards.
+      h(
+        'div',
+        { class: 'dock' },
+        h('div', { class: 'cp-bar' }, status, hintButton),
+        feedback,
+        keyboard.el,
+      ),
       actions,
     );
     // Start on the first blank letter.
