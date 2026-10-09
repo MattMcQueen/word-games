@@ -92,6 +92,7 @@ export const shelfScrambleGame: GameModule<
     return {
       detail: describeOutcome(solution, data),
       answersLabel: "Today's book",
+      prose: true,
       answers: [`${solution.title} by ${solution.author}`],
       credit: buyBookLink(solution.title, solution.author),
       shareText: buildShareText({

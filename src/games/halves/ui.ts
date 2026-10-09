@@ -6,11 +6,13 @@
  */
 
 import { puzzleNumber } from '../../core/date.ts';
+import { createRng } from '../../core/rng.ts';
 import { buildShareText } from '../../core/share.ts';
 import { plural } from '../../core/text.ts';
 import { h, replaceChildren } from '../../ui/dom.ts';
 import type { GameModule } from '../../ui/game-shell.ts';
 import { confirmModal } from '../../ui/modal.ts';
+import { lookUp } from '../../ui/results.ts';
 import { finishOrResults, foundItem } from '../../ui/word-board.ts';
 import { gameUrl } from '../catalogue.ts';
 import { halvesLogic } from './logic.ts';
@@ -59,6 +61,20 @@ export const halvesGame: GameModule<HalvesPuzzle, HalvesSolution, HalvesData> = 
       ...tiles.values(),
     ]);
     const progress = h('p', { class: 'hv-progress' });
+    // Moving the tiles round can make a pair jump out. Only the picture changes, so it isn't saved.
+    const shuffle = h(
+      'button',
+      {
+        class: 'btn quiet hv-shuffle',
+        type: 'button',
+        onclick: () => {
+          const order = createRng(String(Math.random())).shuffle([...tiles.values()]);
+          grid.append(...order);
+          say('Shuffled the halves.');
+        },
+      },
+      'Shuffle',
+    );
     const feedback = h('p', { class: 'feedback', 'aria-live': 'polite' });
     const actions = h('div', { class: 'board-actions' });
     const joinedHeading = h('h2', { class: 'found-heading' });
@@ -152,6 +168,7 @@ export const halvesGame: GameModule<HalvesPuzzle, HalvesSolution, HalvesData> = 
         [...tiles.values()].find((t) => !t.hidden)?.focus();
       }
       grid.hidden = finished;
+      shuffle.hidden = finished;
       feedback.hidden = finished;
 
       const done = joined(data, solution);
@@ -175,7 +192,7 @@ export const halvesGame: GameModule<HalvesPuzzle, HalvesSolution, HalvesData> = 
         { class: 'panel hv-panel', 'aria-label': 'The halves' },
         h('p', { class: 'hv-label' }, 'Join the halves in pairs to make six words.'),
         grid,
-        progress,
+        h('div', { class: 'hv-bar' }, progress, shuffle),
       ),
       feedback,
       actions,
@@ -193,7 +210,7 @@ export const halvesGame: GameModule<HalvesPuzzle, HalvesSolution, HalvesData> = 
     return {
       detail: describeOutcome(solution, data),
       answersLabel: "Today's six words",
-      answers: solution.words.map((pair) => `${pair.join('').toUpperCase()} (${sum(pair)})`),
+      answers: solution.words.map((pair) => [lookUp(pair.join('')), ` (${sum(pair)})`]),
       shareText: buildShareText({
         game: NAME,
         puzzleNumber: puzzleNumber(date),

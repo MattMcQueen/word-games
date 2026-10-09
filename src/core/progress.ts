@@ -4,10 +4,12 @@
  * Keys:
  *   <slug>:day:<date>  → DayRecord: in-progress or finished state for one puzzle
  *   <slug>:stats       → GameStats
+ *   site:streak        → SiteStreak: days in a row with any puzzle finished
  *
  * Streaks count consecutive days on which the player finished that day's
  * puzzle on the day itself. Archive plays count towards "played" and
- * "perfect" but never towards streaks.
+ * "perfect" but never towards streaks. The site streak is the same, for
+ * finishing at least one of the day's puzzles.
  */
 
 import { addDays } from './date.ts';
@@ -49,6 +51,15 @@ const EMPTY_STATS: GameStats = {
   lastStreakDate: null,
 };
 
+/** Days in a row on which at least one of the day's puzzles was finished on the day. */
+export interface SiteStreak {
+  current: number;
+  best: number;
+  lastDate: string | null;
+}
+
+const SITE_STREAK_KEY = 'site:streak';
+
 const dayKey = (slug: string, date: string) => `${slug}:day:${date}`;
 const statsKey = (slug: string) => `${slug}:stats`;
 
@@ -64,6 +75,23 @@ export function loadStats(slug: string, today: string): GameStats {
   const last = stats.lastStreakDate;
   if (last !== today && last !== addDays(today, -1)) stats.currentStreak = 0;
   return stats;
+}
+
+/** The site streak as it stands today: one not continued yesterday or today is shown as broken. */
+export function loadSiteStreak(today: string): SiteStreak {
+  const streak = readJson<SiteStreak>(SITE_STREAK_KEY, { current: 0, best: 0, lastDate: null });
+  if (streak.lastDate !== today && streak.lastDate !== addDays(today, -1)) streak.current = 0;
+  return streak;
+}
+
+/** Count today towards the site streak (once). */
+function extendSiteStreak(today: string) {
+  const streak = loadSiteStreak(today);
+  if (streak.lastDate === today) return;
+  streak.current = streak.lastDate === addDays(today, -1) ? streak.current + 1 : 1;
+  streak.best = Math.max(streak.best, streak.current);
+  streak.lastDate = today;
+  writeJson(SITE_STREAK_KEY, streak);
 }
 
 /**
@@ -84,6 +112,7 @@ export function finishDay<D>(
 
   stats.played++;
   if (result.perfect) stats.perfect++;
+  if (date === today) extendSiteStreak(today);
   if (date === today && stats.lastStreakDate !== today) {
     stats.currentStreak = stats.lastStreakDate === addDays(today, -1) ? stats.currentStreak + 1 : 1;
     stats.maxStreak = Math.max(stats.maxStreak, stats.currentStreak);

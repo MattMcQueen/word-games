@@ -70,7 +70,12 @@ test.describe('Halves', () => {
     for (const [a, b] of solution.words.slice(0, 5)) await join(page, a, b);
     const results = page.getByRole('dialog', { name: 'Perfect!' });
     await expect(results).toContainText('without a single mistake!');
-    await expect(results).toContainText(solution.words[5]?.join('').toUpperCase() as string);
+    await expect(results).toContainText(solution.words[5]?.join('') as string);
+    // Then on to the next of today's games.
+    await expect(results.getByRole('link', { name: 'Play Retitled' })).toHaveAttribute(
+      'href',
+      '/retitled/',
+    );
     await expectAccessible(page);
   });
 

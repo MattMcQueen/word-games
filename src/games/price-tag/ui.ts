@@ -61,7 +61,8 @@ export const priceTagGame: GameModule<PriceTagPuzzle, PriceTagSolution, WordHunt
           { class: 'panel pt-budget', 'aria-label': 'Budget' },
           h('p', { class: 'pt-budget-label' }, 'Budget'),
           h('p', { class: 'pt-budget-value' }, pence(puzzle.budget)),
-          targetLine(`${letters(solution.bestLength)} for up to ${pence(puzzle.budget)}`),
+          // Length and spend: a word of the right length that spends less isn't the best yet.
+          targetLine(`${letters(solution.bestLength)} costing ${pence(solution.bestCost)}`),
           bestLine,
         ),
       ],

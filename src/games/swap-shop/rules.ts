@@ -41,6 +41,11 @@ export const swapShopRules: HowToPlay = {
             'Some days only words of one length count; the puzzle says so under the swap.',
           ),
           h('li', null, 'Words need at least 3 letters, and both words must be in the word list.'),
+          h(
+            'li',
+            null,
+            'Plurals and other forms go with their pair: with A ↔ E, BATS ↔ BETS counts as BAT ↔ BET, not as a new pair.',
+          ),
         ),
       ],
     },

@@ -19,6 +19,34 @@ export function buildShareText({ game, puzzleNumber, lines, url }: ShareInput): 
   return [`${SITE_NAME} · ${game} #${puzzleNumber}`, ...lines, url].join('\n');
 }
 
+/** One game's line in the day's summary: its name, and its result if it's finished. */
+export interface DayEntry {
+  name: string;
+  perfect?: boolean;
+  finished: boolean;
+}
+
+/**
+ * Every game finished today in one spoiler-free message:
+ *   Word Games #8: 5 of 12 today, 2 perfect
+ *   ⭐ Price Tag
+ *   ✅ Hinge …
+ *   🔥 4-day streak (from two days)
+ */
+export function buildDayShareText(
+  puzzleNumber: number,
+  entries: DayEntry[],
+  url: string,
+  streak = 0,
+): string {
+  const done = entries.filter((e) => e.finished);
+  const perfect = done.filter((e) => e.perfect).length;
+  const headline = `${SITE_NAME} #${puzzleNumber}: ${done.length} of ${entries.length} today${perfect ? `, ${perfect} perfect` : ''}`;
+  const games = done.map((e) => `${e.perfect ? '⭐' : '✅'} ${e.name}`);
+  const run = streak >= 2 ? [`🔥 ${streak}-day streak`] : [];
+  return [headline, ...games, ...run, url].join('\n');
+}
+
 /**
  * A five-cell meter of how close the player got to the optimum, e.g. 🟩🟩🟩🟩⬜.
  * Pass `lowerIsBetter` for games where the target is a minimum (shortest word,

@@ -21,6 +21,7 @@
     "check": "npm run typecheck && npm run lint && npm run test && npm run fallow && npm run build && npm run test:e2e",
     "build:dictionary": "node scripts/build-dictionary.ts",
     "build:sentences": "node scripts/build-gutenberg.ts",
+    "build:images": "node scripts/build-images.ts",
     "generate": "node scripts/generate-puzzles.ts"
   },
   "devDependencies": {

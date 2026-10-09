@@ -63,6 +63,13 @@ renderPage({
             'After a Lost for Words, Shelf Scramble, Retitled or Cipher puzzle there is a link to buy the book on Amazon. It is an ordinary link: nothing is loaded from Amazon unless you follow it. ',
             h('strong', null, AMAZON_DISCLOSURE),
           ),
+          h(
+            'li',
+            null,
+            'The answers at the end of a puzzle link to their entries in ',
+            link('https://en.wiktionary.org/', 'Wiktionary'),
+            ', the free dictionary. Again, nothing is loaded from it unless you follow a link.',
+          ),
         ),
       ),
       h(

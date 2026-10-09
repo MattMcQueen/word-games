@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildShareText, scoreMeter } from './share.ts';
+import { buildDayShareText, buildShareText, scoreMeter } from './share.ts';
 
 describe('share text', () => {
   it('builds a header, result lines and a link', () => {
@@ -27,5 +27,22 @@ describe('share text', () => {
   it('supports games where lower is better', () => {
     expect(scoreMeter(3, 3, true)).toBe('🟩🟩🟩🟩🟩');
     expect(scoreMeter(6, 3, true)).toBe('🟩🟩🟩⬜⬜');
+  });
+});
+
+describe('buildDayShareText', () => {
+  it('lists the games finished today, starring the perfect ones', () => {
+    const text = buildDayShareText(
+      8,
+      [
+        { name: 'Price Tag', finished: true, perfect: true },
+        { name: 'Hinge', finished: true, perfect: false },
+        { name: 'Threader', finished: false },
+      ],
+      'https://example.com/',
+    );
+    expect(text).toBe(
+      'Word Games #8: 2 of 3 today, 1 perfect\n⭐ Price Tag\n✅ Hinge\nhttps://example.com/',
+    );
   });
 });

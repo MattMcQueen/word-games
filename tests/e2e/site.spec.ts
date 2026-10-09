@@ -35,6 +35,34 @@ test.describe('Home page', () => {
     const card = page.getByRole('listitem').filter({ hasText: 'Price Tag' });
     await expect(card).toContainText('In progress');
     await expect(card.getByRole('link', { name: 'Continue' })).toBeVisible();
+    // Nothing finished yet, so nothing to share.
+    await expect(page.getByRole('button', { name: "Share today's scores" })).toHaveCount(0);
+  });
+
+  test('offers to share the day once a game is finished', async ({ page }) => {
+    await page.goto('/price-tag/');
+    await page.getByRole('button', { name: 'Finish' }).click();
+    await page.getByRole('button', { name: 'Finish and see answers' }).click();
+    await page.goto('/');
+    await expect(page.getByText("You've done 1 of")).toBeVisible();
+    await page.getByRole('button', { name: "Share today's scores" }).click();
+    await expect(page.getByText("Today's scores copied to clipboard")).toBeVisible();
+  });
+
+  test('every page has a title, a description and a picture for link previews', async ({
+    page,
+  }) => {
+    await page.goto('/halves/');
+    await expect(page).toHaveTitle('Halves – Word Games');
+    const og = (property: string) =>
+      page.locator(`meta[property="og:${property}"]`).getAttribute('content');
+    expect(await og('title')).toBe('Halves – Word Games');
+    expect(await og('image')).toBe('https://words.matt-rarely-writes.co.uk/og-image.png');
+    expect(await og('description')).toMatch(/Halves/);
+    await expect(page.locator('link[rel="manifest"]')).toHaveAttribute(
+      'href',
+      '/manifest.webmanifest',
+    );
   });
 
   test('is accessible in light and dark mode', async ({ page }) => {

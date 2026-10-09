@@ -1,14 +1,16 @@
 /**
- * The home page: today's date and how many of today's puzzles you've played,
- * then a card for each game with a small picture of it, today's status and
- * links to play it or read how to play.
+ * The home page: today's date, how many of today's puzzles you've played
+ * (with a button to share them all at once), then a card for each game with a
+ * small picture of it, today's status and links to play it or read how to play.
  */
 
 import { formatLongDate, puzzleNumber, todayKey } from '../core/date.ts';
-import { loadDay } from '../core/progress.ts';
+import { loadDay, loadSiteStreak } from '../core/progress.ts';
+import { buildDayShareText, copyText } from '../core/share.ts';
 import { GAMES, type GameInfo, gamePath, howToPlayPath } from '../games/catalogue.ts';
-import { h } from '../ui/dom.ts';
+import { h, icon } from '../ui/dom.ts';
 import { renderPage, siteNav } from '../ui/page.ts';
+import { toast } from '../ui/toast.ts';
 import { gamePreview } from './previews.ts';
 
 type State = 'new' | 'playing' | 'done' | 'perfect';
@@ -56,7 +58,26 @@ function gameCard(game: GameInfo) {
 }
 
 const today = todayKey();
-const played = GAMES.filter((g) => loadDay(g.slug, today)?.status === 'finished').length;
+const days = GAMES.map((g) => ({ game: g, day: loadDay(g.slug, today) }));
+const played = days.filter(({ day }) => day?.status === 'finished').length;
+const streak = loadSiteStreak(today).current;
+/** " · 🔥 4-day streak", from two days in a row. */
+const streakNote = streak >= 2 ? ` · 🔥 ${streak}-day streak` : '';
+
+/** Copy one message covering every game finished today. */
+async function shareDay() {
+  const text = buildDayShareText(
+    puzzleNumber(today),
+    days.map(({ game, day }) => ({
+      name: game.name,
+      finished: day?.status === 'finished',
+      perfect: day?.result?.perfect ?? false,
+    })),
+    `${location.origin}/`,
+    streak,
+  );
+  toast((await copyText(text)) ? "Today's scores copied to clipboard" : 'Sorry, copying failed');
+}
 
 renderPage({
   nav: siteNav('home'),
@@ -78,11 +99,19 @@ renderPage({
         'p',
         { class: 'home-progress' },
         played === GAMES.length
-          ? `You've done all ${GAMES.length} today. See you tomorrow!`
+          ? `You've done all ${GAMES.length} today. See you tomorrow!${streakNote}`
           : played
-            ? `You've done ${played} of ${GAMES.length} today.`
-            : 'Pick a game to start. Each takes a few minutes.',
+            ? `You've done ${played} of ${GAMES.length} today.${streakNote}`
+            : `Pick a game to start. Each takes a few minutes.${streakNote}`,
       ),
+      played
+        ? h(
+            'button',
+            { class: 'btn primary home-share', type: 'button', onclick: shareDay },
+            icon('share'),
+            "Share today's scores",
+          )
+        : null,
     ),
     h('ul', { class: 'game-grid', 'aria-label': 'Games' }, GAMES.map(gameCard)),
   ),

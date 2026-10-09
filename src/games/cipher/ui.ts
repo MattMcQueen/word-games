@@ -296,6 +296,7 @@ export const cipherGame: GameModule<CipherPuzzle, CipherSolution, CipherData> = 
     return {
       detail: describeOutcome(puzzle, solution, data),
       answersLabel: "Today's line",
+      prose: true,
       answers: [solution.line],
       credit: bookCredit(puzzle.book.title, puzzle.book.author, 'From '),
       shareText: buildShareText({

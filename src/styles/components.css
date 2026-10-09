@@ -360,6 +360,13 @@
   text-transform: uppercase;
   caret-color: var(--accent);
 }
+.word-input::placeholder {
+  color: var(--muted);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
+}
 .word-input:focus {
   border-color: var(--accent);
   outline: none;
@@ -509,7 +516,7 @@
 }
 .best-answers li {
   padding: 0.2rem 0.7rem;
-  border-radius: 999px;
+  border-radius: 1.1rem; /* a pill on one line, a soft box if it wraps */
   background: var(--accent-soft);
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -538,6 +545,10 @@
   gap: 0.5rem;
   margin-top: 1.25rem;
 }
+.result-actions .btn {
+  flex: 1 1 12rem; /* side by side when there's room, each full width when there isn't */
+}
+
 .countdown {
   margin: 1rem 0 0;
 }
@@ -804,4 +815,102 @@
 .buy-disclosure {
   color: var(--muted);
   font-size: 0.8rem;
+}
+
+/* ---------- Results extras: word look-ups, prose answers, next up ---------- */
+
+/* Answers that link to Wiktionary: dotted underline, so they read as words first. */
+.best-answers a.lookup {
+  color: inherit;
+  text-decoration: underline dotted 1.5px;
+  text-underline-offset: 3px;
+}
+.best-answers a.lookup:hover {
+  color: var(--accent);
+  text-decoration-style: solid;
+}
+.lookup-note {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* A sentence or a title, shown as prose rather than as word chips. */
+.best-answers ul.prose li {
+  padding: 0;
+  background: none;
+  font: 400 1.1rem / 1.5 var(--serif);
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* "Next up": the next of today's games, to keep going. */
+.next-up {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-top: 1.25rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+}
+.next-up p {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+.next-up-label {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.next-up-tagline {
+  color: var(--soft);
+  font-size: 0.9rem;
+}
+.next-up-done {
+  display: block;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* A perfect game's shower of letter tiles (results.ts celebrate()). */
+.celebrate {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.celebrate span {
+  position: absolute;
+  top: -2.5rem;
+  left: var(--x);
+  display: grid;
+  place-items: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font: 800 1rem / 1 var(--sans);
+  animation: tile-fall 2s cubic-bezier(0.4, 0, 0.8, 0.6) var(--delay) forwards;
+}
+.celebrate span:nth-child(3n) {
+  background: var(--fg);
+  color: var(--bg);
+}
+.celebrate span:nth-child(3n + 1) {
+  background: var(--accent-soft);
+  color: var(--fg);
+}
+@keyframes tile-fall {
+  to {
+    transform: translateY(105vh) rotate(var(--spin));
+    opacity: 0.3;
+  }
 }

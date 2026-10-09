@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://words.matt-rarely-writes.co.uk/sitemap.xml

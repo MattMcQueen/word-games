@@ -27,7 +27,7 @@ export interface PageOptions {
 
 /** Draw the page frame and return its <main>, to which callers may add more. */
 export function renderPage({ title, nav, width, content }: PageOptions): HTMLElement {
-  if (title) document.title = `${title} – ${document.title}`;
+  document.title = title ? `${title} – ${SITE_NAME}` : document.title;
   const main = h('main', { id: 'main', class: `wrap ${width}-width`, tabindex: -1 }, content);
   document.body.replaceChildren(
     h('a', { class: 'skip', href: '#main' }, 'Skip to content'),

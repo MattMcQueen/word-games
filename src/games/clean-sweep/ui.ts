@@ -10,6 +10,7 @@ import { buildShareText } from '../../core/share.ts';
 import { letters, plural } from '../../core/text.ts';
 import { h, replaceChildren, targetLine } from '../../ui/dom.ts';
 import type { GameContext, GameModule } from '../../ui/game-shell.ts';
+import { lookUpAll } from '../../ui/results.ts';
 import { mountWordBoard, type WordBoard } from '../../ui/word-board.ts';
 import { gameUrl } from '../catalogue.ts';
 import { cleanSweepLogic } from './logic.ts';
@@ -204,7 +205,7 @@ export const cleanSweepGame: GameModule<CleanSweepPuzzle, CleanSweepSolution, Cl
     return {
       detail: describeOutcome(data.best, solution.min),
       answersLabel: solution.examples.length === 1 ? 'A best sweep' : 'Some best sweeps',
-      answers: solution.examples.map((words) => words.join(' + ').toUpperCase()),
+      answers: solution.examples.map((words) => lookUpAll(words.join(' + ').toUpperCase())),
       shareText: buildShareText({
         game: NAME,
         puzzleNumber: puzzleNumber(date),

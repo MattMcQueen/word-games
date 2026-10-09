@@ -15,6 +15,8 @@ export type FeedbackKind = 'info' | 'good' | 'bad';
 export interface WordInputOptions {
   /** Accessible label, e.g. "Your word". */
   label: string;
+  /** Faint text shown while the box is empty. */
+  placeholder?: string;
   maxLength?: number;
   /** Return false to reject `letter` being added after `current`. */
   allowLetter?: (current: string, letter: string) => boolean;
@@ -40,7 +42,14 @@ export interface WordInput {
 let counter = 0;
 
 export function createWordInput(options: WordInputOptions): WordInput {
-  const { label, maxLength = 15, allowLetter = () => true, onChange, onSubmit } = options;
+  const {
+    label,
+    placeholder = 'Type a word, then press Enter',
+    maxLength = 15,
+    allowLetter = () => true,
+    onChange,
+    onSubmit,
+  } = options;
   const id = `word-input-${++counter}`;
 
   const input = h('input', {
@@ -52,6 +61,7 @@ export function createWordInput(options: WordInputOptions): WordInput {
     autocapitalize: 'none',
     spellcheck: 'false',
     enterkeyhint: 'enter',
+    placeholder,
     'aria-describedby': `${id}-feedback`,
   });
   const message = h('p', { id: `${id}-feedback`, class: 'feedback', 'aria-live': 'polite' });

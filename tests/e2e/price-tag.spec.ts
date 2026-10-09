@@ -133,6 +133,11 @@ test.describe('Price Tag', () => {
     await expect(results).toContainText("You didn't find the best word. Yours had 4 letters");
     await expect(results).toContainText(`the best has ${solution.bestLength} letters`);
     await expect(results.locator('.best-answers')).toContainText(best);
+    // Each answer links to its dictionary entry.
+    await expect(results.getByRole('link', { name: best, exact: true })).toHaveAttribute(
+      'href',
+      `https://en.wiktionary.org/wiki/${best}#English`,
+    );
 
     // After closing, the board stays finished and can reopen the results.
     await results.getByRole('button', { name: 'Close' }).click();

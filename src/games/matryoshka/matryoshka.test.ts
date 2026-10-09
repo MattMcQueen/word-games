@@ -5,7 +5,7 @@ import { contextFor, generateDaily } from '../../core/game.ts';
 import { createRng } from '../../core/rng.ts';
 import { acceptMatryoshka, generateMatryoshka } from './generate.ts';
 import { matryoshkaLogic } from './logic.ts';
-import { chainLabel, describeOutcome, nextProblem, resultFor, shareLines } from './scoring.ts';
+import { describeOutcome, nextProblem, resultFor, shareLines } from './scoring.ts';
 import { nextWords, solveMatryoshka } from './solve.ts';
 import { insertedAt, isOneLetterInsertion, MAX_CHAIN, MIN_CHAIN, MIN_FIRST_STEPS } from './spec.ts';
 
@@ -110,7 +110,6 @@ describe('Matryoshka scoring', () => {
   });
 
   it('describes and shares the outcome without the words', () => {
-    expect(chainLabel(['at', 'cat'])).toBe('AT → CAT');
     expect(describeOutcome(0, 4, 'at')).toBe(
       "You didn't add a word to AT. The longest chain has 4 words.",
     );

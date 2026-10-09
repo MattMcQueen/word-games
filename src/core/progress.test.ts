@@ -1,5 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { finishDay, type GameResult, loadDay, loadStats, saveDay } from './progress.ts';
+import {
+  finishDay,
+  type GameResult,
+  loadDay,
+  loadSiteStreak,
+  loadStats,
+  saveDay,
+} from './progress.ts';
 
 const perfect: GameResult = { score: 9, best: 9, perfect: true, gaveUp: false };
 const partial: GameResult = { score: 6, best: 9, perfect: false, gaveUp: true };
@@ -41,5 +48,17 @@ describe('progress', () => {
     const stats = finishDay(slug, '2026-10-08', '2026-10-08', { a: 2 }, partial);
     expect(stats.played).toBe(1);
     expect(loadDay(slug, '2026-10-08')).toMatchObject({ status: 'finished', data: { a: 1 } });
+  });
+
+  it('keeps a site streak for finishing any puzzle on the day, counted once a day', () => {
+    finishDay(`${slug}-a`, '2031-03-01', '2031-03-01', {}, partial);
+    finishDay(`${slug}-b`, '2031-03-01', '2031-03-01', {}, partial);
+    expect(loadSiteStreak('2031-03-01').current).toBe(1);
+    finishDay(`${slug}-a`, '2031-03-02', '2031-03-02', {}, partial);
+    expect(loadSiteStreak('2031-03-02')).toEqual({ current: 2, best: 2, lastDate: '2031-03-02' });
+    expect(loadSiteStreak('2031-03-04').current).toBe(0);
+    // An archive play doesn't keep it going.
+    finishDay(`${slug}-b`, '2031-03-03', '2031-03-05', {}, partial);
+    expect(loadSiteStreak('2031-03-05').current).toBe(0);
   });
 });

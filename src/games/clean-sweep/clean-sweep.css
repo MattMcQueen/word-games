@@ -1,8 +1,9 @@
 /* Clean Sweep's letter tiles. The rest is the shared word board (components.css). */
 
+/* Fifteen letters as three tidy rows of five. */
 .cs-tiles {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(5, auto);
   justify-content: center;
   gap: 0.4rem;
   margin: 0;
@@ -13,8 +14,8 @@
 .cs-tile {
   display: inline-grid;
   place-items: center;
-  width: 2.6rem;
-  height: 2.6rem;
+  width: 2.8rem;
+  height: 2.8rem;
   border-radius: var(--radius-sm);
   background: var(--accent);
   color: var(--accent-fg);

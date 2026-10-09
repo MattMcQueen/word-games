@@ -9,6 +9,7 @@ import { buildShareText } from '../../core/share.ts';
 import { letters } from '../../core/text.ts';
 import { h } from '../../ui/dom.ts';
 import type { GameContext, GameModule } from '../../ui/game-shell.ts';
+import { lookUpAll } from '../../ui/results.ts';
 import { foundItem, mountWordBoard } from '../../ui/word-board.ts';
 import { gameUrl } from '../catalogue.ts';
 import { swapShopLogic } from './logic.ts';
@@ -116,7 +117,9 @@ export const swapShopGame: GameModule<SwapShopPuzzle, SwapShopSolution, SwapShop
     return {
       detail: describeOutcome(data.pairs.length, solution.pairs.length),
       answersLabel: missed.length > 0 ? 'Pairs you missed' : 'Every pair',
-      answers: (missed.length > 0 ? missed : solution.pairs).map(pairLabel),
+      answers: (missed.length > 0 ? missed : solution.pairs).map((key) =>
+        lookUpAll(pairLabel(key)),
+      ),
       shareText: buildShareText({
         game: NAME,
         puzzleNumber: puzzleNumber(date),

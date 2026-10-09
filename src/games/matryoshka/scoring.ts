@@ -23,9 +23,6 @@ export function nextProblem(word: string, current: string, dict: Dictionary): st
   return null;
 }
 
-/** "AT → CAT → SCAT" */
-export const chainLabel = (words: readonly string[]) => words.join(' → ').toUpperCase();
-
 export function resultFor(
   longest: readonly string[],
   solution: MatryoshkaSolution,

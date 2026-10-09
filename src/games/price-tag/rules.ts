@@ -23,7 +23,7 @@ export const priceTagRules: HowToPlay = {
         h(
           'p',
           null,
-          'If two words are the same length, the one that spends closer to the budget wins.',
+          'If two words are the same length, the one that spends closer to the budget wins. The target shows how long the best word is and what it costs.',
         ),
       ],
     },

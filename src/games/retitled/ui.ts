@@ -82,6 +82,7 @@ export const retitledGame: GameModule<RetitledPuzzle, RetitledSolution, Retitled
     return {
       detail: describeOutcome(puzzle, data),
       answersLabel: "Today's book",
+      prose: true,
       answers: [`“${puzzle.clue}” was ${solution.title} by ${solution.author}`],
       credit: buyBookLink(solution.title, solution.author),
       shareText: buildShareText({

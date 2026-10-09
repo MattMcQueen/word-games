@@ -9,6 +9,7 @@ import { puzzleNumber } from '../../core/date.ts';
 import { buildShareText } from '../../core/share.ts';
 import { h, replaceChildren } from '../../ui/dom.ts';
 import type { GameContext, GameModule } from '../../ui/game-shell.ts';
+import { lookUp } from '../../ui/results.ts';
 import { foundItem, mountWordBoard, type WordBoard } from '../../ui/word-board.ts';
 import { gameUrl } from '../catalogue.ts';
 import { hingeLogic } from './logic.ts';
@@ -153,7 +154,17 @@ export const hingeGame: GameModule<HingePuzzle, HingeSolution, HingeData> = {
     return {
       detail: describeOutcome(data, puzzle.pairs.length),
       answersLabel: "Today's hinges",
-      answers: puzzle.pairs.map((pair, i) => `${pair.left} [${solution.answers[i]}] ${pair.right}`),
+      // "PET: CARPET · PETROL", with both joined words to look up.
+      answers: puzzle.pairs.map((pair, i) => {
+        const hinge = solution.answers[i] ?? '';
+        return [
+          h('strong', null, hinge.toUpperCase()),
+          ': ',
+          lookUp(pair.left + hinge),
+          ' · ',
+          lookUp(hinge + pair.right),
+        ];
+      }),
       shareText: buildShareText({
         game: NAME,
         puzzleNumber: puzzleNumber(date),

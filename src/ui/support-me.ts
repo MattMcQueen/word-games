@@ -85,9 +85,13 @@ function loadForm(panel: HTMLElement) {
 }
 
 /**
- * Slide the button away while a small control is underneath it. Big targets
- * don't count, since covering a corner of one doesn't stop you pressing it.
+ * Slide the button away while a small control is underneath it, or a line of
+ * text worth reading (a heading, a found word, a game's messages). Big
+ * targets don't count, since covering a corner of one doesn't stop you
+ * pressing it.
  */
+const TEXT_TO_KEEP_CLEAR = 'h1, h2, h3, .found-list li, .feedback, .live-line, .footer-name';
+
 function keepOutOfTheWay(button: HTMLElement, panel: HTMLElement) {
   function coversControl(): boolean {
     // Measure where the button rests, not where it is while slid away.
@@ -106,6 +110,7 @@ function keepOutOfTheWay(button: HTMLElement, panel: HTMLElement) {
     return points.some(([x, y]) =>
       document.elementsFromPoint(x, y).some((el) => {
         if (button.contains(el) || panel.contains(el)) return false;
+        if (el.closest(TEXT_TO_KEEP_CLEAR)) return true;
         const control = el.closest('a, button, input, select, textarea, summary');
         if (!control) return false;
         const box = control.getBoundingClientRect();

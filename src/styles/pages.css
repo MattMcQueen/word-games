@@ -136,6 +136,10 @@ kbd {
   color: var(--fg);
   font-weight: 700;
 }
+.home-share {
+  position: relative; /* above the faint WORDS behind the hero */
+  margin-top: 4px;
+}
 
 .game-card {
   display: flex;

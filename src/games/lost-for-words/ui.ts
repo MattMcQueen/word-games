@@ -9,6 +9,7 @@ import { buildShareText } from '../../core/share.ts';
 import { bookCredit } from '../../ui/book-link.ts';
 import { h, replaceChildren } from '../../ui/dom.ts';
 import type { GameContext, GameModule } from '../../ui/game-shell.ts';
+import { lookUp } from '../../ui/results.ts';
 import { foundItem, mountWordBoard } from '../../ui/word-board.ts';
 import { gameUrl } from '../catalogue.ts';
 import { lostForWordsLogic } from './logic.ts';
@@ -119,7 +120,7 @@ export const lostForWordsGame: GameModule<
     return {
       detail: describeOutcome(data.guesses, solution.word),
       answersLabel: 'The missing word',
-      answers: [solution.word],
+      answers: [lookUp(solution.word)],
       credit: credit(puzzle),
       shareText: buildShareText({
         game: NAME,

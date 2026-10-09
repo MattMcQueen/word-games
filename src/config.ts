@@ -1,7 +1,9 @@
 /** Site-wide settings. Change these here rather than hunting through the code. */
 
-/** Live at https://words.matt-rarely-writes.co.uk (see README, Hosting). */
 export const SITE_NAME = 'Word Games';
+
+/** The live site (see README, Hosting), for links in share previews and the sitemap. */
+export const SITE_URL = 'https://words.matt-rarely-writes.co.uk';
 
 /** The source code, linked from the About page and the footer. */
 export const SOURCE_URL = 'https://github.com/MattMcQueen/word-games';

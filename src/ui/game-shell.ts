@@ -24,12 +24,12 @@ import type { GameLogic } from '../core/game.ts';
 import { finishDay, type GameResult, loadDay, loadStats, saveDay } from '../core/progress.ts';
 import { loadDailyPuzzle } from '../core/puzzle-loader.ts';
 import { readJson, writeJson } from '../core/storage.ts';
-import { gamePath, howToPlayPath } from '../games/catalogue.ts';
+import { GAMES, gamePath, howToPlayPath } from '../games/catalogue.ts';
 import { openArchive } from './archive.ts';
 import { h, type IconName, icon, replaceChildren } from './dom.ts';
 import { openModal } from './modal.ts';
 import { gameNav, renderPage } from './page.ts';
-import { type ResultSummary, showResults, statsGrid } from './results.ts';
+import { type NextGame, type ResultSummary, showResults, statsGrid } from './results.ts';
 import { toast } from './toast.ts';
 
 import '../styles/tokens.css';
@@ -70,6 +70,18 @@ export interface GameModule<P, S, D> {
     result: GameResult;
     date: string;
   }): ResultSummary;
+}
+
+/** The first of today's games after this one (going round) that isn't finished yet, or null. */
+function nextGame(slug: string, today: string): NextGame | null {
+  const here = GAMES.findIndex((g) => g.slug === slug);
+  for (let step = 1; step < GAMES.length; step++) {
+    const game = GAMES[(here + step) % GAMES.length];
+    if (game && loadDay(game.slug, today)?.status !== 'finished') {
+      return { name: game.name, tagline: game.tagline, href: gamePath(game.slug) };
+    }
+  }
+  return null;
 }
 
 /** The date to show: ?date= if it's a valid past puzzle, otherwise today. */
@@ -170,6 +182,7 @@ export function startGame<P, S, D>(game: GameModule<P, S, D>): void {
           stats: loadStats(slug, today),
           isToday,
           onArchive: showArchive,
+          ...(isToday ? { next: nextGame(slug, today) } : {}),
         });
       };
 

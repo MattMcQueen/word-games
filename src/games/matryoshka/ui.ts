@@ -9,10 +9,11 @@ import { buildShareText } from '../../core/share.ts';
 import { letters, plural } from '../../core/text.ts';
 import { h, replaceChildren, targetLine } from '../../ui/dom.ts';
 import type { GameContext, GameModule } from '../../ui/game-shell.ts';
+import { lookUp } from '../../ui/results.ts';
 import { foundItem, mountWordBoard, type WordBoard } from '../../ui/word-board.ts';
 import { gameUrl } from '../catalogue.ts';
 import { matryoshkaLogic } from './logic.ts';
-import { chainLabel, describeOutcome, nextProblem, resultFor, shareLines } from './scoring.ts';
+import { describeOutcome, nextProblem, resultFor, shareLines } from './scoring.ts';
 import { nextWords } from './solve.ts';
 import { insertedAt, type MatryoshkaPuzzle, type MatryoshkaSolution, NAME, SLUG } from './spec.ts';
 import './matryoshka.css';
@@ -119,7 +120,10 @@ export const matryoshkaGame: GameModule<MatryoshkaPuzzle, MatryoshkaSolution, Ma
     return {
       detail: describeOutcome(data.best.length, solution.best, puzzle.seed),
       answersLabel: solution.chains.length === 1 ? 'A longest chain' : 'Some longest chains',
-      answers: solution.chains.map((c) => chainLabel([puzzle.seed, ...c])),
+      answers: solution.chains.map((c) => [
+        puzzle.seed.toUpperCase(),
+        ...c.flatMap((word) => [' → ', lookUp(word.toUpperCase())]),
+      ]),
       shareText: buildShareText({
         game: NAME,
         puzzleNumber: puzzleNumber(date),
