@@ -48,6 +48,16 @@ export const cleanSweepGame: GameModule<CleanSweepPuzzle, CleanSweepSolution, Cl
       order: [...ctx.data.order],
     };
     const left = () => remainingCounts(puzzle.letters, data.words);
+    /**
+     * How many of each letter are free once `word` is taken out too, going
+     * below zero if it uses too many. (A plain number array: the Uint8Array
+     * from remainingCounts would wrap round from 0 to 255.)
+     */
+    const freeAfter = (word: string) => {
+      const free = Array.from(left());
+      for (const ch of word) free[ch.charCodeAt(0) - A] = (free[ch.charCodeAt(0) - A] ?? 0) - 1;
+      return (c: number) => free[c] ?? 0;
+    };
     let typed = '';
     let board: WordBoard | undefined;
 
@@ -72,8 +82,7 @@ export const cleanSweepGame: GameModule<CleanSweepPuzzle, CleanSweepSolution, Cl
 
     /** Draw the tiles: each letter is crossed off once it's used, or while it's being typed. */
     function drawTiles() {
-      const free = left();
-      for (const ch of typed) free[ch.charCodeAt(0) - A]!--;
+      const free = freeAfter(typed);
       // A letter's tiles are marked used from the last one back, so the free ones stay first.
       const freeSeen = new Uint8Array(26);
       replaceChildren(
@@ -81,8 +90,9 @@ export const cleanSweepGame: GameModule<CleanSweepPuzzle, CleanSweepSolution, Cl
         data.order.map((i) => {
           const ch = puzzle.letters[i] as string;
           const c = ch.charCodeAt(0) - A;
-          const used = freeSeen[c]! >= Math.max(free[c]!, 0);
-          freeSeen[c]!++;
+          const seen = freeSeen[c] ?? 0;
+          const used = seen >= Math.max(free(c), 0);
+          freeSeen[c] = seen + 1;
           return h(
             'li',
             { class: used ? 'cs-tile cs-used' : 'cs-tile' },
@@ -96,10 +106,9 @@ export const cleanSweepGame: GameModule<CleanSweepPuzzle, CleanSweepSolution, Cl
     /** Offer only the letters still free (allowing for what's typed), showing how many of each. */
     function updateKeyboard() {
       if (!board) return;
-      const free = left();
-      for (const ch of typed) free[ch.charCodeAt(0) - A]!--;
+      const free = freeAfter(typed);
       for (let c = 0; c < 26; c++) {
-        const n = Math.max(free[c]!, 0);
+        const n = Math.max(free(c), 0);
         board.keyboard.setKey(String.fromCharCode(A + c), {
           disabled: n === 0,
           ...(n > 1 ? { hint: `×${n}` } : {}),
@@ -126,11 +135,7 @@ export const cleanSweepGame: GameModule<CleanSweepPuzzle, CleanSweepSolution, Cl
           targetLine(`every letter in ${plural(solution.min, 'word')}`),
         ),
       ],
-      allowLetter: (current, letter) => {
-        const free = left();
-        for (const ch of current + letter) free[ch.charCodeAt(0) - A]!--;
-        return free[letter.charCodeAt(0) - A]! >= 0;
-      },
+      allowLetter: (current, letter) => freeAfter(current + letter)(letter.charCodeAt(0) - A) >= 0,
       onType: (word) => {
         typed = word;
         drawTiles();

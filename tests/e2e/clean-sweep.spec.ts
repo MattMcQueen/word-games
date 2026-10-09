@@ -34,6 +34,15 @@ test.describe('Clean Sweep', () => {
     await expectNoHorizontalScroll(page);
   });
 
+  test("a physical keyboard can't type letters that aren't left", async ({ page }) => {
+    await page.goto('/clean-sweep/');
+    const once = [...new Set(puzzle.letters)].find(
+      (c) => puzzle.letters.indexOf(c) === puzzle.letters.lastIndexOf(c),
+    ) as string;
+    await page.keyboard.type(`${missing}${once}${once}`);
+    await expect(page.getByRole('textbox', { name: 'Your word' })).toHaveValue(once);
+  });
+
   test('placing a word crosses off its letters, and taking it back returns them', async ({
     page,
   }) => {
