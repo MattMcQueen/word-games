@@ -63,6 +63,7 @@ test.describe('Cipher', () => {
   });
 
   test("a full but wrong code says how many letters aren't right", async ({ page }) => {
+    test.slow(); // about twenty taps and key presses: slow on WebKit when the machine is busy
     await page.goto('/cipher/');
     // Every letter right except the first two, swapped.
     const [a, b] = codes as [string, string];
@@ -83,6 +84,7 @@ test.describe('Cipher', () => {
   });
 
   test('cracking it without hints is perfect, and credits the book', async ({ page }) => {
+    test.slow(); // about twenty taps and key presses: slow on WebKit when the machine is busy
     await page.goto('/cipher/');
     for (const code of codes) await place(page, code, solution.key[code] as string);
     const results = page.getByRole('dialog', { name: 'Perfect!' });

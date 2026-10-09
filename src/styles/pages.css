@@ -141,6 +141,13 @@ kbd {
   margin-top: 4px;
 }
 
+.game-card-streak {
+  margin: -0.25rem 0 0;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .game-card {
   display: flex;
   flex-direction: column;

@@ -5,7 +5,7 @@
  */
 
 import { formatLongDate, puzzleNumber, todayKey } from '../core/date.ts';
-import { loadDay, loadSiteStreak } from '../core/progress.ts';
+import { loadDay, loadSiteStreak, loadStats } from '../core/progress.ts';
 import { buildDayShareText, copyText } from '../core/share.ts';
 import { GAMES, type GameInfo, gamePath, howToPlayPath } from '../games/catalogue.ts';
 import { h, icon } from '../ui/dom.ts';
@@ -26,6 +26,12 @@ function todayStatus(slug: string): { text: string; state: State; action: string
     : { text: '✓ Done', state: 'done', action: 'See results' };
 }
 
+/** "🔥 4-day streak" once a game has been finished on the day two days running. */
+function gameStreak(slug: string) {
+  const streak = loadStats(slug, todayKey()).currentStreak;
+  return streak >= 2 ? h('p', { class: 'game-card-streak' }, `🔥 ${streak}-day streak`) : null;
+}
+
 function gameCard(game: GameInfo) {
   const status = todayStatus(game.slug);
   const headingId = `game-${game.slug}`;
@@ -40,6 +46,7 @@ function gameCard(game: GameInfo) {
       h('span', { class: 'game-card-status', 'data-state': status.state }, status.text),
     ),
     h('p', { class: 'game-card-tagline' }, game.tagline),
+    gameStreak(game.slug),
     h(
       'div',
       { class: 'game-card-actions' },

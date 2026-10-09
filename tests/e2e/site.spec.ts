@@ -39,6 +39,25 @@ test.describe('Home page', () => {
     await expect(page.getByRole('button', { name: "Share today's scores" })).toHaveCount(0);
   });
 
+  test("shows a game's streak on its card from two days running", async ({ page }) => {
+    // A Price Tag streak of 3, last kept up today.
+    await page.addInitScript((today) => {
+      localStorage.setItem(
+        'wg:price-tag:stats',
+        JSON.stringify({
+          played: 3,
+          perfect: 0,
+          currentStreak: 3,
+          maxStreak: 3,
+          lastStreakDate: today,
+        }),
+      );
+    }, DATE);
+    await page.goto('/');
+    const card = page.getByRole('listitem').filter({ hasText: 'Price Tag' });
+    await expect(card).toContainText('🔥 3-day streak');
+  });
+
   test('offers to share the day once a game is finished', async ({ page }) => {
     await page.goto('/price-tag/');
     await page.getByRole('button', { name: 'Finish' }).click();
