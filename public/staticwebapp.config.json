@@ -16,6 +16,7 @@
       "statusCode": 301
     },
     { "route": "/gutenberg-gap*", "redirect": "/lost-for-words/", "statusCode": 301 },
+    { "route": "/keyhop*", "redirect": "/", "statusCode": 301 },
     {
       "route": "/assets/*",
       "headers": { "Cache-Control": "public, max-age=31536000, immutable" }

@@ -1,0 +1,15 @@
+{
+  "game": "halves",
+  "month": "2029-10",
+  "days": {
+    "2029-10-01": {"puzzle":{"halves":["pier","fore","nap","warn","over","skim","block","book","store","cat","blown","age"]},"solution":{"words":[["skim","pier"],["fore","warn"],["cat","nap"],["over","blown"],["block","age"],["book","store"]]}},
+    "2029-10-02": {"puzzle":{"halves":["silver","super","visor","track","back","less","lab","time","our","winter","point","smith"]},"solution":{"words":[["silver","smith"],["super","visor"],["back","track"],["point","less"],["lab","our"],["winter","time"]]}},
+    "2029-10-03": {"puzzle":{"halves":["able","inject","head","ion","work","sat","food","person","ire","sea","frame","master"]},"solution":{"words":[["person","able"],["inject","ion"],["head","master"],["frame","work"],["sat","ire"],["sea","food"]]}},
+    "2029-10-04": {"puzzle":{"halves":["par","throw","oral","life","our","elect","demean","less","don","fore","away","seen"]},"solution":{"words":[["par","don"],["throw","away"],["elect","oral"],["life","less"],["demean","our"],["fore","seen"]]}},
+    "2029-10-05": {"puzzle":{"halves":["play","sight","try","down","master","pal","shut","what","inter","ever","fore","piece"]},"solution":{"words":[["inter","play"],["fore","sight"],["pal","try"],["shut","down"],["master","piece"],["what","ever"]]}},
+    "2029-10-06": {"puzzle":{"halves":["get","bud","hand","bum","for","man","moon","some","light","pier","bid","post"]},"solution":{"words":[["bud","get"],["hand","some"],["bum","pier"],["for","bid"],["post","man"],["moon","light"]]}},
+    "2029-10-07": {"puzzle":{"halves":["tire","gown","sauce","night","expend","some","last","out","let","pan","able","ring"]},"solution":{"words":[["tire","some"],["night","gown"],["sauce","pan"],["expend","able"],["out","last"],["ring","let"]]}},
+    "2029-10-08": {"puzzle":{"halves":["rode","hill","rid","base","ball","ship","ant","member","plum","over","met","dance"]},"solution":{"words":[["over","rode"],["ant","hill"],["rid","dance"],["base","ball"],["member","ship"],["plum","met"]]}},
+    "2029-10-09": {"puzzle":{"halves":["work","brain","the","patch","fisher","for","rein","man","flower","less","given","sun"]},"solution":{"words":[["patch","work"],["brain","less"],["the","rein"],["fisher","man"],["for","given"],["sun","flower"]]}}
+  }
+}

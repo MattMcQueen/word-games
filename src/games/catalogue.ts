@@ -52,6 +52,16 @@ export const GAMES: readonly GameInfo[] = [
     name: 'Clean Sweep',
     tagline: 'Use every letter in as few words as you can.',
   },
+  {
+    slug: 'shelf-scramble',
+    name: 'Shelf Scramble',
+    tagline: "A well-known book's title, jumbled. Put it back together.",
+  },
+  {
+    slug: 'halves',
+    name: 'Halves',
+    tagline: 'Join the halves in pairs to make six words.',
+  },
 ];
 
 /** Look a game up by slug; throws for an unknown one, which is a programming error. */

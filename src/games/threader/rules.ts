@@ -5,7 +5,7 @@ import type { HowToPlay } from '../../ui/how-to-play.ts';
 
 export const threaderRules: HowToPlay = {
   intro:
-    "You're given three or four letters in order. Find the shortest word that contains them, in that order. There's a new puzzle every day at midnight.",
+    "You're given three or four letters in order. Find the shortest word that contains them, in that order. There's a new puzzle every day at midnight, your time.",
   sections: [
     {
       title: 'The goal',

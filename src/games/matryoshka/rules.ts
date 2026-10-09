@@ -5,7 +5,7 @@ import type { HowToPlay } from '../../ui/how-to-play.ts';
 
 export const matryoshkaRules: HowToPlay = {
   intro:
-    "Start from two or three letters and grow them into a chain of words, one letter at a time. There's a new puzzle every day at midnight.",
+    "Start from two or three letters and grow them into a chain of words, one letter at a time. There's a new puzzle every day at midnight, your time.",
   sections: [
     {
       title: 'The goal',

@@ -5,7 +5,7 @@ import type { HowToPlay } from '../../ui/how-to-play.ts';
 
 export const priceTagRules: HowToPlay = {
   intro:
-    "Every letter has a price and you have a budget. Find the longest word you can afford. There's a new puzzle every day at midnight.",
+    "Every letter has a price and you have a budget. Find the longest word you can afford. There's a new puzzle every day at midnight, your time.",
   sections: [
     {
       title: 'The goal',

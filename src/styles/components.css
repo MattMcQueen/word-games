@@ -793,3 +793,15 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* "Buy … on Amazon" with the Associates disclosure (src/ui/book-link.ts). */
+.buy-book {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+}
+.buy-disclosure {
+  color: var(--muted);
+  font-size: 0.8rem;
+}

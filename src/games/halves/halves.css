@@ -1,0 +1,68 @@
+/* Halves' grid of tiles. The rest is the shared board styling (components.css). */
+
+.hv-label {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.hv-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+@media (min-width: 30rem) {
+  .hv-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.hv-tile {
+  min-height: 3.4rem;
+  padding: 0.4rem 0.25rem;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--fg);
+  font: 800 1.05rem / 1.1 var(--sans);
+  letter-spacing: 0.06em;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    border-color 0.12s ease;
+}
+.hv-tile:hover {
+  border-color: var(--accent);
+}
+.hv-tile:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* The picked half: filled, lifted and with a thicker edge, so it isn't shown by colour alone. */
+.hv-tile[aria-pressed="true"] {
+  border-color: var(--accent);
+  border-width: 3px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  transform: translateY(-3px);
+  box-shadow: 0 3px 0 var(--accent-soft);
+}
+
+.hv-progress {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hv-tile {
+    transition: none;
+  }
+  .hv-tile[aria-pressed="true"] {
+    transform: none;
+  }
+}

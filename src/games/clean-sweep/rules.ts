@@ -5,7 +5,7 @@ import type { HowToPlay } from '../../ui/how-to-play.ts';
 
 export const cleanSweepRules: HowToPlay = {
   intro:
-    "Fifteen jumbled letters. Use every one of them in as few words as you can. There's a new puzzle every day at midnight.",
+    "Fifteen jumbled letters. Use every one of them in as few words as you can. There's a new puzzle every day at midnight, your time.",
   sections: [
     {
       title: 'The goal',

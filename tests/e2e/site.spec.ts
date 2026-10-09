@@ -136,6 +136,8 @@ test.describe('Security headers', () => {
       'matryoshka',
       'clean-sweep',
       'hinge',
+      'shelf-scramble',
+      'halves',
       'lockout',
       'lost-for-words',
     ].flatMap((slug) => [`/${slug}/`, `/${slug}/how-to-play/`]),

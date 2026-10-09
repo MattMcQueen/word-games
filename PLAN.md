@@ -24,6 +24,8 @@ accounts or ads. It's hosted on Azure Static Web Apps.
 | Clean Sweep | 15 letters from 3–4 random words; exact minimum by iterative-deepening search; kept if the minimum is 3–4 words with at most 40 best sweeps |
 | Lockout | 8 banned, 1 required, at random; kept only if the longest word is 7–10 letters (random bans usually allow 12–16-letter words) |
 | Lost for Words | Was "Gutenberg Gap" (renamed so a game with affiliate links doesn't use Project Gutenberg's trademark; old URLs redirect). After each puzzle, an Amazon UK link to buy the book (tag in `src/config.ts`) with the Associates disclosure. 28 public-domain novels → 2,240 sentences (`npm run build:sentences`), walked in a fixed shuffled order, one a day; gap word 5–10 letters, in the word list, not among the 600 commonest; sentences with blocked or dated offensive words (`data/gutenberg-exclude.txt`) dropped |
+| Shelf Scramble | One book a day from `src/games/shelf-scramble/books.json` (440 well-known titles, letters and spaces only), walked in a fixed shuffled order; each word's letters are jumbled, never left as they were, and words of one or two letters are given. Hints: show the author, or reveal a letter. The title is the answer whether or not its words are in the word list. Ends with an Amazon UK link to the book |
+| Halves | Twelve halves (3–6 letters each) of six everyday compounds from the Hinge split index; kept only if there's exactly one way to pair every half, so a decoy word (two halves that make a real word) is a mistake. No STAB + BED = STABBED, NOBLE + MEN or DRAGON + FLIES (doubled-letter endings and plurals are left out). Picking is by tapping, not typing; mistakes counted, the same wrong pair only once; the last two halves join on their own |
 | Boards | Typed-word games share `src/ui/word-board.ts`; "best word counts" games add `src/ui/word-hunt.ts` (Price Tag, Threader, Lockout) |
 | Targets | Every game shows its target up front (e.g. "Target: 7 letters"), so players know how close they are |
 | Swap Shop families | Inflected pairs (BATS ↔ BETS) fold into their family (BAT ↔ BET); the counter counts families |
@@ -37,7 +39,7 @@ accounts or ads. It's hosted on Azure Static Web Apps.
 
 1. ✅ Scaffold, dictionary build script, shared modules and tests
 2. ✅ Price Tag end to end (reference implementation)
-3. ✅ Threader, Swap Shop, Matryoshka, Clean Sweep, Lockout, Lost for Words, Hinge (Keyhop retired)
+3. ✅ Threader, Swap Shop, Matryoshka, Clean Sweep, Lockout, Lost for Words, Hinge (Keyhop retired), Shelf Scramble, Halves
 4. ✅ Home page with today's status, How to play pages, About page with word-list and Gutenberg credits
 5. ✅ Azure Static Web Apps config, GitHub Actions, README
 

@@ -4,9 +4,9 @@
  * and the book it's from, with a link to buy a copy. Built on the common word board.
  */
 
-import { AFFILIATE_REL, AMAZON_DISCLOSURE, bookSearchUrl } from '../../core/amazon.ts';
 import { puzzleNumber } from '../../core/date.ts';
 import { buildShareText } from '../../core/share.ts';
+import { buyBookLink } from '../../ui/book-link.ts';
 import { h, replaceChildren } from '../../ui/dom.ts';
 import type { GameContext, GameModule } from '../../ui/game-shell.ts';
 import { foundItem, mountWordBoard } from '../../ui/word-board.ts';
@@ -29,27 +29,12 @@ interface LostForWordsData {
   guesses: string[];
 }
 
-/**
- * "From Pride and Prejudice by Jane Austen", with an Amazon link to buy a copy
- * and the Associates disclosure beside it (the link only appears if a tag is set).
- */
+/** "From Pride and Prejudice by Jane Austen", with a link to buy a copy. */
 function credit(puzzle: LostForWordsPuzzle) {
   const { title, author } = puzzle.book;
-  const buy = bookSearchUrl(title, author);
   return [
     h('span', { class: 'lw-from' }, 'From ', h('cite', null, title), ` by ${author}.`),
-    buy
-      ? h(
-          'span',
-          { class: 'lw-buy' },
-          h(
-            'a',
-            { class: 'btn quiet', href: buy, rel: AFFILIATE_REL, target: '_blank' },
-            `Buy ${title} on Amazon`,
-          ),
-          h('small', { class: 'lw-disclosure' }, AMAZON_DISCLOSURE),
-        )
-      : null,
+    buyBookLink(title, author),
   ];
 }
 

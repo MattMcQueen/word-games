@@ -48,15 +48,3 @@
   flex-direction: column;
   gap: 0.5rem;
 }
-
-.lw-buy {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.35rem 0.75rem;
-}
-
-.lw-disclosure {
-  color: var(--muted);
-  font-size: 0.8rem;
-}

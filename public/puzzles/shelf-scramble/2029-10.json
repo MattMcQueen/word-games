@@ -1,0 +1,15 @@
+{
+  "game": "shelf-scramble",
+  "month": "2029-10",
+  "days": {
+    "2029-10-01": {"puzzle":{"entry":201,"tiles":["leap","efri"]},"solution":{"title":"Pale Fire","author":"Vladimir Nabokov","words":["pale","fire"]}},
+    "2029-10-02": {"puzzle":{"entry":77,"tiles":["het","nsteearvdu","of","oiicnpcho"]},"solution":{"title":"The Adventures of Pinocchio","author":"Carlo Collodi","words":["the","adventures","of","pinocchio"]}},
+    "2029-10-03": {"puzzle":{"entry":140,"tiles":["rhrya","terpot","nda","het","cabmreh","of","eetscrs"]},"solution":{"title":"Harry Potter and the Chamber of Secrets","author":"J. K. Rowling","words":["harry","potter","and","the","chamber","of","secrets"]}},
+    "2029-10-04": {"puzzle":{"entry":258,"tiles":["eth","adro"]},"solution":{"title":"The Road","author":"Cormac McCarthy","words":["the","road"]}},
+    "2029-10-05": {"puzzle":{"entry":300,"tiles":["udclo","tsaal"]},"solution":{"title":"Cloud Atlas","author":"David Mitchell","words":["cloud","atlas"]}},
+    "2029-10-06": {"puzzle":{"entry":374,"tiles":["feermpu"]},"solution":{"title":"Perfume","author":"Patrick Süskind","words":["perfume"]}},
+    "2029-10-07": {"puzzle":{"entry":384,"tiles":["hsaterf","dna","noss"]},"solution":{"title":"Fathers and Sons","author":"Ivan Turgenev","words":["fathers","and","sons"]}},
+    "2029-10-08": {"puzzle":{"entry":180,"tiles":["ckbir","laen"]},"solution":{"title":"Brick Lane","author":"Monica Ali","words":["brick","lane"]}},
+    "2029-10-09": {"puzzle":{"entry":409,"tiles":["in","dclo","odolb"]},"solution":{"title":"In Cold Blood","author":"Truman Capote","words":["in","cold","blood"]}}
+  }
+}

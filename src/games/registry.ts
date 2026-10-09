@@ -5,11 +5,13 @@
 
 import type { GameLogic } from '../core/game.ts';
 import { cleanSweepLogic } from './clean-sweep/logic.ts';
+import { halvesLogic } from './halves/logic.ts';
 import { hingeLogic } from './hinge/logic.ts';
 import { lockoutLogic } from './lockout/logic.ts';
 import { lostForWordsLogic } from './lost-for-words/logic.ts';
 import { matryoshkaLogic } from './matryoshka/logic.ts';
 import { priceTagLogic } from './price-tag/logic.ts';
+import { shelfScrambleLogic } from './shelf-scramble/logic.ts';
 import { swapShopLogic } from './swap-shop/logic.ts';
 import { threaderLogic } from './threader/logic.ts';
 
@@ -22,4 +24,6 @@ export const ALL_GAMES: readonly GameLogic<unknown, unknown>[] = [
   lockoutLogic,
   lostForWordsLogic,
   hingeLogic,
+  shelfScrambleLogic,
+  halvesLogic,
 ];

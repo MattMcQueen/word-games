@@ -5,7 +5,7 @@ import type { HowToPlay } from '../../ui/how-to-play.ts';
 
 export const lostForWordsRules: HowToPlay = {
   intro:
-    "A sentence from a classic novel, with one word missing. Can you fill the gap? There's a new sentence every day at midnight.",
+    "A sentence from a classic novel, with one word missing. Can you fill the gap? There's a new sentence every day at midnight, your time.",
   sections: [
     {
       title: 'The goal',

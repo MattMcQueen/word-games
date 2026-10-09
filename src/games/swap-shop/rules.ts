@@ -5,7 +5,7 @@ import type { HowToPlay } from '../../ui/how-to-play.ts';
 
 export const swapShopRules: HowToPlay = {
   intro:
-    "Two letters swap places for the day. Find words that are still words after the swap. There's a new puzzle every day at midnight.",
+    "Two letters swap places for the day. Find words that are still words after the swap. There's a new puzzle every day at midnight, your time.",
   sections: [
     {
       title: 'The goal',

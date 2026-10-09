@@ -60,7 +60,7 @@ renderPage({
           h(
             'li',
             null,
-            'After a Lost for Words puzzle there is a link to buy the book on Amazon. It is an ordinary link: nothing is loaded from Amazon unless you follow it. ',
+            'After a Lost for Words or Shelf Scramble puzzle there is a link to buy the book on Amazon. It is an ordinary link: nothing is loaded from Amazon unless you follow it. ',
             h('strong', null, AMAZON_DISCLOSURE),
           ),
         ),

@@ -130,9 +130,10 @@ kbd {
   pointer-events: none;
   white-space: nowrap;
 }
-.home-progress {
-  margin-top: 4px !important;
-  color: var(--fg) !important;
+/* More specific than .hero p, so it wins without !important. */
+.hero p.home-progress {
+  margin-top: 4px;
+  color: var(--fg);
   font-weight: 700;
 }
 

@@ -81,7 +81,8 @@ describe('generateSwapShop', () => {
     for (let i = 0; i < 100; i++) {
       const { letters, length } = generateSwapShop(rng);
       expect(letters).toMatch(/^[a-z]{2}$/);
-      expect(letters[0]! < letters[1]!).toBe(true);
+      expect([...letters].sort().join('')).toBe(letters);
+      expect(letters[0]).not.toBe(letters[1]);
       expect([null, 4, 5, 6, 7]).toContain(length);
     }
   });

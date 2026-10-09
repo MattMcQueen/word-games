@@ -5,7 +5,7 @@ import type { HowToPlay } from '../../ui/how-to-play.ts';
 
 export const lockoutRules: HowToPlay = {
   intro:
-    "Eight letters are locked out and one is a must. Find the longest word that plays by the rules. There's a new puzzle every day at midnight.",
+    "Eight letters are locked out and one is a must. Find the longest word that plays by the rules. There's a new puzzle every day at midnight, your time.",
   sections: [
     {
       title: 'The goal',

@@ -33,6 +33,7 @@ export interface WordBoardOptions<D> {
   /** Called after every redraw, for the game's own panels. */
   onRender?(finished: boolean): void;
   /** Extra word box options, e.g. to veto letters or react to typing. */
+  maxLength?: number;
   allowLetter?(current: string, letter: string): boolean;
   onType?(word: string): void;
 }
@@ -55,6 +56,7 @@ export function mountWordBoard<D>(opts: WordBoardOptions<D>): WordBoard {
     onSubmit: (word) => {
       if (word) opts.submit(word, board);
     },
+    ...(opts.maxLength ? { maxLength: opts.maxLength } : {}),
     ...(opts.allowLetter ? { allowLetter: opts.allowLetter } : {}),
     ...(opts.onType ? { onChange: opts.onType } : {}),
   });

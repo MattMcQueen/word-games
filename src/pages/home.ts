@@ -72,7 +72,7 @@ renderPage({
       h(
         'p',
         null,
-        `${GAMES.length} original word puzzles, new every day at midnight and the same for everyone. Free, with no ads, no accounts and no cookies.`,
+        `${GAMES.length} original word puzzles. Each day brings new ones at midnight, your time, and everyone gets the same puzzles. Free, with no ads, no accounts and no cookies.`,
       ),
       h(
         'p',

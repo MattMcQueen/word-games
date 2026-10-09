@@ -61,6 +61,14 @@ const PREVIEWS: Record<string, () => Child[]> = {
     tile({ t: 'E', kind: 'struck' }),
     tile({ t: 'N', kind: 'struck' }),
   ],
+  'shelf-scramble': () => [tile('K'), tile('O'), tile('O'), tile('B'), sep('→'), word('BOOK')],
+  halves: () => [
+    tile({ t: 'SUN', kind: 'accent' }),
+    sep('+'),
+    tile({ t: 'DAY', kind: 'accent' }),
+    sep('='),
+    word('SUNDAY'),
+  ],
   'clean-sweep': () => [
     tile({ t: 'G', kind: 'struck' }),
     tile({ t: 'U', kind: 'struck' }),

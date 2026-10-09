@@ -5,7 +5,7 @@ import type { HowToPlay } from '../../ui/how-to-play.ts';
 
 export const hingeRules: HowToPlay = {
   intro:
-    "Five pairs of words, each missing the word that joins them. Find all five hinges. There's a new puzzle every day at midnight.",
+    "Five pairs of words, each missing the word that joins them. Find all five hinges. There's a new puzzle every day at midnight, your time.",
   sections: [
     {
       title: 'The goal',
