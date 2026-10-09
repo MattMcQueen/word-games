@@ -22,6 +22,7 @@
     "build:dictionary": "node scripts/build-dictionary.ts",
     "build:sentences": "node scripts/build-gutenberg.ts",
     "build:images": "node scripts/build-images.ts",
+    "indexnow": "node scripts/indexnow.ts",
     "generate": "node scripts/generate-puzzles.ts"
   },
   "devDependencies": {

@@ -5,6 +5,12 @@ export const SITE_NAME = 'Word Games';
 /** The live site (see README, Hosting), for links in share previews and the sitemap. */
 export const SITE_URL = 'https://words.matt-rarely-writes.co.uk';
 
+/**
+ * The site's IndexNow key (public: it's served as public/<key>.txt), used by
+ * `npm run indexnow` to tell Bing and others about new pages.
+ */
+export const INDEXNOW_KEY = '02d08f10db0e23eadc30e00b7e7fe72e';
+
 /** The source code, linked from the About page and the footer. */
 export const SOURCE_URL = 'https://github.com/MattMcQueen/word-games';
 
