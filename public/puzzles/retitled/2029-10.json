@@ -1,0 +1,15 @@
+{
+  "game": "retitled",
+  "month": "2029-10",
+  "days": {
+    "2029-10-01": {"puzzle":{"entry":306,"clue":"Stuff Drops Asunder","lengths":[6,4,5],"given":[false,false,false]},"solution":{"title":"Things Fall Apart","author":"Chinua Achebe","words":["things","fall","apart"]}},
+    "2029-10-02": {"puzzle":{"entry":364,"clue":"A Chap Named Ove","lengths":[1,3,6,3],"given":[true,false,false,true]},"solution":{"title":"A Man Called Ove","author":"Fredrik Backman","words":["a","man","called","ove"]}},
+    "2029-10-03": {"puzzle":{"entry":28,"clue":"The Missing Planet","lengths":[3,4,5],"given":[true,false,false]},"solution":{"title":"The Lost World","author":"Arthur Conan Doyle","words":["the","lost","world"]}},
+    "2029-10-04": {"puzzle":{"entry":252,"clue":"Concerning a Lad","lengths":[5,1,3],"given":[false,true,false]},"solution":{"title":"About a Boy","author":"Nick Hornby","words":["about","a","boy"]}},
+    "2029-10-05": {"puzzle":{"entry":159,"clue":"Go Place a Sentry","lengths":[2,3,1,8],"given":[true,false,true,false]},"solution":{"title":"Go Set a Watchman","author":"Harper Lee","words":["go","set","a","watchman"]}},
+    "2029-10-06": {"puzzle":{"entry":166,"clue":"On the Highway","lengths":[2,3,4],"given":[true,true,false]},"solution":{"title":"On the Road","author":"Jack Kerouac","words":["on","the","road"]}},
+    "2029-10-07": {"puzzle":{"entry":373,"clue":"The Extremely Peckish Grub","lengths":[3,4,6,11],"given":[true,false,false,false]},"solution":{"title":"The Very Hungry Caterpillar","author":"Eric Carle","words":["the","very","hungry","caterpillar"]}},
+    "2029-10-08": {"puzzle":{"entry":90,"clue":"Master of the Bluebottles","lengths":[4,2,3,5],"given":[false,true,true,false]},"solution":{"title":"Lord of the Flies","author":"William Golding","words":["lord","of","the","flies"]}},
+    "2029-10-09": {"puzzle":{"entry":193,"clue":"Potent Venom","lengths":[6,6],"given":[false,false]},"solution":{"title":"Strong Poison","author":"Dorothy L. Sayers","words":["strong","poison"]}}
+  }
+}

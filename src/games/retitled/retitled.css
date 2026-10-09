@@ -1,0 +1,43 @@
+/* Retitled's reworded title and letter boxes. The rest is the shared title board (../title-board.css). */
+
+.rt-clue {
+  margin: 0 0 1rem;
+  text-align: center;
+  font: italic 400 clamp(1.35rem, 4.5vw, 1.8rem) / 1.25 var(--serif);
+  text-wrap: balance;
+}
+
+.rt-boxes {
+  display: inline-flex;
+  gap: 3px;
+}
+
+/* An empty box is a slot with a strong bottom edge; a filled one shows its letter. */
+.rt-box {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 2rem;
+  border-bottom: 3px solid var(--accent);
+  border-radius: 4px 4px 0 0;
+  background: var(--panel);
+  font: 800 1rem / 1 var(--sans);
+}
+
+.rt-done .rt-box {
+  background: var(--accent);
+  border-bottom-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+.rt-missed .rt-box {
+  background: var(--accent-soft);
+}
+
+@media (max-width: 639px) {
+  .rt-box {
+    width: 1.4rem;
+    height: 1.85rem;
+    font-size: 0.9rem;
+  }
+}

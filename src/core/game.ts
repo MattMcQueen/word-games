@@ -15,20 +15,22 @@ import { LAUNCH_DATE } from '../config.ts';
 import { daysBetween } from './date.ts';
 import type { Dictionary } from './dictionary.ts';
 import { createRng, dailySeed, type Rng } from './rng.ts';
-import type { SentenceBank } from './sentences.ts';
+import type { LineBank, SentenceBank } from './sentences.ts';
 
 /**
  * Extra data a generator can ask for (GameLogic.needs). The browser fetches
  * these only when it has to generate a puzzle itself, and only for games that
  * need them; the generator script reads them from public/data/.
  */
-export type ResourceName = 'sentences' | 'common';
+export type ResourceName = 'sentences' | 'common' | 'lines';
 
 export interface Resources {
   /** The Gutenberg sentence bank (public/data/sentences.json). */
   sentences?: SentenceBank;
   /** Everyday words, a subset of the dictionary (public/data/common.txt). */
   common?: ReadonlySet<string>;
+  /** The Cipher line bank (public/data/cipher-lines.json). */
+  lines?: LineBank;
 }
 
 /** Everything a generator or solver may use. */

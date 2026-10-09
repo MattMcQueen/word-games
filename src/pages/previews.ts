@@ -62,6 +62,20 @@ const PREVIEWS: Record<string, () => Child[]> = {
     tile({ t: 'N', kind: 'struck' }),
   ],
   'shelf-scramble': () => [tile('K'), tile('O'), tile('O'), tile('B'), sep('→'), word('BOOK')],
+  retitled: () => [
+    word('BATTLE'),
+    sep('→'),
+    tile({ t: 'W', kind: 'accent' }),
+    tile({ t: 'A', kind: 'accent' }),
+    tile({ t: 'R', kind: 'accent' }),
+  ],
+  cipher: () => [
+    tile({ t: 'Q', note: 'T' }),
+    tile({ t: 'X', note: 'H' }),
+    tile({ t: 'R', note: 'E' }),
+    sep('→'),
+    word('THE'),
+  ],
   halves: () => [
     tile({ t: 'SUN', kind: 'accent' }),
     sep('+'),

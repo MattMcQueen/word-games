@@ -28,10 +28,18 @@ function jumble(word: string, rng: Rng): string {
   return [...word].reverse().join('');
 }
 
-export function generateShelfScramble(rng: Rng, ctx: GenerateContext): ShelfScramblePuzzle {
+/** The book (index into BOOKS) for a day. */
+function entryFor(dayIndex: number): number {
   order ??= createRng(ORDER_SEED).shuffle(BOOKS.map((_, i) => i));
   const n = order.length;
-  const entry = order[((ctx.dayIndex % n) + n) % n] as number;
+  return order[((dayIndex % n) + n) % n] as number;
+}
+
+/** The title of the day's book; Retitled checks it to avoid showing the same one. */
+export const shelfScrambleTitle = (dayIndex: number) => BOOKS[entryFor(dayIndex)]?.[0] ?? '';
+
+export function generateShelfScramble(rng: Rng, ctx: GenerateContext): ShelfScramblePuzzle {
+  const entry = entryFor(ctx.dayIndex);
   const [title = ''] = BOOKS[entry] ?? [];
   return {
     entry,

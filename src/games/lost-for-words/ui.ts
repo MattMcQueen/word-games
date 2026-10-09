@@ -6,7 +6,7 @@
 
 import { puzzleNumber } from '../../core/date.ts';
 import { buildShareText } from '../../core/share.ts';
-import { buyBookLink } from '../../ui/book-link.ts';
+import { bookCredit } from '../../ui/book-link.ts';
 import { h, replaceChildren } from '../../ui/dom.ts';
 import type { GameContext, GameModule } from '../../ui/game-shell.ts';
 import { foundItem, mountWordBoard } from '../../ui/word-board.ts';
@@ -30,13 +30,7 @@ interface LostForWordsData {
 }
 
 /** "From Pride and Prejudice by Jane Austen", with a link to buy a copy. */
-function credit(puzzle: LostForWordsPuzzle) {
-  const { title, author } = puzzle.book;
-  return [
-    h('span', { class: 'lw-from' }, 'From ', h('cite', null, title), ` by ${author}.`),
-    buyBookLink(title, author),
-  ];
-}
+const credit = ({ book }: LostForWordsPuzzle) => bookCredit(book.title, book.author, 'From ');
 
 export const lostForWordsGame: GameModule<
   LostForWordsPuzzle,

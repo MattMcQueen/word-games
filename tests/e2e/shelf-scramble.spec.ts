@@ -28,7 +28,7 @@ test.describe('Shelf Scramble', () => {
     await page.goto('/shelf-scramble/');
     const words = page.getByRole('list', { name: 'The title' }).getByRole('listitem');
     await expect(words).toHaveCount(puzzle.tiles.length);
-    await expect(page.locator('.ss2-byline')).not.toContainText(solution.author);
+    await expect(page.locator('.tb-byline')).not.toContainText(solution.author);
     await expectAccessible(page);
     await expectNoHorizontalScroll(page);
   });
@@ -45,7 +45,7 @@ test.describe('Shelf Scramble', () => {
   test('the author can be shown as a hint', async ({ page }) => {
     await page.goto('/shelf-scramble/');
     await page.getByRole('button', { name: 'Show the author' }).click();
-    await expect(page.locator('.ss2-byline')).toHaveText(`By ${solution.author}`);
+    await expect(page.locator('.tb-byline')).toHaveText(`By ${solution.author}`);
     await expect(page.getByRole('button', { name: 'Show the author' })).toBeDisabled();
   });
 

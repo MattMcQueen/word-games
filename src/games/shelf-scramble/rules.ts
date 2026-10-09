@@ -2,6 +2,7 @@
 
 import { h } from '../../ui/dom.ts';
 import type { HowToPlay } from '../../ui/how-to-play.ts';
+import { finishingSection, hintsSection, typingSection } from '../title-rules.ts';
 
 export const shelfScrambleRules: HowToPlay = {
   intro:
@@ -18,39 +19,8 @@ export const shelfScrambleRules: HowToPlay = {
         ),
       ],
     },
-    {
-      title: 'Playing',
-      body: [
-        h(
-          'ul',
-          { class: 'points' },
-          h('li', null, 'Type any word of the title and press Enter to put it in place.'),
-          h(
-            'li',
-            null,
-            'If you know the whole title, type it all as one (no spaces) and press Enter.',
-          ),
-          h(
-            'li',
-            null,
-            'Names and unusual words count: the title is the answer, whether or not it is in the word list.',
-          ),
-        ),
-      ],
-    },
-    {
-      title: 'Hints',
-      body: [
-        h(
-          'p',
-          null,
-          h('strong', null, 'Show the author'),
-          ' if the title rings no bells, or ',
-          h('strong', null, 'reveal a letter'),
-          ' of the next word you have not solved. A perfect day needs no hints.',
-        ),
-      ],
-    },
+    typingSection('the title'),
+    hintsSection('you have not solved'),
     {
       title: 'An example',
       body: [
@@ -62,17 +32,6 @@ export const shelfScrambleRules: HowToPlay = {
         ),
       ],
     },
-    {
-      title: 'Finishing',
-      body: [
-        h(
-          'p',
-          null,
-          'The game ends when the whole title is in place, or when you press ',
-          h('strong', null, 'Finish'),
-          ". You'll then see the book, with a link to find a copy.",
-        ),
-      ],
-    },
+    finishingSection,
   ],
 };

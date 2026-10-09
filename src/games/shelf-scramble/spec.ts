@@ -34,7 +34,7 @@ export interface ShelfScrambleSolution {
   words: string[];
 }
 
-export const titleWords = (title: string) => title.toLowerCase().split(' ');
+export { titleWords } from '../title-words.ts';
 
 /** Words the player has to unscramble (the short ones are given). */
 export const isGiven = (word: string) => word.length <= SHOWN_MAX;

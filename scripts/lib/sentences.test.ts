@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  cipherCandidate,
   commonWords,
   gapCandidates,
   paragraphs,
@@ -79,5 +80,24 @@ describe('choosing the gap', () => {
 
   it('finds the most common words', () => {
     expect([...commonWords(['a', 'b', 'a', 'c', 'a', 'b'], 2)]).toEqual(['a', 'b']);
+  });
+});
+
+describe('Cipher lines', () => {
+  it('keeps lines of 45–85 letters with enough different letters, and no word too wide', () => {
+    expect(
+      cipherCandidate(
+        'It was the best of times, it was the worst of times, it was the age of wisdom.',
+      ),
+    ).toBe(true);
+    expect(cipherCandidate('It was a dark and stormy night.')).toBe(false); // too short
+    expect(
+      cipherCandidate('Nananananananananana nananananananananana nananananananananana nanananana.'),
+    ).toBe(false); // too few different letters
+    expect(
+      cipherCandidate(
+        'The extraordinarily unsympathetic gentleman considered the matter for a long while.',
+      ),
+    ).toBe(false); // a word too wide for a phone
   });
 });

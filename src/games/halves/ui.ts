@@ -11,7 +11,7 @@ import { plural } from '../../core/text.ts';
 import { h, replaceChildren } from '../../ui/dom.ts';
 import type { GameModule } from '../../ui/game-shell.ts';
 import { confirmModal } from '../../ui/modal.ts';
-import { foundItem } from '../../ui/word-board.ts';
+import { finishOrResults, foundItem } from '../../ui/word-board.ts';
 import { gameUrl } from '../catalogue.ts';
 import { halvesLogic } from './logic.ts';
 import {
@@ -166,16 +166,7 @@ export const halvesGame: GameModule<HalvesPuzzle, HalvesSolution, HalvesData> = 
         ...done.map((pair) => foundItem(pair.join(''), sum(pair))),
         ...missed.map((pair) => foundItem(pair.join(''), sum(pair), 'Missed')),
       ]);
-      replaceChildren(
-        actions,
-        finished
-          ? h(
-              'button',
-              { class: 'btn primary', type: 'button', onclick: () => ctx.showResults() },
-              'See results',
-            )
-          : h('button', { class: 'btn', type: 'button', onclick: confirmFinish }, 'Finish'),
-      );
+      replaceChildren(actions, finishOrResults(finished, confirmFinish, ctx.showResults));
     }
 
     ctx.root.append(

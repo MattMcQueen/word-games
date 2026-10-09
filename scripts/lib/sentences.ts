@@ -1,10 +1,12 @@
 /**
- * Pure helpers for building the Gutenberg Gap sentence bank, kept apart from
- * the downloading in build-gutenberg.ts so they can be unit tested.
+ * Pure helpers for building the Lost for Words sentence bank and the Cipher
+ * line bank, kept apart from the downloading in build-gutenberg.ts so they
+ * can be unit tested.
  *
  * The steps: strip Project Gutenberg's header and footer, tidy the text, split
  * it into paragraphs and sentences, keep sentences that read well on their own,
- * and choose one gap word in each.
+ * and choose one gap word in each (Lost for Words) or keep the ones that make
+ * a good code to crack (Cipher).
  */
 
 /** The part of a Project Gutenberg file between its START and END markers. */
@@ -143,4 +145,19 @@ export function commonWords(allTokens: Iterable<string>, count: number): Set<str
       .slice(0, count)
       .map(([w]) => w),
   );
+}
+
+/** Letters in a Cipher line: enough to crack, few enough to fit a phone screen. */
+const CIPHER_LETTERS = { min: 45, max: 85 };
+/** Fewer different letters than this makes the code too hard to crack without hints. */
+const CIPHER_MIN_DISTINCT = 14;
+/** The longest run of characters without a space, so no word is too wide for a phone. */
+const CIPHER_MAX_WORD = 12;
+
+/** True if a usable sentence makes a good Cipher line. */
+export function cipherCandidate(sentence: string): boolean {
+  const letters = sentence.toLowerCase().replace(/[^a-z]/g, '');
+  if (letters.length < CIPHER_LETTERS.min || letters.length > CIPHER_LETTERS.max) return false;
+  if (new Set(letters).size < CIPHER_MIN_DISTINCT) return false;
+  return sentence.split(' ').every((word) => word.length <= CIPHER_MAX_WORD);
 }

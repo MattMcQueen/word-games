@@ -16,7 +16,7 @@ import {
   type PuzzleMonthFile,
   type Resources,
 } from './game.ts';
-import { loadSentences, type SentenceBank } from './sentences.ts';
+import { type LineBank, loadLines, loadSentences, type SentenceBank } from './sentences.ts';
 
 export interface LoadedPuzzle<P, S> extends DailyPuzzle<P, S> {
   /** Where the puzzle came from; handy for debugging and tests. */
@@ -43,12 +43,14 @@ export interface Loaders {
   dictionary: () => Promise<Dictionary>;
   sentences: () => Promise<SentenceBank>;
   common: () => Promise<ReadonlySet<string>>;
+  lines: () => Promise<LineBank>;
 }
 
 const defaultLoaders: Loaders = {
   dictionary: loadDictionary,
   sentences: loadSentences,
   common: loadCommonWords,
+  lines: loadLines,
 };
 
 export async function loadDailyPuzzle<P, S>(
@@ -62,13 +64,15 @@ export async function loadDailyPuzzle<P, S>(
 
   const load = { ...defaultLoaders, ...overrides };
   const needs = game.needs ?? [];
-  const [dict, sentences, common] = await Promise.all([
+  const [dict, sentences, common, lines] = await Promise.all([
     load.dictionary(),
     needs.includes('sentences') ? load.sentences() : undefined,
     needs.includes('common') ? load.common() : undefined,
+    needs.includes('lines') ? load.lines() : undefined,
   ]);
   const resources: Resources = {};
   if (sentences) resources.sentences = sentences;
   if (common) resources.common = common;
+  if (lines) resources.lines = lines;
   return { ...generateDaily(game, contextFor(dict, date, resources)), source: 'generated' };
 }

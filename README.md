@@ -18,6 +18,8 @@ is funded by a Ko-fi "Support me" button.
 | Lost for Words | [`src/games/lost-for-words`](src/games/lost-for-words) | Guess the missing word in a line from a classic novel |
 | Shelf Scramble | [`src/games/shelf-scramble`](src/games/shelf-scramble) | Unjumble each word of a well-known book's title |
 | Halves | [`src/games/halves`](src/games/halves) | Join twelve word-halves in pairs to make six words |
+| Retitled | [`src/games/retitled`](src/games/retitled) | Work out a famous book's title from a reworded one |
+| Cipher | [`src/games/cipher`](src/games/cipher) | Crack a letter-swap code to read a line from a classic novel |
 
 [`PLAN.md`](PLAN.md) records the design decisions (difficulty bounds, rule interpretations) and how to add a game.
 
@@ -61,9 +63,10 @@ step uses the one before.
 1. **Dictionary.** Edit `data/blocklist.txt` if you like, then `npm run build:dictionary`. It downloads the pinned
    SCOWL release once, into `.cache/`, and writes `public/data/words.txt` (every game's word list) and
    `public/data/common.txt` (everyday words, SCOWL size 35, which Hinge and Halves build from).
-2. **Lost for Words sentences.** Edit `data/gutenberg-sources.json` (the books) or `data/gutenberg-exclude.txt` (extra
-   words that rule a sentence out), then `npm run build:sentences`. The books are downloaded once from Project
-   Gutenberg into `.cache/gutenberg/`.
+2. **Lost for Words and Cipher lines.** Edit `data/gutenberg-sources.json` (the books) or `data/gutenberg-exclude.txt`
+   (extra words that rule a sentence out), then `npm run build:sentences`. It writes `public/data/sentences.json` (Lost
+   for Words) and `public/data/cipher-lines.json` (Cipher, never the same sentences). The books are downloaded once
+   from Project Gutenberg into `.cache/gutenberg/`.
 3. **Puzzles.** `npm run generate` fills every game from the launch date to three years from today. It only adds
    dates that are missing, so it's safe to run any time. Run it about once a year to keep three years ahead; the
    in-browser fallback covers any gap meanwhile.
@@ -77,7 +80,8 @@ Then run `npm run check` and commit.
 ## Settings
 
 `src/config.ts` holds the site name, the launch date (puzzle #1 and the start of the archive), the source code and
-Ko-fi addresses, the Amazon Associates tracking ID used for book links in Lost for Words and Shelf Scramble (empty hides them) and the Cloudflare Web
+Ko-fi addresses, the Amazon Associates tracking ID used for book links in Lost for Words, Shelf Scramble, Retitled and Cipher (empty hides
+them) and the Cloudflare Web
 Analytics token. Changing `LAUNCH_DATE` renumbers every puzzle.
 
 Book links go to an Amazon UK search for the title and author (`src/core/amazon.ts`, as on Brand New), marked

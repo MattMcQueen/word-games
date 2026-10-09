@@ -62,6 +62,16 @@ export const GAMES: readonly GameInfo[] = [
     name: 'Halves',
     tagline: 'Join the halves in pairs to make six words.',
   },
+  {
+    slug: 'retitled',
+    name: 'Retitled',
+    tagline: "A famous book's title, reworded. What's it really called?",
+  },
+  {
+    slug: 'cipher',
+    name: 'Cipher',
+    tagline: 'Crack the code to read a line from a classic novel.',
+  },
 ];
 
 /** Look a game up by slug; throws for an unknown one, which is a programming error. */

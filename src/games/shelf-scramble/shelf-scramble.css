@@ -1,18 +1,4 @@
-/* Shelf Scramble's jumbled title. The rest is the shared word board (components.css). */
-
-.ss2-label {
-  margin: 0 0 0.75rem;
-  color: var(--muted);
-  font-weight: 600;
-}
-
-/* The title, word by word; words wrap as a whole, never mid-word. */
-.ss2-title {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.6rem 1rem;
-}
+/* Shelf Scramble's jumbled tiles. The rest is the shared title board (../title-board.css). */
 
 .ss2-word {
   display: flex;
@@ -51,40 +37,6 @@
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-}
-
-.ss2-byline {
-  margin: 0.9rem 0 0;
-  text-align: center;
-  color: var(--soft);
-  font-style: italic;
-}
-
-.ss2-hints {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 0.6rem;
-}
-
-.ss2-hint {
-  min-height: 36px;
-  padding: 0 16px;
-  font-size: 0.9rem;
-}
-
-.ss2-credit {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-  text-align: center;
-}
-
-.ss2-credit:empty {
-  display: none;
 }
 
 @media (max-width: 639px) {

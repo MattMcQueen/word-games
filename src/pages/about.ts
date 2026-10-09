@@ -60,9 +60,26 @@ renderPage({
           h(
             'li',
             null,
-            'After a Lost for Words or Shelf Scramble puzzle there is a link to buy the book on Amazon. It is an ordinary link: nothing is loaded from Amazon unless you follow it. ',
+            'After a Lost for Words, Shelf Scramble, Retitled or Cipher puzzle there is a link to buy the book on Amazon. It is an ordinary link: nothing is loaded from Amazon unless you follow it. ',
             h('strong', null, AMAZON_DISCLOSURE),
           ),
+        ),
+      ),
+      h(
+        'li',
+        { class: 'wide', id: 'books' },
+        h('h2', null, 'The books in Lost for Words and Cipher'),
+        h(
+          'p',
+          null,
+          'The lines in Lost for Words and Cipher come from these novels, all in the public domain. The texts were taken from ',
+          link('https://www.gutenberg.org/', 'Project Gutenberg'),
+          '; thank you to its volunteers.',
+        ),
+        h(
+          'ul',
+          { class: 'points book-list' },
+          books.map((b) => h('li', null, h('cite', null, b.title), ` by ${b.author}`)),
         ),
       ),
       h(
@@ -75,23 +92,6 @@ renderPage({
           "If it's not in the list, it's not a word. Every game uses the same list: British English words from ",
           link('http://wordlist.aspell.net/', 'SCOWL'),
           ' (Spell Checker Oriented Word Lists) by Kevin Atkinson, at size 50, without proper nouns, abbreviations or offensive words.',
-        ),
-      ),
-      h(
-        'li',
-        { class: 'wide', id: 'books' },
-        h('h2', null, 'The books in Lost for Words'),
-        h(
-          'p',
-          null,
-          "Lost for Words' sentences come from these novels, all in the public domain. The texts were taken from ",
-          link('https://www.gutenberg.org/', 'Project Gutenberg'),
-          '; thank you to its volunteers.',
-        ),
-        h(
-          'ul',
-          { class: 'points book-list' },
-          books.map((b) => h('li', null, h('cite', null, b.title), ` by ${b.author}`)),
         ),
       ),
       h(
@@ -138,7 +138,7 @@ renderPage({
           'Matt McQueen, who also writes the ',
           link('https://www.matt-rarely-writes.co.uk/', 'Matt Rarely Writes'),
           ' blog and makes the ',
-          link('https://blackjack.matt-rarely-writes.co.uk/', 'card games'),
+          link('https://www.matt-rarely-writes.co.uk/post/deal-me-in', 'card games'),
           '.',
         ),
         h(

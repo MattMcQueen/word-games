@@ -31,4 +31,5 @@ export const GENERATE_YEARS_AHEAD = 3;
 export const WORDS_URL = '/data/words.txt';
 export const SENTENCES_URL = '/data/sentences.json';
 export const COMMON_URL = '/data/common.txt';
+export const LINES_URL = '/data/cipher-lines.json';
 export const puzzleMonthUrl = (slug: string, month: string) => `/puzzles/${slug}/${month}.json`;

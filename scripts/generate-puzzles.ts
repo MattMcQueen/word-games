@@ -26,7 +26,7 @@ import {
   type PuzzleMonthFile,
   type Resources,
 } from '../src/core/game.ts';
-import type { SentenceBank } from '../src/core/sentences.ts';
+import type { LineBank, SentenceBank } from '../src/core/sentences.ts';
 import { ALL_GAMES } from '../src/games/registry.ts';
 
 const ROOT = resolve(import.meta.dirname, '..');
@@ -57,6 +57,9 @@ const resources: Required<Resources> = {
   common: new Set(
     createDictionary(readFileSync(join(ROOT, 'public', 'data', 'common.txt'), 'utf8')).words,
   ),
+  lines: JSON.parse(
+    readFileSync(join(ROOT, 'public', 'data', 'cipher-lines.json'), 'utf8'),
+  ) as LineBank,
 };
 const resourcesFor = (game: GameLogic<unknown, unknown>): Resources =>
   Object.fromEntries((game.needs ?? []).map((name) => [name, resources[name]]));

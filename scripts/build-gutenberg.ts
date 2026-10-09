@@ -1,5 +1,7 @@
 /**
- * Builds public/data/sentences.json, the sentence bank for Gutenberg Gap.
+ * Builds the two banks of lines from public-domain novels:
+ *   - public/data/sentences.json, sentences with a gap word, for Lost for Words
+ *   - public/data/cipher-lines.json, whole lines for Cipher
  *
  *   npm run build:sentences
  *
@@ -9,15 +11,25 @@
  *
  * For each book: strip the Gutenberg header and footer, split into sentences,
  * keep the ones that read well alone (scripts/lib/sentences.ts), drop any with
- * a blocked word, choose a gap word, and keep up to PER_BOOK of them.
+ * a blocked word, choose a gap word, and keep up to PER_BOOK of them. Then,
+ * from the sentences Lost for Words didn't take, keep up to CIPHER_PER_BOOK
+ * that make a good code to crack. Each bank has its own seed, so changing one
+ * never changes the other.
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { createDictionary } from '../src/core/dictionary.ts';
 import { createRng } from '../src/core/rng.ts';
-import type { SentenceBank, SentenceBook, SentenceEntry } from '../src/core/sentences.ts';
+import type {
+  LineBank,
+  LineEntry,
+  SentenceBank,
+  SentenceBook,
+  SentenceEntry,
+} from '../src/core/sentences.ts';
 import {
+  cipherCandidate,
   commonWords,
   gapCandidates,
   paragraphs,
@@ -32,6 +44,7 @@ import { parseBlocklist } from './lib/word-filter.ts';
 const ROOT = resolve(import.meta.dirname, '..');
 const CACHE = join(ROOT, '.cache', 'gutenberg');
 const PER_BOOK = 80;
+const CIPHER_PER_BOOK = 60;
 /** The most frequent words across the books are too easy to be gaps. */
 const COMMON_COUNT = 600;
 
@@ -63,6 +76,12 @@ async function bookText(book: SentenceBook): Promise<string> {
   return tidy(stripGutenberg(text));
 }
 
+/** Write a bank as one line of JSON. */
+function writeBank(file: string, bank: SentenceBank | LineBank, count: number, what: string) {
+  writeFileSync(join(ROOT, 'public', 'data', file), `${JSON.stringify(bank)}\n`);
+  console.log(`Wrote ${count} ${what} to public/data/${file}`);
+}
+
 async function main() {
   const texts = await Promise.all(books.map(bookText));
   const sentenceLists = texts.map((t) => paragraphs(t).flatMap(sentences));
@@ -91,10 +110,19 @@ async function main() {
     }
     console.log(`${book.title}: ${usable.length} usable sentences, kept ${kept}`);
   });
+  writeBank('sentences.json', { books, entries }, entries.length, 'sentences');
 
-  const bank: SentenceBank = { books, entries };
-  writeFileSync(join(ROOT, 'public', 'data', 'sentences.json'), `${JSON.stringify(bank)}\n`);
-  console.log(`Wrote ${entries.length} sentences to public/data/sentences.json`);
+  // Cipher's lines: never a sentence Lost for Words uses.
+  const taken = new Set(entries.map((e) => e.before + e.word + e.after));
+  const lines: LineEntry[] = [];
+  books.forEach((book, b) => {
+    const rng = createRng(`cipher:${book.id}`);
+    const candidates = (sentenceLists[b] ?? []).filter(
+      (s) => usableSentence(s, blocked) && cipherCandidate(s) && !taken.has(s),
+    );
+    for (const text of rng.shuffle(candidates).slice(0, CIPHER_PER_BOOK)) lines.push({ b, text });
+  });
+  writeBank('cipher-lines.json', { books, lines }, lines.length, 'lines');
 }
 
 await main();

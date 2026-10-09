@@ -138,6 +138,8 @@ test.describe('Security headers', () => {
       'hinge',
       'shelf-scramble',
       'halves',
+      'retitled',
+      'cipher',
       'lockout',
       'lost-for-words',
     ].flatMap((slug) => [`/${slug}/`, `/${slug}/how-to-play/`]),

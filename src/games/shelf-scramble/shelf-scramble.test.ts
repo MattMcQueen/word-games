@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createDictionary } from '../../core/dictionary.ts';
 import { contextFor, generateDaily } from '../../core/game.ts';
 import { sortedLetters } from '../../solvers/letters.ts';
+import { nextToReveal } from '../title-words.ts';
 import { shelfScrambleLogic } from './logic.ts';
 import {
   allFound,
@@ -9,7 +10,6 @@ import {
   emptyData,
   hintCount,
   matchGuess,
-  nextToReveal,
   resultFor,
   shareLines,
 } from './scoring.ts';
@@ -97,11 +97,11 @@ describe('Shelf Scramble scoring', () => {
 
   it('reveals letters in the first unsolved word, up to all but one', () => {
     const data = emptyData(puzzle);
-    expect(nextToReveal(pride, data)).toBe(0);
+    expect(nextToReveal(pride.words, data)).toBe(0);
     const pretty = { ...data, found: [true, false, false] };
-    expect(nextToReveal(pride, pretty)).toBe(1);
+    expect(nextToReveal(pride.words, pretty)).toBe(1);
     expect(
-      nextToReveal(pride, { ...pretty, revealed: [0, 2, 8], found: [true, false, true] }),
+      nextToReveal(pride.words, { ...pretty, revealed: [0, 2, 8], found: [true, false, true] }),
     ).toBe(-1);
   });
 

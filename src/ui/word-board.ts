@@ -145,3 +145,16 @@ export function foundItem(word: string, meta: string, tag?: string): HTMLElement
     tag ? h('span', { class: 'best-tag' }, tag) : null,
   );
 }
+
+/**
+ * The button under a board without a word box (Halves, Cipher): Finish while
+ * playing, See results once it's over.
+ */
+export const finishOrResults = (
+  finished: boolean,
+  onFinish: () => void,
+  onResults: () => void,
+): HTMLElement =>
+  finished
+    ? h('button', { class: 'btn primary', type: 'button', onclick: onResults }, 'See results')
+    : h('button', { class: 'btn', type: 'button', onclick: onFinish }, 'Finish');
