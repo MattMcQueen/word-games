@@ -43,10 +43,11 @@ export function describeOutcome(longest: number, best: number, seed: string): st
 }
 
 /** Spoiler-free share lines: chain lengths only, never the words. */
-export function shareLines(longest: number, best: number): string[] {
+export function shareLines(longest: number, best: number, hints = 0): string[] {
+  const used = hints ? ` · ${plural(hints, 'hint')}` : '';
   const headline =
     longest >= best
-      ? `⭐ Chain of ${longest}, the longest possible`
-      : `Chain of ${longest} (best ${best})`;
+      ? `${hints ? '' : '⭐ '}Chain of ${longest}, the longest possible${used}`
+      : `Chain of ${longest} (best ${best})${used}`;
   return [`🪆 ${headline}`, scoreMeter(longest, best)];
 }

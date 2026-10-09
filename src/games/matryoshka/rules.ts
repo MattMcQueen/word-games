@@ -58,6 +58,18 @@ export const matryoshkaRules: HowToPlay = {
     },
     everydaySection('The longest chain'),
     {
+      title: 'Hints',
+      body: [
+        h(
+          'p',
+          null,
+          'Stuck? ',
+          h('strong', null, 'Reveal a letter'),
+          ' suggests which letter to add next on a longest route from your current word. Reaching the longest chain still ends the game, but a perfect day needs no hints.',
+        ),
+      ],
+    },
+    {
       title: 'Finishing',
       body: [
         h(

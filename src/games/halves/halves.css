@@ -59,6 +59,11 @@
   margin-top: 0.75rem;
 }
 
+.hv-tools {
+  display: flex;
+  gap: 0.4rem;
+}
+
 .hv-shuffle {
   min-height: 34px;
   padding: 0 14px;

@@ -14,7 +14,7 @@ import { foundItem, mountWordBoard, type WordBoard } from '../../ui/word-board.t
 import { gameUrl } from '../catalogue.ts';
 import { matryoshkaLogic } from './logic.ts';
 import { describeOutcome, nextProblem, resultFor, shareLines } from './scoring.ts';
-import { nextWords } from './solve.ts';
+import { chainLengths, nextWords } from './solve.ts';
 import { insertedAt, type MatryoshkaPuzzle, type MatryoshkaSolution, NAME, SLUG } from './spec.ts';
 import './matryoshka.css';
 
@@ -23,6 +23,8 @@ interface MatryoshkaData {
   chain: string[];
   /** The longest chain built so far (kept when you undo). */
   best: string[];
+  /** Letters suggested by hints (missing in games saved before hints). */
+  hints?: number;
 }
 
 /** One row of the stack, with the letter that was added marked (bold and underlined). */
@@ -47,7 +49,11 @@ export const matryoshkaGame: GameModule<MatryoshkaPuzzle, MatryoshkaSolution, Ma
 
   mount(ctx) {
     const { puzzle, solution, dict } = ctx;
-    const data: MatryoshkaData = { chain: [...ctx.data.chain], best: [...ctx.data.best] };
+    const data: MatryoshkaData = {
+      chain: [...ctx.data.chain],
+      best: [...ctx.data.best],
+      hints: ctx.data.hints ?? 0,
+    };
     const current = () => data.chain.at(-1) ?? puzzle.seed;
 
     const stack = h('ol', { class: 'mt-stack', 'aria-label': 'Your chain' });
@@ -68,6 +74,31 @@ export const matryoshkaGame: GameModule<MatryoshkaPuzzle, MatryoshkaSolution, Ma
       'Undo last word',
     );
 
+    // Stuck: suggest the letter to add next on a longest route from the current word.
+    const longest = chainLengths(dict);
+    const bestNext = () =>
+      nextWords(current(), dict).reduce<string | null>(
+        (top, w) => (top === null || longest(w) > longest(top) ? w : top),
+        null,
+      );
+    const hintButton = h(
+      'button',
+      {
+        class: 'btn quiet',
+        type: 'button',
+        onclick: () => {
+          const next = bestNext();
+          if (!next) return;
+          data.hints = (data.hints ?? 0) + 1;
+          const letter = next[insertedAt(current(), next)]?.toUpperCase();
+          board?.input.feedback(`Hint: try adding ${letter} to ${current().toUpperCase()}.`);
+          board?.commit();
+          board?.input.focus();
+        },
+      },
+      'Reveal a letter',
+    );
+
     board = mountWordBoard({
       ctx: ctx as GameContext<unknown, unknown, MatryoshkaData>,
       data,
@@ -78,7 +109,7 @@ export const matryoshkaGame: GameModule<MatryoshkaPuzzle, MatryoshkaSolution, Ma
           h('p', { class: 'mt-label' }, 'Add one letter at a time. Every step must be a word.'),
           targetLine(`a chain of ${plural(solution.best, 'word')}`),
           stack,
-          h('div', { class: 'mt-tools' }, undo),
+          h('div', { class: 'mt-tools' }, undo, hintButton),
         ),
       ],
       belowInput: [hint],
@@ -102,8 +133,15 @@ export const matryoshkaGame: GameModule<MatryoshkaPuzzle, MatryoshkaSolution, Ma
         heading: `Your longest chain: ${data.best.length}`,
         items: data.best.map((w) => foundItem(w, letters(w.length))),
       }),
-      result: (gaveUp) => resultFor(data.best, solution, gaveUp),
+      // The longest chain ends the game; it's perfect only without hints.
+      result: (gaveUp) => {
+        const result = resultFor(data.best, solution, gaveUp);
+        return data.hints ? { ...result, perfect: false } : result;
+      },
+      done: () => resultFor(data.best, solution, false).perfect,
       onRender(finished) {
+        hintButton.hidden = finished;
+        hintButton.disabled = bestNext() === null;
         const words = [puzzle.seed, ...data.chain];
         replaceChildren(
           stack,
@@ -118,7 +156,7 @@ export const matryoshkaGame: GameModule<MatryoshkaPuzzle, MatryoshkaSolution, Ma
 
   summarise({ puzzle, solution, data, date }) {
     return {
-      detail: describeOutcome(data.best.length, solution.best, puzzle.seed),
+      detail: `${describeOutcome(data.best.length, solution.best, puzzle.seed)}${data.hints ? ` You used ${plural(data.hints, 'hint')}.` : ''}`,
       answersLabel: solution.chains.length === 1 ? 'A longest chain' : 'Some longest chains',
       answers: solution.chains.map((c) => [
         puzzle.seed.toUpperCase(),
@@ -127,7 +165,7 @@ export const matryoshkaGame: GameModule<MatryoshkaPuzzle, MatryoshkaSolution, Ma
       shareText: buildShareText({
         game: NAME,
         puzzleNumber: puzzleNumber(date),
-        lines: shareLines(data.best.length, solution.best),
+        lines: shareLines(data.best.length, solution.best, data.hints ?? 0),
         url: gameUrl(SLUG),
       }),
     };

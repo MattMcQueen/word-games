@@ -41,7 +41,10 @@ export const halvesGame: GameModule<HalvesPuzzle, HalvesSolution, HalvesData> = 
 
   mount(ctx) {
     const { puzzle, solution, dict } = ctx;
-    const data: HalvesData = { tries: ctx.data.tries.map(([a, b]) => [a, b]) };
+    const data: HalvesData = {
+      tries: ctx.data.tries.map(([a, b]) => [a, b]),
+      hints: ctx.data.hints ?? 0,
+    };
     let finished = ctx.finished;
     /** The first half of a join in progress. */
     let picked: string | null = null;
@@ -74,6 +77,23 @@ export const halvesGame: GameModule<HalvesPuzzle, HalvesSolution, HalvesData> = 
         },
       },
       'Shuffle',
+    );
+    // Stuck: join the next pair for the player. A perfect day needs no hints.
+    const hint = h(
+      'button',
+      {
+        class: 'btn quiet hv-shuffle',
+        type: 'button',
+        onclick: () => {
+          const done = joined(data, solution);
+          const next = solution.words.find((w) => !done.some((d) => d[0] === w[0]));
+          if (!next || finished) return;
+          picked = null;
+          data.hints = (data.hints ?? 0) + 1;
+          accept(next, 'Hint: ');
+        },
+      },
+      'Join a pair',
     );
     const feedback = h('p', { class: 'feedback', 'aria-live': 'polite' });
     const actions = h('div', { class: 'board-actions' });
@@ -108,8 +128,13 @@ export const halvesGame: GameModule<HalvesPuzzle, HalvesSolution, HalvesData> = 
         shake(a, b);
         return commit();
       }
-      data.tries.push(outcome.pair);
-      let message = `${outcome.pair.join('').toUpperCase()}: ${sum(outcome.pair)}.`;
+      accept(outcome.pair, '');
+    }
+
+    /** Join a right pair, then the last two halves if that leaves only them. */
+    function accept(pair: [string, string], lead: string) {
+      data.tries.push(pair);
+      let message = `${lead}${pair.join('').toUpperCase()}: ${sum(pair)}.`;
       // The last two halves can only go together, so join them too.
       const left = halvesLeft(puzzle.halves, data, solution);
       if (left.length === 2) {
@@ -169,6 +194,7 @@ export const halvesGame: GameModule<HalvesPuzzle, HalvesSolution, HalvesData> = 
       }
       grid.hidden = finished;
       shuffle.hidden = finished;
+      hint.hidden = finished;
       feedback.hidden = finished;
 
       const done = joined(data, solution);
@@ -192,7 +218,7 @@ export const halvesGame: GameModule<HalvesPuzzle, HalvesSolution, HalvesData> = 
         { class: 'panel hv-panel', 'aria-label': 'The halves' },
         h('p', { class: 'hv-label' }, 'Join the halves in pairs to make six words.'),
         grid,
-        h('div', { class: 'hv-bar' }, progress, shuffle),
+        h('div', { class: 'hv-bar' }, progress, h('span', { class: 'hv-tools' }, shuffle, hint)),
       ),
       feedback,
       actions,

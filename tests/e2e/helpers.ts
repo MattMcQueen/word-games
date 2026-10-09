@@ -46,6 +46,8 @@ export async function enterWord(page: Page, word: string) {
 export async function expectAccessible(page: Page) {
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+    // A perfect game's falling tiles are decorative and hidden from screen readers.
+    .exclude('.celebrate')
     .analyze();
   expect(results.violations.map((v) => `${v.id}: ${v.help}`)).toEqual([]);
 }

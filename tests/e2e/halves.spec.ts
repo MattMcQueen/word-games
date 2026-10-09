@@ -98,6 +98,14 @@ test.describe('Halves', () => {
       .toBe(true);
   });
 
+  test("Join a pair joins one for you, but then the day isn't perfect", async ({ page }) => {
+    await page.goto('/halves/');
+    // Five hints, and the last two halves join on their own.
+    for (let i = 0; i < 5; i++) await page.getByRole('button', { name: 'Join a pair' }).click();
+    const results = page.getByRole('dialog', { name: 'Well played' });
+    await expect(results).toContainText('Hints joined 5 pairs.');
+  });
+
   test('has a How to play page', async ({ page }) => {
     await page.goto('/halves/how-to-play/');
     await expect(page.getByRole('heading', { level: 1, name: 'Halves' })).toBeVisible();

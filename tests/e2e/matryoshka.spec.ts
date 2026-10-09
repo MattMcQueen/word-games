@@ -74,6 +74,12 @@ test.describe('Matryoshka', () => {
     );
   });
 
+  test('a hint suggests the next letter to add', async ({ page }) => {
+    await page.goto('/matryoshka/');
+    await page.getByRole('button', { name: 'Reveal a letter' }).click();
+    await expect(page.locator('.feedback')).toContainText('Hint: try adding');
+  });
+
   test('has a How to play page', async ({ page }) => {
     await page.goto('/matryoshka/how-to-play/');
     await expect(page.getByRole('heading', { level: 1, name: 'Matryoshka' })).toBeVisible();

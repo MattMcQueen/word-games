@@ -32,6 +32,8 @@ interface CleanSweepData {
   best: string[] | null;
   /** Tile order on screen (indexes into the puzzle's letters), changed by Shuffle. */
   order: number[];
+  /** Words of a best sweep revealed by hints (missing in games saved before hints). */
+  hints?: number;
 }
 
 const A = 97;
@@ -47,7 +49,26 @@ export const cleanSweepGame: GameModule<CleanSweepPuzzle, CleanSweepSolution, Cl
       words: [...ctx.data.words],
       best: ctx.data.best ? [...ctx.data.best] : null,
       order: [...ctx.data.order],
+      hints: ctx.data.hints ?? 0,
     };
+
+    // Stuck: reveal a best sweep a word at a time, all but its last word.
+    const sweepWords = solution.examples[0] ?? [];
+    const hintLine = h('p', { class: 'hunt-hint-line' });
+    const hintButton = h(
+      'button',
+      {
+        class: 'btn quiet hunt-hint-btn',
+        type: 'button',
+        onclick: () => {
+          data.hints = (data.hints ?? 0) + 1;
+          board?.commit();
+          board?.input.focus();
+        },
+      },
+      'Reveal a word',
+    );
+    const hintRow = h('div', { class: 'hunt-hint cs-hint' }, hintLine, hintButton);
     const left = () => remainingCounts(puzzle.letters, data.words);
     /**
      * How many of each letter are free once `word` is taken out too, going
@@ -134,6 +155,7 @@ export const cleanSweepGame: GameModule<CleanSweepPuzzle, CleanSweepSolution, Cl
           tiles,
           h('div', { class: 'cs-bar' }, status, shuffle),
           targetLine(`every letter in ${plural(solution.min, 'word')}`),
+          hintRow,
         ),
       ],
       allowLetter: (current, letter) => freeAfter(current + letter)(letter.charCodeAt(0) - A) >= 0,
@@ -184,8 +206,19 @@ export const cleanSweepGame: GameModule<CleanSweepPuzzle, CleanSweepSolution, Cl
           ),
         ),
       }),
-      result: (gaveUp) => resultFor(data.best, solution, gaveUp),
+      // Sweeping in the fewest words ends the game; it's perfect only without hints.
+      result: (gaveUp) => {
+        const result = resultFor(data.best, solution, gaveUp);
+        return data.hints ? { ...result, perfect: false } : result;
+      },
+      done: () => resultFor(data.best, solution, false).perfect,
       onRender(finished) {
+        const shown = data.hints ?? 0;
+        hintRow.hidden = finished;
+        hintLine.textContent = shown
+          ? `A best sweep uses ${sweepWords.slice(0, shown).join(', ').toUpperCase()}…`
+          : 'Stuck? Reveal a best sweep a word at a time.';
+        hintButton.disabled = shown >= sweepWords.length - 1;
         const remaining = left().reduce((a, b) => a + b, 0);
         status.textContent = data.best
           ? `${plural(remaining, 'letter')} left · best sweep so far: ${plural(data.best.length, 'word')}`
@@ -203,13 +236,13 @@ export const cleanSweepGame: GameModule<CleanSweepPuzzle, CleanSweepSolution, Cl
 
   summarise({ solution, data, date }) {
     return {
-      detail: describeOutcome(data.best, solution.min),
+      detail: `${describeOutcome(data.best, solution.min)}${data.hints ? ` You had ${plural(data.hints, 'word')} revealed.` : ''}`,
       answersLabel: solution.examples.length === 1 ? 'A best sweep' : 'Some best sweeps',
       answers: solution.examples.map((words) => lookUpAll(words.join(' + ').toUpperCase())),
       shareText: buildShareText({
         game: NAME,
         puzzleNumber: puzzleNumber(date),
-        lines: shareLines(data.best, solution.min),
+        lines: shareLines(data.best, solution.min, data.hints ?? 0),
         url: gameUrl(SLUG),
       }),
     };

@@ -141,3 +141,10 @@ describe('Matryoshka with everyday words', () => {
     }
   });
 });
+
+describe('Matryoshka hints', () => {
+  it('take away the star and are counted in the share', () => {
+    expect(shareLines(5, 5, 2)[0]).toBe('🪆 Chain of 5, the longest possible · 2 hints');
+    expect(shareLines(5, 5)[0]).toBe('🪆 ⭐ Chain of 5, the longest possible');
+  });
+});

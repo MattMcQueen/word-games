@@ -46,6 +46,11 @@ export const swapShopRules: HowToPlay = {
             null,
             'Plurals and other forms go with their pair: with A ↔ E, BATS ↔ BETS counts as BAT ↔ BET, not as a new pair.',
           ),
+          h(
+            'li',
+            null,
+            'Stuck? Reveal a letter shows how a word of a pair you haven’t found starts. Finding every pair still ends the game, but a perfect day needs no hints.',
+          ),
         ),
       ],
     },

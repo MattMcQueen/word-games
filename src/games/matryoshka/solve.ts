@@ -22,8 +22,8 @@ export function nextWords(word: string, dict: Dictionary): string[] {
   return [...found].sort();
 }
 
-/** Longest chain length from each word, memoised for one solve. */
-function chainLengths(dict: Dictionary) {
+/** Longest chain length from each word, memoised (for one solve, or one game's hints). */
+export function chainLengths(dict: Dictionary) {
   const memo = new Map<string, number>();
   const longest = (word: string): number => {
     const known = memo.get(word);

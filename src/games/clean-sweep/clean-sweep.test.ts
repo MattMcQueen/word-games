@@ -147,3 +147,10 @@ describe('CleanSweep with everyday words', () => {
     }
   });
 });
+
+describe('Clean Sweep hints', () => {
+  it('take away the star and are counted in the share', () => {
+    expect(shareLines(['abc', 'def'], 2, 1)[0]).toBe('🧹 Swept in 2, the fewest possible · 1 hint');
+    expect(shareLines(['abc', 'def'], 2)[0]).toBe('🧹 ⭐ Swept in 2, the fewest possible');
+  });
+});

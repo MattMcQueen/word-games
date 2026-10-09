@@ -47,6 +47,18 @@ export const cleanSweepRules: HowToPlay = {
     },
     everydaySection('The best sweep'),
     {
+      title: 'Hints',
+      body: [
+        h(
+          'p',
+          null,
+          'Stuck? ',
+          h('strong', null, 'Reveal a word'),
+          ' shows a best sweep a word at a time. Sweeping in the fewest words still ends the game, but a perfect day needs no hints.',
+        ),
+      ],
+    },
+    {
       title: 'Finishing',
       body: [
         h(

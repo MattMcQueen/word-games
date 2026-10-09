@@ -169,11 +169,14 @@ describe('Swap Shop scoring', () => {
     expect(describeOutcome(1, 3)).toBe('You found 1 of the 3 pairs.');
     expect(describeOutcome(3, 3)).toBe('You found all 3 pairs!');
     expect(describeOutcome(3, 3, 2)).toBe('You found all 3 pairs! You also found 2 bonus pairs.');
+    expect(describeOutcome(3, 3, 0, 2)).toBe('You found all 3 pairs! You used 2 hints.');
   });
 
   it('shares the swap and the count, never the words', () => {
     expect(shareLines(1, ae, solution)).toEqual(['🔁 A ↔ E · 1/3 pairs', '🟩🟩⬜⬜⬜']);
     expect(shareLines(3, ae, solution)[0]).toBe('🔁 A ↔ E · ⭐ 3/3 pairs');
     expect(shareLines(3, ae, solution, 1)[0]).toBe('🔁 A ↔ E · ⭐ 3/3 pairs +1 bonus');
+    // Hints take away the star.
+    expect(shareLines(3, ae, solution, 0, 1)[0]).toBe('🔁 A ↔ E · 3/3 pairs · 1 hint');
   });
 });

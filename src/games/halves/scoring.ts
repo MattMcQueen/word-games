@@ -15,6 +15,8 @@ export interface HalvesData {
    * word's order (SUN, DAY), whichever half was picked first.
    */
   tries: [string, string][];
+  /** Pairs joined by the hint button (missing in games saved before hints). */
+  hints?: number;
 }
 
 export const emptyData = (): HalvesData => ({ tries: [] });
@@ -83,7 +85,7 @@ export function resultFor(solution: HalvesSolution, data: HalvesData, gaveUp: bo
   return {
     score: done,
     best: solution.words.length,
-    perfect: all && mistakeCount(data, solution) === 0,
+    perfect: all && mistakeCount(data, solution) === 0 && !data.hints,
     gaveUp: gaveUp && !all,
   };
 }
@@ -91,7 +93,7 @@ export function resultFor(solution: HalvesSolution, data: HalvesData, gaveUp: bo
 const NUMBERS = ['no', 'one', 'two', 'three', 'four', 'five', 'six'];
 const inWords = (n: number) => NUMBERS[n] ?? String(n);
 
-export function describeOutcome(solution: HalvesSolution, data: HalvesData): string {
+function outcomeBeforeHints(solution: HalvesSolution, data: HalvesData): string {
   const done = joined(data, solution).length;
   const mistakes = mistakeCount(data, solution);
   if (done === WORDS_PER_DAY) {
@@ -104,7 +106,7 @@ export function describeOutcome(solution: HalvesSolution, data: HalvesData): str
 }
 
 /** Spoiler-free share lines: every join in order, 🟩 right and 🟥 wrong. */
-export function shareLines(solution: HalvesSolution, data: HalvesData): string[] {
+function shareLinesBeforeHints(solution: HalvesSolution, data: HalvesData): string[] {
   const done = joined(data, solution).length;
   const mistakes = mistakeCount(data, solution);
   const squares = data.tries.map((t) => (isAnswer(t, solution) ? '🟩' : '🟥')).join('');
@@ -114,4 +116,20 @@ export function shareLines(solution: HalvesSolution, data: HalvesData): string[]
       ? `${mistakes ? '' : '⭐ '}All six, ${slips}`
       : `${done}/${solution.words.length} words, ${slips}`;
   return [`✂️ ${headline}`, squares || '—'];
+}
+
+/** " A hint joined 1 pair.", for results; empty with no hints. */
+const hintNote = (data: HalvesData) =>
+  data.hints
+    ? ` ${data.hints === 1 ? 'A hint' : 'Hints'} joined ${plural(data.hints, 'pair')}.`
+    : '';
+
+export const describeOutcome = (solution: HalvesSolution, data: HalvesData): string =>
+  outcomeBeforeHints(solution, data) + hintNote(data);
+
+/** Spoiler-free share lines; hints take away the star and are counted. */
+export function shareLines(solution: HalvesSolution, data: HalvesData): string[] {
+  const [headline = '', ...rest] = shareLinesBeforeHints(solution, data);
+  if (!data.hints) return [headline, ...rest];
+  return [`${headline.replace('⭐ ', '')} · ${plural(data.hints, 'hint')}`, ...rest];
 }

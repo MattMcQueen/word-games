@@ -49,3 +49,8 @@
   background: var(--accent);
   transition: width 0.3s ease;
 }
+
+/* The hint row under the meter (shared .hunt-hint styles). */
+.ss-hint {
+  margin-top: 0.75rem;
+}

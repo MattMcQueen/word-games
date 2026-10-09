@@ -48,11 +48,12 @@ export function describeOutcome(best: readonly string[] | null, min: number): st
 }
 
 /** Spoiler-free share lines: word counts only, never the words. */
-export function shareLines(best: readonly string[] | null, min: number): string[] {
+export function shareLines(best: readonly string[] | null, min: number, hints = 0): string[] {
   if (best === null) return [`🧹 Not swept (best ${min})`, scoreMeter(0, min, true)];
+  const used = hints ? ` · ${plural(hints, 'hint')}` : '';
   const headline =
     best.length <= min
-      ? `⭐ Swept in ${best.length}, the fewest possible`
-      : `Swept in ${plural(best.length, 'word')} (best ${min})`;
+      ? `${hints ? '' : '⭐ '}Swept in ${best.length}, the fewest possible${used}`
+      : `Swept in ${plural(best.length, 'word')} (best ${min})${used}`;
   return [`🧹 ${headline}`, scoreMeter(best.length, min, true)];
 }

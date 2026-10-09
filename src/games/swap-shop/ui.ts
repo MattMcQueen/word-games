@@ -33,6 +33,10 @@ interface SwapShopData {
   pairs: string[];
   /** Bonus pairs found (rarer words). Missing from games saved before bonuses existed. */
   bonus?: string[];
+  /** Hints used in all, and the pair the latest hints are about with how many letters shown. */
+  hints?: number;
+  hintPair?: string;
+  hintShown?: number;
 }
 
 export const swapShopGame: GameModule<SwapShopPuzzle, SwapShopSolution, SwapShopData> = {
@@ -46,6 +50,31 @@ export const swapShopGame: GameModule<SwapShopPuzzle, SwapShopSolution, SwapShop
     const [A, B] = [a.toUpperCase(), b.toUpperCase()];
     const data: SwapShopData = { pairs: [...ctx.data.pairs], bonus: [...(ctx.data.bonus ?? [])] };
     const bonus = data.bonus ?? [];
+    data.hints = ctx.data.hints ?? 0;
+    if (ctx.data.hintPair) data.hintPair = ctx.data.hintPair;
+    data.hintShown = ctx.data.hintShown ?? 0;
+
+    // Stuck: reveal the start of a word from the first pair not yet found, a letter at a time.
+    const hintTarget = () => missedPairs(data.pairs, solution)[0];
+    const hintLine = h('p', { class: 'hunt-hint-line' });
+    const hintButton = h(
+      'button',
+      {
+        class: 'btn quiet hunt-hint-btn',
+        type: 'button',
+        onclick: () => {
+          const target = hintTarget();
+          if (!target) return;
+          data.hintShown = data.hintPair === target ? (data.hintShown ?? 0) + 1 : 1;
+          data.hintPair = target;
+          data.hints = (data.hints ?? 0) + 1;
+          board.commit();
+          board.input.focus();
+        },
+      },
+      'Reveal a letter',
+    );
+    const hintRow = h('div', { class: 'hunt-hint ss-hint' }, hintLine, hintButton);
     const total = solution.pairs.length;
 
     const counter = h('p', { class: 'ss-counter' });
@@ -76,6 +105,7 @@ export const swapShopGame: GameModule<SwapShopPuzzle, SwapShopSolution, SwapShop
           h('p', { class: 'ss-rule' }, lengthRule(puzzle.length)),
           counter,
           meter,
+          hintRow,
         ),
       ],
       belowInput: [previewLine],
@@ -108,8 +138,21 @@ export const swapShopGame: GameModule<SwapShopPuzzle, SwapShopSolution, SwapShop
           return foundItem(pairLabel(key), meta, bonus.includes(key) ? 'Bonus' : undefined);
         }),
       }),
-      result: (gaveUp) => resultFor(data.pairs, solution, gaveUp),
-      onRender() {
+      // Finding every pair ends the game; it's perfect only without hints.
+      result: (gaveUp) => {
+        const result = resultFor(data.pairs, solution, gaveUp);
+        return data.hints ? { ...result, perfect: false } : result;
+      },
+      done: () => resultFor(data.pairs, solution, false).perfect,
+      onRender(finished) {
+        const target = hintTarget();
+        const word = target?.split('/')[0] ?? '';
+        const shown = target && data.hintPair === target ? (data.hintShown ?? 0) : 0;
+        hintRow.hidden = finished || !target;
+        hintLine.textContent = shown
+          ? `Try a ${word.length}-letter word starting ${word.slice(0, shown).toUpperCase()}…`
+          : 'Stuck? Reveal a word of a pair you haven’t found.';
+        hintButton.disabled = shown >= word.length - 1;
         counter.textContent = `Found ${data.pairs.length} of ${total} pairs${bonus.length ? ` · ${bonus.length} bonus` : ''}`;
         (meter.firstChild as HTMLElement).style.width = `${(100 * data.pairs.length) / total}%`;
       },
@@ -123,7 +166,7 @@ export const swapShopGame: GameModule<SwapShopPuzzle, SwapShopSolution, SwapShop
     const missed = missedPairs(data.pairs, solution);
     const bonus = data.bonus?.length ?? 0;
     return {
-      detail: describeOutcome(data.pairs.length, solution.pairs.length, bonus),
+      detail: describeOutcome(data.pairs.length, solution.pairs.length, bonus, data.hints ?? 0),
       answersLabel: missed.length > 0 ? 'Pairs you missed' : 'Every pair',
       answers: (missed.length > 0 ? missed : solution.pairs).map((key) =>
         lookUpAll(pairLabel(key)),
@@ -131,7 +174,7 @@ export const swapShopGame: GameModule<SwapShopPuzzle, SwapShopSolution, SwapShop
       shareText: buildShareText({
         game: NAME,
         puzzleNumber: puzzleNumber(date),
-        lines: shareLines(data.pairs.length, puzzle, solution, bonus),
+        lines: shareLines(data.pairs.length, puzzle, solution, bonus, data.hints ?? 0),
         url: gameUrl(SLUG),
       }),
     };

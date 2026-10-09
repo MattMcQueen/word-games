@@ -30,6 +30,11 @@ export const halvesRules: HowToPlay = {
             'Pick a half, then pick the half that goes with it. Either order works: DAY then SUN still makes SUNDAY.',
           ),
           h('li', null, 'Pick the same half again to put it back.'),
+          h(
+            'li',
+            null,
+            'Stuck? Shuffle moves the halves round, and Join a pair joins one for you (a perfect day needs no hints).',
+          ),
           h('li', null, 'Using a keyboard? Tab to a half and press Enter or Space to pick it.'),
           h(
             'li',

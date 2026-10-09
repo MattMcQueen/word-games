@@ -78,6 +78,12 @@ test.describe('Clean Sweep', () => {
     await expect(results.locator('.best-answers')).toContainText(best.join(' + ').toUpperCase());
   });
 
+  test('a hint reveals a best sweep a word at a time', async ({ page }) => {
+    await page.goto('/clean-sweep/');
+    await page.getByRole('button', { name: 'Reveal a word' }).click();
+    await expect(page.locator('.hunt-hint-line')).toContainText('A best sweep uses');
+  });
+
   test('has a How to play page', async ({ page }) => {
     await page.goto('/clean-sweep/how-to-play/');
     await expect(page.getByRole('heading', { level: 1, name: 'Clean Sweep' })).toBeVisible();

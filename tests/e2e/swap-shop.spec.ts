@@ -78,6 +78,12 @@ test.describe('Swap Shop', () => {
     await expectAccessible(page);
   });
 
+  test('a hint shows how a word of a missing pair starts', async ({ page }) => {
+    await page.goto('/swap-shop/');
+    await page.getByRole('button', { name: 'Reveal a letter' }).click();
+    await expect(page.locator('.hunt-hint-line')).toContainText('-letter word starting');
+  });
+
   test('has a How to play page', async ({ page }) => {
     await page.goto('/swap-shop/how-to-play/');
     await expect(page.getByRole('heading', { level: 1, name: 'Swap Shop' })).toBeVisible();

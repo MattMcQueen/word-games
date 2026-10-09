@@ -148,3 +148,14 @@ describe('Halves scoring', () => {
     expect(shareLines(six, emptyData())).toEqual(['✂️ 0/6 words, no mistakes', '—']);
   });
 });
+
+describe('Halves hints', () => {
+  it('count against a perfect day, and show in results and shares', () => {
+    const helped: HalvesData = { tries: [...solution.words], hints: 1 };
+    expect(resultFor(solution, helped, false).perfect).toBe(false);
+    expect(resultFor(solution, helped, false).score).toBe(2);
+    expect(describeOutcome(solution, helped)).toContain('A hint joined 1 pair.');
+    expect(shareLines(solution, helped)[0]).not.toContain('⭐');
+    expect(shareLines(solution, helped)[0]).toContain('1 hint');
+  });
+});
