@@ -39,8 +39,10 @@ test.describe('Clean Sweep', () => {
     const once = [...new Set(puzzle.letters)].find(
       (c) => puzzle.letters.indexOf(c) === puzzle.letters.lastIndexOf(c),
     ) as string;
+    const box = page.getByRole('textbox', { name: 'Your word' });
+    await expect(box).toBeEditable();
     await page.keyboard.type(`${missing}${once}${once}`);
-    await expect(page.getByRole('textbox', { name: 'Your word' })).toHaveValue(once);
+    await expect(box).toHaveValue(once);
   });
 
   test('placing a word crosses off its letters, and taking it back returns them', async ({
