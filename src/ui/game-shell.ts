@@ -21,7 +21,14 @@ import {
 } from '../core/date.ts';
 import { type Dictionary, loadDictionary } from '../core/dictionary.ts';
 import type { GameLogic } from '../core/game.ts';
-import { finishDay, type GameResult, loadDay, loadStats, saveDay } from '../core/progress.ts';
+import {
+  finishDay,
+  type GameResult,
+  loadDay,
+  loadStats,
+  recentDays,
+  saveDay,
+} from '../core/progress.ts';
 import { loadDailyPuzzle } from '../core/puzzle-loader.ts';
 import { readJson, writeJson } from '../core/storage.ts';
 import { GAMES, gamePath, howToPlayPath } from '../games/catalogue.ts';
@@ -29,7 +36,13 @@ import { openArchive } from './archive.ts';
 import { h, type IconName, icon, replaceChildren } from './dom.ts';
 import { openModal } from './modal.ts';
 import { gameNav, renderPage } from './page.ts';
-import { type NextGame, type ResultSummary, showResults, statsGrid } from './results.ts';
+import {
+  type NextGame,
+  type ResultSummary,
+  recentDaysStrip,
+  showResults,
+  statsGrid,
+} from './results.ts';
 import { toast } from './toast.ts';
 
 import '../styles/tokens.css';
@@ -101,13 +114,19 @@ export function startGame<P, S, D>(game: GameModule<P, S, D>): void {
   const date = chooseDate(today);
   const isToday = date === today;
 
+  /** How this game's recent days went, for the stats and results. */
+  const recent = () => recentDays(slug, today, LAUNCH_DATE);
+
   // Set once the puzzle has loaded; the stats button behaves differently before and after.
   let openResults: (() => void) | undefined;
 
   const showArchive = () => openArchive({ slug, path, today, current: date });
   const showStats = () => {
     if (openResults) return openResults();
-    openModal({ title: `${game.name} stats`, content: statsGrid(loadStats(slug, today)) });
+    openModal({
+      title: `${game.name} stats`,
+      content: [statsGrid(loadStats(slug, today)), recentDaysStrip(recent())],
+    });
   };
   // On phones these shrink to round icon buttons (the label stays for screen readers).
   const toolButton = (iconName: IconName, label: string, onclick: () => void) =>
@@ -167,7 +186,10 @@ export function startGame<P, S, D>(game: GameModule<P, S, D>): void {
       openResults = () => {
         const record = loadDay<D>(slug, date);
         if (record?.status !== 'finished' || !record.result) {
-          openModal({ title: `${game.name} stats`, content: statsGrid(loadStats(slug, today)) });
+          openModal({
+            title: `${game.name} stats`,
+            content: [statsGrid(loadStats(slug, today)), recentDaysStrip(recent())],
+          });
           return;
         }
         showResults({
@@ -183,6 +205,7 @@ export function startGame<P, S, D>(game: GameModule<P, S, D>): void {
           isToday,
           onArchive: showArchive,
           ...(isToday ? { next: nextGame(slug, today) } : {}),
+          recent: recent(),
         });
       };
 

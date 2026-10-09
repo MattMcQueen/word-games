@@ -121,3 +121,22 @@ export function finishDay<D>(
   writeJson(statsKey(slug), stats);
   return stats;
 }
+
+/** How one day's puzzle went, for the recent-days strip. */
+export type DayMark = 'perfect' | 'done' | 'missed';
+
+/**
+ * How the last `count` daily puzzles went, oldest first, starting no earlier
+ * than `first` (launch day). Archive plays count: it's a picture of which
+ * puzzles are done, not a streak.
+ */
+export function recentDays(slug: string, today: string, first: string, count = 14): DayMark[] {
+  const marks: DayMark[] = [];
+  for (let i = count - 1; i >= 0; i--) {
+    const date = addDays(today, -i);
+    if (date < first) continue;
+    const day = loadDay(slug, date);
+    marks.push(day?.status !== 'finished' ? 'missed' : day.result?.perfect ? 'perfect' : 'done');
+  }
+  return marks;
+}

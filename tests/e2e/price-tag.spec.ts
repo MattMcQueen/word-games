@@ -111,6 +111,8 @@ test.describe('Price Tag', () => {
     await expect(results).toBeVisible();
     await expect(results).toContainText('You found the best word');
     await expect(results.locator('.stat').first()).toContainText('1');
+    // Today shows as perfect in the recent-days strip.
+    await expect(results.locator('.recent-day').last()).toHaveText('★');
     await expectAccessible(page);
 
     await results.getByRole('button', { name: 'Share result' }).click();

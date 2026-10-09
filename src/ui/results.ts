@@ -6,7 +6,7 @@
  */
 
 import { msUntilMidnight } from '../core/date.ts';
-import type { GameResult, GameStats } from '../core/progress.ts';
+import type { DayMark, GameResult, GameStats } from '../core/progress.ts';
 import { copyText } from '../core/share.ts';
 import { type Child, h, icon } from './dom.ts';
 import { openModal } from './modal.ts';
@@ -68,6 +68,35 @@ function countdown(): HTMLElement {
   return el;
 }
 
+const MARKS: Record<DayMark, { symbol: string; word: string }> = {
+  perfect: { symbol: '★', word: 'perfect' },
+  done: { symbol: '✓', word: 'finished' },
+  missed: { symbol: '·', word: 'not finished' },
+};
+
+/** The last fortnight at a glance: a tile per day, ★ perfect, ✓ finished, · not finished. */
+export function recentDaysStrip(marks: readonly DayMark[]): HTMLElement | null {
+  if (marks.length === 0) return null;
+  const count = (mark: DayMark) => marks.filter((m) => m === mark).length;
+  const spoken = (['perfect', 'done', 'missed'] as const)
+    .map((m) => `${count(m)} ${MARKS[m].word}`)
+    .join(', ');
+  return h(
+    'div',
+    { class: 'recent' },
+    h(
+      'p',
+      { class: 'recent-label' },
+      `Your last ${marks.length === 1 ? 'day' : `${marks.length} days`}`,
+    ),
+    h(
+      'p',
+      { class: 'recent-days', role: 'img', 'aria-label': spoken },
+      marks.map((m) => h('span', { class: `recent-day recent-${m}` }, MARKS[m].symbol)),
+    ),
+  );
+}
+
 /** Another of today's games, to offer once one is finished. */
 export interface NextGame {
   name: string;
@@ -106,8 +135,10 @@ export function showResults(opts: {
   onArchive: () => void;
   /** Today's next unfinished game (null when they're all done); left out for archive puzzles. */
   next?: NextGame | null;
+  /** How the recent days went, for the strip under the stats. */
+  recent?: readonly DayMark[];
 }) {
-  const { result, summary, stats, isToday, onArchive, next } = opts;
+  const { result, summary, stats, isToday, onArchive, next, recent = [] } = opts;
 
   const share = h(
     'button',
@@ -134,6 +165,7 @@ export function showResults(opts: {
       summary.credit ? h('div', { class: 'result-credit lw-credit' }, summary.credit) : null,
       h('h3', null, 'Your stats'),
       statsGrid(stats),
+      recentDaysStrip(recent),
       h(
         'div',
         { class: 'result-actions' },

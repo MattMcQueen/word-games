@@ -5,6 +5,7 @@ import {
   loadDay,
   loadSiteStreak,
   loadStats,
+  recentDays,
   saveDay,
 } from './progress.ts';
 
@@ -60,5 +61,11 @@ describe('progress', () => {
     // An archive play doesn't keep it going.
     finishDay(`${slug}-b`, '2031-03-03', '2031-03-05', {}, partial);
     expect(loadSiteStreak('2031-03-05').current).toBe(0);
+  });
+
+  it('marks recent days perfect, finished or missed, from launch at the earliest', () => {
+    finishDay(slug, '2031-05-02', '2031-05-03', {}, perfect);
+    finishDay(slug, '2031-05-03', '2031-05-03', {}, partial);
+    expect(recentDays(slug, '2031-05-03', '2031-05-01', 4)).toEqual(['missed', 'perfect', 'done']);
   });
 });

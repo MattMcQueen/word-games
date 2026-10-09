@@ -970,3 +970,41 @@
   padding: 0 14px;
   font-size: 0.85rem;
 }
+
+/* The last fortnight under the stats (results.ts recentDaysStrip): symbols, not just colours. */
+.recent {
+  margin-top: 0.9rem;
+}
+.recent-label {
+  margin: 0 0 0.35rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.recent-days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+}
+.recent-day {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 5px;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+.recent-perfect {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+.recent-done {
+  background: var(--accent-soft);
+  color: var(--fg);
+}
+.recent-missed {
+  background: var(--panel);
+  color: var(--muted);
+}
