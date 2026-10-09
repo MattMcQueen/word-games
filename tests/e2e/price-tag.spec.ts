@@ -155,7 +155,10 @@ test.describe('Price Tag', () => {
 
     // Keep playing returns to the game with the word still typed, ready to enter.
     await dialog.getByRole('button', { name: 'Keep playing' }).click();
-    await expect(page.getByRole('textbox', { name: 'Your word' })).toHaveValue(okWord);
+    const box = page.getByRole('textbox', { name: 'Your word' });
+    await expect(box).toHaveValue(okWord);
+    // Focus comes back to the word box once the dialog has closed.
+    await expect(box).toBeFocused();
     await page.keyboard.press('Enter');
     await expect(page.getByText('Words found: 1')).toBeVisible();
   });
