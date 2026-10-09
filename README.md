@@ -79,6 +79,16 @@ step uses the one before.
 
 Then run `npm run check` and commit.
 
+## Search engines
+
+- **Google:** the site is covered by the `matt-rarely-writes.co.uk` domain property in Google Search Console,
+  where `https://words.matt-rarely-writes.co.uk/sitemap.xml` is submitted. The sitemap is written at build time
+  from the pages in `pages/`, so new games appear in it automatically, and `public/robots.txt` points to it.
+- **Bing:** the site is verified in Bing Webmaster Tools by the `msvalidate.01` meta tag in `pages/index.html`
+  (keep it), with the same sitemap submitted. After deploying new pages, `npm run indexnow` tells Bing (and
+  other IndexNow engines) straight away; its key is `INDEXNOW_KEY` in `src/config.ts`, matching
+  `public/<key>.txt`.
+
 ## Settings
 
 `src/config.ts` holds the site name, the launch date (puzzle #1 and the start of the archive), the source code and
