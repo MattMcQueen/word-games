@@ -81,11 +81,14 @@ test.describe('Lost for Words', () => {
     await expect(results).toContainText(`From ${puzzle.book.title} by ${puzzle.book.author}`);
     await expectAccessible(page);
     await results.getByRole('button', { name: 'Close' }).click();
-    await expect(page.locator('.lw-credit')).toContainText(puzzle.book.title);
-    const buy = page.locator('.lw-credit').getByRole('link', { name: /on Amazon/ });
+    await expect(results).toBeHidden();
+    // The board's own credit (the results dialog has a copy too).
+    const credit = page.getByRole('region', { name: 'The sentence' }).locator('.lw-credit');
+    await expect(credit).toContainText(puzzle.book.title);
+    const buy = credit.getByRole('link', { name: /on Amazon/ });
     await expect(buy).toHaveAttribute('href', /amazon\.co\.uk\/s\?.*tag=matsbasblo-21/);
     await expect(buy).toHaveAttribute('rel', /sponsored/);
-    await expect(page.locator('.lw-credit')).toContainText('As an Amazon Associate');
+    await expect(credit).toContainText('As an Amazon Associate');
     await expect(page.locator('.lw-sentence')).toContainText(answer);
   });
 
