@@ -128,24 +128,19 @@ export function describeOutcome(
 }
 
 /**
- * Spoiler-free share lines: a square per code letter in reading order
- * (🟩 cracked, 🟨 given by a hint, ⬜ not cracked).
+ * The spoiler-free share line, kept to one line however long the code:
+ * "⭐ Cracked, no hints", "Cracked with 1 hint, 20 of 21 letters unaided"
+ * or "12 of 21 letters".
  */
 export function shareLines(
   puzzle: CipherPuzzle,
   solution: CipherSolution,
   data: CipherData,
 ): string[] {
-  const codes = codeLetters(puzzle.coded);
-  const squares = codes
-    .map((code) => {
-      if (data.revealed.includes(code)) return '🟨';
-      return data.guesses[code] === solution.key[code] ? '🟩' : '⬜';
-    })
-    .join('');
+  const total = codeLetters(puzzle.coded).length;
+  const own = ownRight(puzzle, solution, data).length;
   const hints = data.revealed.length;
-  const headline = isCracked(puzzle, solution, data)
-    ? `${hints ? '' : '⭐ '}Cracked${hints ? ` with ${plural(hints, 'hint')}` : ', no hints'}`
-    : `${ownRight(puzzle, solution, data).length}/${codes.length} letters`;
-  return [`🔐 ${headline}`, squares];
+  if (!isCracked(puzzle, solution, data)) return [`🔐 ${own} of ${total} letters`];
+  if (!hints) return ['🔐 ⭐ Cracked, no hints'];
+  return [`🔐 Cracked with ${plural(hints, 'hint')}, ${own} of ${total} letters unaided`];
 }

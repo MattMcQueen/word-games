@@ -131,12 +131,14 @@ describe('Cipher scoring', () => {
     expect(describeOutcome(puzzle, solution, all)).toBe(
       'You cracked the code without a single hint!',
     );
-    expect(shareLines(puzzle, solution, all)).toEqual(['🔐 ⭐ Cracked, no hints', '🟩🟩🟩🟩']);
+    expect(shareLines(puzzle, solution, all)).toEqual(['🔐 ⭐ Cracked, no hints']);
 
     const helped: CipherData = { guesses: { ...solution.key }, revealed: ['q'] };
     expect(resultFor(puzzle, solution, helped, false).score).toBe(3);
     expect(describeOutcome(puzzle, solution, helped)).toBe('You cracked the code, with 1 hint.');
-    expect(shareLines(puzzle, solution, helped)[1]).toBe('🟩🟨🟩🟩');
+    expect(shareLines(puzzle, solution, helped)).toEqual([
+      '🔐 Cracked with 1 hint, 3 of 4 letters unaided',
+    ]);
 
     const partway: CipherData = { guesses: { x: 'c', q: 'e' }, revealed: [] };
     expect(resultFor(puzzle, solution, partway, true)).toEqual({
@@ -146,7 +148,7 @@ describe('Cipher scoring', () => {
       gaveUp: true,
     });
     expect(describeOutcome(puzzle, solution, partway)).toBe('You had 1 of the 4 letters right.');
-    expect(shareLines(puzzle, solution, partway)).toEqual(['🔐 1/4 letters', '🟩⬜⬜⬜']);
+    expect(shareLines(puzzle, solution, partway)).toEqual(['🔐 1 of 4 letters']);
     expect(describeOutcome(puzzle, solution, emptyData())).toBe(
       "You didn't crack any of the code.",
     );
