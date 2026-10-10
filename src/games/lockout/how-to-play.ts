@@ -1,7 +1,8 @@
 /** Entry point for /lockout/how-to-play/. */
 
-import { renderHowToPlay } from '../../ui/how-to-play.ts';
+import { howToPlayPage } from '../../ui/how-to-play.ts';
+import { renderPage } from '../../ui/page.ts';
 import { lockoutRules } from './rules.ts';
 import { SLUG } from './spec.ts';
 
-renderHowToPlay(SLUG, lockoutRules);
+renderPage(howToPlayPage(SLUG, lockoutRules));

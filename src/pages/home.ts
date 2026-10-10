@@ -9,7 +9,8 @@ import { loadDay, loadSiteStreak, loadStats } from '../core/progress.ts';
 import { buildDayShareText, copyText } from '../core/share.ts';
 import { GAMES, type GameInfo, gamePath, howToPlayPath } from '../games/catalogue.ts';
 import { h, icon } from '../ui/dom.ts';
-import { renderPage, siteNav } from '../ui/page.ts';
+import { siteNav } from '../ui/frame.ts';
+import { renderPage } from '../ui/page.ts';
 import { toast } from '../ui/toast.ts';
 import { gamePreview } from './previews.ts';
 

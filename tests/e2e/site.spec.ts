@@ -107,6 +107,42 @@ test.describe('How to play and About', () => {
     await expectNoHorizontalScroll(page);
   });
 
+  for (const path of ['/cipher/how-to-play/', '/about/']) {
+    test(`${path} is in the HTML before any script runs, and nothing moves when it does`, async ({
+      page,
+    }) => {
+      // Hold back the page's scripts until the pre-rendered page has been measured.
+      let release = () => {};
+      const held = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      await page.route('**/assets/*.js', async (route) => {
+        await held;
+        await route.continue();
+      });
+      const boxes = () =>
+        page.evaluate(() =>
+          ['h1', '.facts', '.site-footer'].map((selector) => ({
+            selector,
+            box: document.querySelector(selector)?.getBoundingClientRect().toJSON(),
+          })),
+        );
+
+      await page.goto(path, { waitUntil: 'commit' });
+      await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+      await expect(page.locator('.support-btn')).toHaveCount(0);
+      // Load the fonts first, so the only thing that could move the page is the script.
+      // (WebKit's document.fonts.ready waits for the held scripts, so load each face.)
+      await page.evaluate(() => Promise.all([...document.fonts].map((face) => face.load())));
+      const before = await boxes();
+
+      release();
+      // The Support me button shows the script has drawn the page.
+      await expect(page.locator('.support-btn')).toBeVisible();
+      expect(await boxes()).toEqual(before);
+    });
+  }
+
   test('About credits the word list and explains privacy', async ({ page }) => {
     await page.goto('/about/');
     await expect(page.getByRole('heading', { name: 'Privacy' })).toBeVisible();

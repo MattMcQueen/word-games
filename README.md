@@ -88,6 +88,11 @@ Then run `npm run check` and commit.
   (keep it), with the same sitemap submitted. After deploying new pages, `npm run indexnow` tells Bing (and
   other IndexNow engines) straight away; its key is `INDEXNOW_KEY` in `src/config.ts`, matching
   `public/<key>.txt`.
+- **Pre-rendered rules.** The How to play and About pages are written into their HTML at build time
+  (`scripts/lib/prerender.ts`, run by the prerender plugin in `vite.config.ts`), so search engines see the rules
+  without running JavaScript. The page's script then draws the same markup over it, so nothing moves; a
+  Playwright test checks that. The build runs the page code in Node with a small stand-in for the browser's DOM
+  (`scripts/lib/dom-shim.ts`): if a How to play page starts using something it lacks, the build says so.
 
 ## Settings
 

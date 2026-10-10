@@ -34,8 +34,9 @@ import { readJson, writeJson } from '../core/storage.ts';
 import { GAMES, gamePath, howToPlayPath } from '../games/catalogue.ts';
 import { openArchive } from './archive.ts';
 import { h, type IconName, icon, replaceChildren } from './dom.ts';
+import { gameNav } from './frame.ts';
 import { openModal } from './modal.ts';
-import { gameNav, renderPage } from './page.ts';
+import { renderPage } from './page.ts';
 import {
   type NextGame,
   type ResultSummary,

@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite';
+import { prerenderPages } from './scripts/lib/prerender.ts';
 import { SITE_NAME, SITE_URL } from './src/config.ts';
 import { GAMES } from './src/games/catalogue.ts';
 
@@ -115,6 +116,25 @@ function sitemap(): Plugin {
 }
 
 /**
+ * Writes the How to play and About pages' content into their HTML at build
+ * time (scripts/lib/prerender.ts), so it's there before any script runs.
+ */
+function prerender(): Plugin {
+  let pages = new Map<string, string>();
+  return {
+    name: 'prerender',
+    apply: 'build',
+    async buildStart() {
+      pages = await prerenderPages();
+    },
+    transformIndexHtml: (html, ctx) => {
+      const body = pages.get(pageKey(ctx.filename));
+      return body ? html.replace(/<body[^>]*>/, (tag) => `${tag}\n${body}`) : html;
+    },
+  };
+}
+
+/**
  * The same security headers the live site sends (public/staticwebapp.config.json),
  * so `vite preview`, and the Playwright tests that use it, behave like production
  * and anything the policy blocks shows up locally. (As in card-kit's vite.ts.)
@@ -134,7 +154,7 @@ function previewHeaders(): Record<string, string> {
 }
 
 export default defineConfig({
-  plugins: [sharedHead(), sitemap()],
+  plugins: [sharedHead(), prerender(), sitemap()],
   root: pagesDir,
   // Multi-page app: unknown URLs 404 (as on the live site) instead of serving index.html.
   appType: 'mpa',

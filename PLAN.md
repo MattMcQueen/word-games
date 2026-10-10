@@ -42,6 +42,7 @@ accounts or ads. It's hosted on Azure Static Web Apps.
 | Swap Shop families | Inflected pairs (BATS ↔ BETS) fold into their family (BAT ↔ BET); the counter counts families |
 | Look | Matches the card games (card-games/packages/card-kit): slate colours, terracotta accent, Figtree and Young Serif, sticky header, hero + card pages |
 | Pages | `/` lists the games; each game has `/<slug>/` and `/<slug>/how-to-play/`; `/about/` has privacy and credits |
+| Pre-rendering | How to play and About pages are written into their HTML at build time (`scripts/lib/prerender.ts`), using a small fake DOM (`scripts/lib/dom-shim.ts`) rather than a new dependency. The browser-free part of the page frame is `src/ui/frame.ts`; `src/ui/page.ts` adds the styles, Support me and analytics. The script redraws identical markup, so nothing moves (tested). Game pages and the home page aren't pre-rendered: they depend on the player's progress and the day |
 | Theme | Follows the device until the sun/moon button is pressed; the choice is remembered (unlike the card games) |
 | Support | Ko-fi "Support me" button, bottom-left; nothing is loaded from Ko-fi until it's opened |
 | Hosting | Azure Static Web App `swa-word-games` (Free) at words.matt-rarely-writes.co.uk; GitHub Actions checks and deploys; Cloudflare Web Analytics on the live address only |
@@ -61,16 +62,17 @@ pages/                 HTML entry points (Vite root); pages/<slug>/index.html �
 src/config.ts          site name, launch date, data URLs
 src/core/              dictionary, rng, date, game interface, puzzle loader, storage, progress, share, validate
 src/solvers/           letter helpers shared by solvers and generators
-src/ui/                dom helper, page frame, header, theme toggle, Support me, How to play layout,
+src/ui/                dom helper, page frame (frame.ts runs in Node too; page.ts adds styles), header, theme toggle, Support me, How to play layout,
                        keyboard, word input, modal, results, archive, toast, game shell
-src/pages/             home and About page scripts
+src/pages/             home and About page scripts (about-page.ts holds the About page for pre-rendering)
 src/assets/            fonts (with licences) and the Ko-fi logo, shared with the card games
 src/games/<slug>/      spec.ts, generate.ts, solve.ts, logic.ts, scoring.ts, rules.ts, ui.ts,
                        main.ts, how-to-play.ts, tests
 src/games/title-*.ts   word-by-word title guessing, shared by Shelf Scramble and Retitled
 src/games/catalogue.ts names and taglines for navigation
 src/games/registry.ts  all game logic, for the generator script
-scripts/               build-dictionary.ts, build-gutenberg.ts, generate-puzzles.ts
+scripts/               build-dictionary.ts, build-gutenberg.ts, generate-puzzles.ts, build-images.ts, indexnow.ts;
+                       lib/ has their pure helpers and the build-time pre-renderer
 data/                  hand-edited inputs (blocklist, the Lost for Words book list and exclusions)
 public/                static files served as-is: word list, sentence and line banks, puzzles, favicon, theme-init.js
 tests/e2e/             Playwright specs
@@ -81,7 +83,7 @@ tests/e2e/             Playwright specs
 1. `src/games/<slug>/spec.ts`: types, constants and difficulty bounds.
 2. `generate.ts` and `solve.ts`: pure functions with no DOM or Node APIs. Then `logic.ts` combines them into a `GameLogic`.
 3. `ui.ts`: a `GameModule` whose `mount()` draws the board; `main.ts` calls `startGame()`.
-   `rules.ts` holds the How to play words; `how-to-play.ts` calls `renderHowToPlay()`.
+   `rules.ts` holds the How to play words; `how-to-play.ts` calls `renderPage(howToPlayPage(SLUG, rules))`; the build pre-renders it.
 4. `pages/<slug>/index.html` and `pages/<slug>/how-to-play/index.html` (copy Price Tag's).
 5. Register it in `src/games/registry.ts` and `src/games/catalogue.ts`.
 6. Unit tests for the solver and generator, plus a Playwright spec.

@@ -6,7 +6,7 @@
 
 import { gameInfo, gamePath } from '../games/catalogue.ts';
 import { type Child, h } from './dom.ts';
-import { gameNav, renderPage } from './page.ts';
+import { gameNav, type PageOptions } from './frame.ts';
 
 export interface RuleSection {
   title: string;
@@ -34,10 +34,11 @@ const ARCHIVE_SECTION: RuleSection = {
   ],
 };
 
-export function renderHowToPlay(slug: string, rules: HowToPlay): void {
+/** The page for renderPage, or for the build to pre-render (scripts/prerender.ts). */
+export function howToPlayPage(slug: string, rules: HowToPlay): PageOptions {
   const { name } = gameInfo(slug);
   const sections = [...rules.sections, ARCHIVE_SECTION];
-  renderPage({
+  return {
     title: `How to play ${name}`,
     nav: gameNav(slug, 'how-to-play'),
     width: 'page',
@@ -60,5 +61,5 @@ export function renderHowToPlay(slug: string, rules: HowToPlay): void {
         ),
       ),
     ),
-  });
+  };
 }
