@@ -33,7 +33,8 @@ is funded by a Ko-fi "Support me" button.
   and date, so it makes exactly the puzzle the script would have made.
 - **Local days.** The day rolls over at the player's midnight, and every past day is in the archive.
 - **Made to share.** Results share without spoilers, one game or the whole day at once; shared links show a
-  preview picture (`public/og-image.png`, drawn by `npm run build:images`); answers link to Wiktionary.
+  preview picture, each game its own (`public/og-image.png` and `public/og/<game>.png`, drawn by
+  `npm run build:images`); answers link to Wiktionary.
 
 Plain TypeScript and CSS, built with Vite, no framework and no runtime dependencies. The shared code is in
 `src/core` (dictionary, seeded random numbers, dates, the game interface, puzzle loading, storage, stats, share

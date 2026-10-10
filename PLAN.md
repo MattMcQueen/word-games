@@ -37,7 +37,7 @@ accounts or ads. It's hosted on Azure Static Web Apps.
 | Results | The best answers link to Wiktionary (`lookUp()` in `src/ui/results.ts`); "Next up" offers the next of today's games not yet finished; a perfect game gets a short shower of letter tiles (none if the player prefers reduced motion) |
 | Home streaks | Each game's card shows "🔥 N-day streak" from two days running |
 | Home | "Share today's scores" copies one spoiler-free message for every game finished today; a site-wide streak (days in a row with any puzzle finished on the day, `site:streak`) shows from two days |
-| Link previews | Every page gets its real title, a canonical link and Open Graph tags at build time (`vite.config.ts`), with `public/og-image.png`; `public/manifest.webmanifest` and the icons make it installable; `sitemap.xml` is written at build. `npm run build:images` redraws the picture and icons |
+| Link previews | Every page gets its real title, a canonical link and Open Graph tags at build time (`vite.config.ts`). A game's pages show its own picture (`public/og/<slug>.png`: its name, tagline and home-page tiles), the rest `public/og-image.png`; `public/manifest.webmanifest` and the icons make it installable; `sitemap.xml` is written at build. `npm run build:images` redraws the pictures and icons |
 | Targets | Every game shows its target up front (e.g. "Target: 7 letters"), so players know how close they are |
 | Swap Shop families | Inflected pairs (BATS ↔ BETS) fold into their family (BAT ↔ BET); the counter counts families |
 | Look | Matches the card games (card-games/packages/card-kit): slate colours, terracotta accent, Figtree and Young Serif, sticky header, hero + card pages |
@@ -85,6 +85,6 @@ tests/e2e/             Playwright specs
 3. `ui.ts`: a `GameModule` whose `mount()` draws the board; `main.ts` calls `startGame()`.
    `rules.ts` holds the How to play words; `how-to-play.ts` calls `renderPage(howToPlayPage(SLUG, rules))`; the build pre-renders it.
 4. `pages/<slug>/index.html` and `pages/<slug>/how-to-play/index.html` (copy Price Tag's).
-5. Register it in `src/games/registry.ts` and `src/games/catalogue.ts`.
+5. Register it in `src/games/registry.ts` and `src/games/catalogue.ts`, and give it a picture in `src/pages/previews.ts`.
 6. Unit tests for the solver and generator, plus a Playwright spec.
-7. `npm run generate -- --game <slug>`, then `npm run check`.
+7. `npm run generate -- --game <slug>` and `npm run build:images` (its share picture), then `npm run check`.

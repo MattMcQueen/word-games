@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { GAMES } from '../../src/games/catalogue.ts';
 import { enterWord, expectAccessible, expectNoHorizontalScroll, setUp } from './helpers.ts';
 
 const DATE = '2026-10-08';
@@ -65,7 +66,10 @@ test.describe('Home page', () => {
     await page.goto('/');
     await expect(page.getByText("You've done 1 of")).toBeVisible();
     await page.getByRole('button', { name: "Share today's scores" }).click();
-    await expect(page.getByText("Today's scores copied to clipboard")).toBeVisible();
+    const toast = page.getByText("Today's scores copied to clipboard");
+    await expect(toast).toBeVisible();
+    // On one line, even on a phone.
+    expect((await toast.boundingBox())?.height).toBeLessThan(50);
   });
 
   test('every page has a title, a description and a picture for link previews', async ({
@@ -76,12 +80,29 @@ test.describe('Home page', () => {
     const og = (property: string) =>
       page.locator(`meta[property="og:${property}"]`).getAttribute('content');
     expect(await og('title')).toBe('Halves – Word Games');
-    expect(await og('image')).toBe('https://words.matt-rarely-writes.co.uk/og-image.png');
+    expect(await og('image')).toBe('https://words.matt-rarely-writes.co.uk/og/halves.png');
     expect(await og('description')).toMatch(/Halves/);
     await expect(page.locator('link[rel="manifest"]')).toHaveAttribute(
       'href',
       '/manifest.webmanifest',
     );
+  });
+
+  test("a game's pages share its own picture, and the rest share the site's", async ({ page }) => {
+    const site = 'https://words.matt-rarely-writes.co.uk';
+    const picture = async (path: string) => {
+      await page.goto(path);
+      return page.locator('meta[property="og:image"]').getAttribute('content');
+    };
+    expect(await picture('/')).toBe(`${site}/og-image.png`);
+    expect(await picture('/about/')).toBe(`${site}/og-image.png`);
+    expect(await picture('/halves/how-to-play/')).toBe(`${site}/og/halves.png`);
+    // Every game's picture has been drawn. (If one is missing: npm run build:images.)
+    for (const { slug } of GAMES) {
+      expect(await picture(`/${slug}/`)).toBe(`${site}/og/${slug}.png`);
+      const file = await page.request.get(`/og/${slug}.png`);
+      expect(file.headers()['content-type']).toBe('image/png');
+    }
   });
 
   test('is accessible in light and dark mode', async ({ page }) => {

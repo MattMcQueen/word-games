@@ -587,10 +587,11 @@
 
 /* ---------- Toasts ---------- */
 
+/* The region spans the screen and centres its toasts, so a toast can be nearly as wide as a phone. */
 .toast-region {
   position: fixed;
-  inset: 5.5rem auto auto 50%;
-  transform: translateX(-50%);
+  inset: 5.5rem 1rem auto;
+  width: auto;
   margin: 0;
   padding: 0;
   border: 0;
@@ -604,11 +605,15 @@
   pointer-events: none;
 }
 .toast {
+  max-width: 100%;
   padding: 0.6rem 1.1rem;
-  border-radius: 999px;
+  /* A pill on one line, and still tidy if a long message wraps. */
+  border-radius: 1.4rem;
   background: var(--fg);
   color: var(--bg);
   font-weight: 600;
+  text-align: center;
+  text-wrap: balance;
   box-shadow: var(--shadow);
 }
 

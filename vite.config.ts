@@ -40,6 +40,20 @@ function pageTitle(key: string): string {
 }
 
 /**
+ * The picture shown when a link to the page is shared: a game's own for its pages
+ * (public/og/<slug>.png), the site's for the rest. Drawn by `npm run build:images`.
+ */
+function pagePicture(key: string): { src: string; alt: string } {
+  const game = GAMES.find((g) => g.slug === key.split('/')[0]);
+  return game
+    ? { src: `${SITE_URL}/og/${game.slug}.png`, alt: `${game.name}: ${game.tagline}` }
+    : {
+        src: `${SITE_URL}/og-image.png`,
+        alt: `${SITE_NAME}: original word puzzles, new every day`,
+      };
+}
+
+/**
  * Tags every page shares, added to every index.html under pages/ at build time so
  * the HTML files only hold what differs: language, description and script. It
  * also writes each page's title, and the tags that make a shared link show a
@@ -55,6 +69,7 @@ function sharedHead(): Plugin {
       const title = pageTitle(key);
       const description = html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? '';
       const url = `${SITE_URL}/${key ? `${key}/` : ''}`;
+      const picture = pagePicture(key);
       return {
         html: html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`),
         tags: [
@@ -65,13 +80,10 @@ function sharedHead(): Plugin {
           meta({ property: 'og:title', content: title }),
           meta({ property: 'og:description', content: description }),
           meta({ property: 'og:url', content: url }),
-          meta({ property: 'og:image', content: `${SITE_URL}/og-image.png` }),
+          meta({ property: 'og:image', content: picture.src }),
           meta({ property: 'og:image:width', content: '1200' }),
           meta({ property: 'og:image:height', content: '630' }),
-          meta({
-            property: 'og:image:alt',
-            content: `${SITE_NAME}: original word puzzles, new every day`,
-          }),
+          meta({ property: 'og:image:alt', content: picture.alt }),
           meta({ name: 'twitter:card', content: 'summary_large_image' }),
         ],
       };
