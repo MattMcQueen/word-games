@@ -132,8 +132,9 @@ test.describe('How to play and About', () => {
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
       await expect(page.locator('.support-btn')).toHaveCount(0);
       // Load the fonts first, so the only thing that could move the page is the script.
-      // (WebKit's document.fonts.ready waits for the held scripts, so load each face.)
-      await page.evaluate(() => Promise.all([...document.fonts].map((face) => face.load())));
+      // (WebKit's document.fonts.ready waits for the held scripts, so load each face;
+      // a face that won't load, as one sometimes doesn't in CI, can't move anything later.)
+      await page.evaluate(() => Promise.allSettled([...document.fonts].map((face) => face.load())));
       const before = await boxes();
 
       release();
